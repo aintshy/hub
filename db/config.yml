@@ -1,0 +1,8 @@
+dev:
+  adapter: postgres
+  server: localhost
+  database: aintshy
+  pool: 5
+  timeout: 5000
+  username: aintshy
+  password: aintshy

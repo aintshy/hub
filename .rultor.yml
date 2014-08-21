@@ -1,0 +1,9 @@
+assets:
+  s3cfg: "yegor256/home#assets/s3cfg"
+
+release:
+  script:
+    - "sudo bundle install"
+    - "rake"
+    - "pdd --source=$(pwd) --verbose --file=aintshy-web.xml"
+    - "s3cmd --no-progress put aintshy-web.xml --config=../s3cfg s3://pdd.teamed.io/aintshy-web.xml"
