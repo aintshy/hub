@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require_relative 'lib/database'
+require 'aintshy/database'
 require 'sinatra'
 
 set :erb, content_type: 'text/xml'

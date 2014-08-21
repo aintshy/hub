@@ -4,6 +4,7 @@ require 'rubygems'
 require 'rake'
 require 'rdoc'
 require 'rake/clean'
+require_relative 'lib/aintshy/version'
 
 CLEAN = FileList['coverage', 'rdoc']
 
@@ -12,7 +13,7 @@ def name
 end
 
 def version
-  @version = '0.1'
+  @version = VERSION
 end
 
 task default: [:clean, :test, :rubocop]

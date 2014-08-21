@@ -1,4 +1,7 @@
 assets:
+  database.yml: "yegor256/home#assets/aintshy/database.yml"
+  id_rsa: "yegor256/home#assets/aintshy/id_rsa"
+  id_rsa.pub: "yegor256/home#assets/aintshy/id_rsa.pub"
   s3cfg: "yegor256/home#assets/s3cfg"
 
 release:
@@ -7,3 +10,10 @@ release:
     - "rake"
     - "pdd --source=$(pwd) --verbose --file=aintshy-web.xml"
     - "s3cmd --no-progress put aintshy-web.xml --config=../s3cfg s3://pdd.teamed.io/aintshy-web.xml"
+    - "sed -i \"s/1\\.0\\.snapshot/${tag}/g\" lib/aintshy/version.rb"
+    - "sequel --migrate-directory db ../database.yml"
+    - "git remote add heroku git@heroku.com:aintshy.git"
+    - "mkdir /home/r/.ssh"
+    - "mv ../id_rsa ../id_rsa.pub /home/r/.ssh"
+    - "chmod -R 600 /home/r/.ssh"
+    - "git push heroku master"
