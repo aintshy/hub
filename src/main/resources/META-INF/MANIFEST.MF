@@ -1,0 +1,14 @@
+Bib-GithubId: ${github.id}
+Bib-GithubSecret: ${github.secret}
+Bib-SecurityKey: ${security.key}
+Bib-Version: ${project.version}
+Bib-Revision: ${buildNumber}
+Bib-Date: ${buildDate}
+Bib-DynamoKey: ${dynamo.key}
+Bib-DynamoSecret: ${dynamo.secret}
+Bib-SttcUrn: ${sttc.urn}
+Bib-SttcToken: ${sttc.token}
+Bib-TwitterKey: ${twitter.key}
+Bib-TwitterSecret: ${twitter.secret}
+Bib-TwitterToken: ${twitter.token}
+Bib-TwitterTsecret: ${twitter.tsecret}

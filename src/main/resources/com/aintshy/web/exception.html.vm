@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>oops...</title>
+        <link rel="icon" type="image/gif" href="//img.aintshy.com/logo.png?${buildNumber}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    </head>
+    <body>
+        <p>
+            <a href="/">
+                <img src="http://img.aintshy.com/logo.svg"
+                     style="width:64px;height:64px;" alt="aintshy logo"/>
+            </a>
+        </p>
+        <h1>
+            Internal Application Error
+        </h1>
+        <p>
+            Release: <code>${buildNumber}</code>
+        </p>
+        <p>
+            Sorry, something went terribly wrong. Please, copy
+            the text below and post it as a new issue into our
+            <a href="https://github.com/aintshy/hub/issues">Github project</a>.
+            Sorry for inconvenience and thanks for your help
+            in making Aintshy better.
+        </p>
+        <pre>${text}</pre>
+    </body>
+</html>
