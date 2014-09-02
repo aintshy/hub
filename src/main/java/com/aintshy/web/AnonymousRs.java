@@ -26,7 +26,6 @@ import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -86,19 +85,11 @@ public final class AnonymousRs extends BaseRs {
         try {
             human = this.base().register(email, password);
         } catch (final Base.InvalidPasswordException ex) {
-            throw this.flash().redirect(
-                this.uriInfo().getBaseUriBuilder()
-                    .clone()
-                    .path(AnonymousRs.class)
-                    .path(AnonymousRs.class, "index")
-                    .build(),
-                "password is not valid",
-                Level.WARNING
-            );
+            throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
         }
         final Identity identity = new Identity.Simple(
             human.urn(),
-            human.profile().name(),
+            human.urn().nss(),
             this.uriInfo().getBaseUriBuilder()
                 .clone()
                 .path(PhotoRs.class)
@@ -111,7 +102,7 @@ public final class AnonymousRs extends BaseRs {
                     .clone()
                     .path(AnonymousRs.class)
                     .path(AnonymousRs.class, "index")
-                    .build(this.human().next().number())
+                    .build(human.next().number())
             ).cookie(this.auth().cookie(identity)).build()
         );
     }

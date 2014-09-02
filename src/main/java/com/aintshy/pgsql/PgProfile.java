@@ -57,7 +57,7 @@ final class PgProfile implements Profile {
      * @param source Data source
      * @param num Number
      */
-    public PgProfile(final PgSource source, final long num) {
+    PgProfile(final PgSource source, final long num) {
         this.src = source;
         this.number = num;
     }

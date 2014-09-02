@@ -18,55 +18,64 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.api;
+package com.aintshy.pgsql;
 
+import com.aintshy.api.Human;
+import com.aintshy.api.Messages;
+import com.aintshy.api.Talk;
 import com.jcabi.aspects.Immutable;
-import com.jcabi.urn.URN;
-import java.io.IOException;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Base of the entire system.
+ * Talk in PostgreSQL.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
 @Immutable
-public interface Base {
+@EqualsAndHashCode
+@ToString
+final class PgTalk implements Talk {
 
     /**
-     * Register user by email (throws
-     * {@link com.aintshy.api.Base.InvalidPasswordException} if password
-     * is not correct).
-     *
-     * @param email Email
-     * @param password Password
-     * @return Human
+     * Data source.
      */
-    Human register(String email, String password) throws IOException;
+    private final transient PgSource src;
 
     /**
-     * Get human by URN.
-     * @param urn His URN
-     * @return Human
+     * Number of it.
      */
-    Human human(URN urn);
+    private final transient long number;
 
     /**
-     * Password is not correct.
+     * Ctor.
+     * @param source Data source
+     * @param num Number
      */
-    final class InvalidPasswordException extends RuntimeException {
-        /**
-         * Serialization marker.
-         */
-        private static final long serialVersionUID = 305929936831895556L;
-        /**
-         * Ctor.
-         * @param cause Cause
-         */
-        public InvalidPasswordException(final String cause) {
-            super(cause);
-        }
+    PgTalk(final PgSource source, final long num) {
+        this.src = source;
+        this.number = num;
     }
 
+    @Override
+    public long number() {
+        return this.number;
+    }
+
+    @Override
+    public Human asker() {
+        return new PgHuman(this.src, 1L);
+    }
+
+    @Override
+    public Human responder() {
+        return new PgHuman(this.src, 1L);
+    }
+
+    @Override
+    public Messages messages() {
+        return new PgMessages(this.src, this.number);
+    }
 }

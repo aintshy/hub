@@ -10,7 +10,7 @@
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(128) NOT NULL,
-        name VARCHAR(40) UNIQUE NOT NULL,
+        name VARCHAR(40) UNIQUE,
         confirmed BOOLEAN DEFAULT false NOT NULL,
         age INTEGER DEFAULT 0 NOT NULL,
         sex gender DEFAULT 'male' NOT NULL,

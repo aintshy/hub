@@ -55,7 +55,7 @@ final class PgHuman implements Human {
      * @param source Data source
      * @param num Number
      */
-    public PgHuman(final PgSource source, final long num) {
+    PgHuman(final PgSource source, final long num) {
         this.src = source;
         this.number = num;
     }
@@ -77,11 +77,11 @@ final class PgHuman implements Human {
 
     @Override
     public Talk talk(final long number) {
-        throw new UnsupportedOperationException("#talk()");
+        return new PgTalk(this.src, 0L);
     }
 
     @Override
     public Talk next() {
-        throw new UnsupportedOperationException("#next()");
+        return new PgTalk(this.src, 0L);
     }
 }

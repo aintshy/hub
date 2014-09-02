@@ -83,11 +83,18 @@ public final class PgBase implements Base {
                 .select(new SingleOutcome<Long>(Long.class, true));
             if (number == null) {
                 number = new JdbcSession(this.src.get())
-                    .sql("INSERT INTO human (email, password, name) VALUES (?, ?, ?)")
+                    .sql("INSERT INTO human (email, password) VALUES (?, ?)")
                     .set(email)
                     .set(password)
-                    .set("jeff")
                     .insert(new SingleOutcome<Long>(Long.class));
+            } else {
+                final String pwd = new JdbcSession(this.src.get())
+                    .sql("SELECT password FROM human WHERE id=?")
+                    .set(number)
+                    .select(new SingleOutcome<String>(String.class));
+                if (!pwd.equals(password)) {
+                    throw new Base.InvalidPasswordException("invalid password");
+                }
             }
         } catch (final SQLException ex) {
             throw new IOException(ex);
