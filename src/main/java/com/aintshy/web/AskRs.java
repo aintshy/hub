@@ -47,11 +47,7 @@ public final class AskRs extends BaseRs {
         final Human human = this.human();
         human.ask(text);
         throw this.flash().redirect(
-            this.uriInfo().getBaseUriBuilder()
-                .clone()
-                .path(TalkRs.class)
-                .path(TalkRs.class, "index")
-                .build(human.next().number()),
+            this.uriInfo().getBaseUri(),
             "thanks for the question",
             Level.INFO
         );

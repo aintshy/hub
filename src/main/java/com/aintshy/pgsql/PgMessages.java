@@ -23,6 +23,14 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Message;
 import com.aintshy.api.Messages;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.Outcome;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+import java.util.LinkedList;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -64,7 +72,54 @@ final class PgMessages implements Messages {
     }
 
     @Override
-    public Iterable<Message> iterate() {
-        throw new UnsupportedOperationException("#iterate()");
+    public Iterable<Message> iterate() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT asking, text FROM message WHERE talk=?")
+                .set(this.number)
+                .select(
+                    new Outcome<Iterable<Message>>() {
+                        @Override
+                        public Iterable<Message> handle(final ResultSet rset,
+                            final Statement stmt) throws SQLException {
+                            final Collection<Message> msgs =
+                                new LinkedList<Message>();
+                            while (rset.next()) {
+                                msgs.add(PgMessages.message(rset));
+                            }
+                            return msgs;
+                        }
+                    }
+                );
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
+
+    /**
+     * Make a message from result set.
+     * @param rset Result set
+     * @return Message
+     */
+    private static Message message(final ResultSet rset) {
+        return new Message() {
+            @Override
+            public boolean asking() throws IOException {
+                try {
+                    return rset.getBoolean(1);
+                } catch (final SQLException ex) {
+                    throw new IOException(ex);
+                }
+            }
+            @Override
+            public String text() throws IOException {
+                try {
+                    return rset.getString(2);
+                } catch (final SQLException ex) {
+                    throw new IOException(ex);
+                }
+            }
+        };
+    }
+
 }

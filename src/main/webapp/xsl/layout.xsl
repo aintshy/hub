@@ -95,19 +95,21 @@
                 <xsl:value-of select="name"/>
             </li>
             <li>
-                <a href="{links/link[@rel='ask']/@href}">
-                    <xsl:text>ask</xsl:text>
-                </a>
-            </li>
-            <li>
                 <a title="log out" href="{/page/links/link[@rel='rexsl:logout']/@href}">
                     <xsl:text>logout</xsl:text>
                 </a>
             </li>
         </ul>
-        <form action="{links/link[@rel='upload']/@href}" method="post">
-            <input type="file" name="photo"/>
-            <input type="submit" value="Upload photo"/>
+        <form action="{/page/links/link[@rel='ask']/@href}" method="post">
+            <fieldset class="inline">
+                <input style="width:90%" name="text" placeholder="Ask a question..."/>
+            </fieldset>
+        </form>
+        <form action="{/page/links/link[@rel='upload']/@href}" method="post">
+            <fieldset class="inline">
+                <input type="file" name="photo"/>
+                <input type="submit" value="Upload photo"/>
+            </fieldset>
         </form>
     </xsl:template>
     <xsl:template match="page/millis">

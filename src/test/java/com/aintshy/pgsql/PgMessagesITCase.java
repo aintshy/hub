@@ -18,35 +18,40 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.web;
+package com.aintshy.pgsql;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import com.aintshy.api.Base;
+import com.aintshy.api.Human;
+import com.aintshy.api.Message;
+import com.aintshy.api.Messages;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Profile.
+ * Integration case for {@link PgMessages}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@Path("/profile")
-public final class ProfileRs extends BaseRs {
+public final class PgMessagesITCase {
 
     /**
-     * Upload a photo.
-     * @throws IOException If fails
+     * PgMessages can post a message.
+     * @throws Exception If fails
      */
-    @POST
-    @Path("/upload")
-    public void upload(final InputStream photo) throws IOException {
-        throw this.flash().redirect(
-            this.uriInfo().getBaseUri(),
-            "photo updated, thanks",
-            Level.INFO
+    @Test
+    public void postsMessage() throws Exception {
+        final Base base = new PgBase();
+        final Human friend = base.register("f8@aintshy.com", "--Iokha");
+        friend.ask("how are you doing this?");
+        final Human human = base.register("oi@aintshy.com", "-9w8(8s");
+        final Messages msgs = human.next().messages();
+        msgs.post(false, "I'm fine, thanks!");
+        MatcherAssert.assertThat(
+            msgs.iterate(),
+            Matchers.<Message>iterableWithSize(1)
         );
     }
 

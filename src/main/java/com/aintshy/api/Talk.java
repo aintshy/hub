@@ -21,6 +21,7 @@
 package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
+import java.io.IOException;
 
 /**
  * Talk.
@@ -33,6 +34,28 @@ import com.jcabi.aspects.Immutable;
 public interface Talk {
 
     /**
+     * Nothing to talk about.
+     */
+    Talk EMPTY = new Talk() {
+        @Override
+        public long number() {
+            throw new UnsupportedOperationException("#number()");
+        }
+        @Override
+        public Human asker() throws IOException {
+            throw new UnsupportedOperationException("#asker()");
+        }
+        @Override
+        public Human responder() throws IOException {
+            throw new UnsupportedOperationException("#responder()");
+        }
+        @Override
+        public Messages messages() {
+            throw new UnsupportedOperationException("#messages()");
+        }
+    };
+
+    /**
      * Its number.
      * @return The number
      */
@@ -42,13 +65,13 @@ public interface Talk {
      * Who asked the question.
      * @return Human who asked
      */
-    Human asker();
+    Human asker() throws IOException;
 
     /**
      * Who is answering.
      * @return Human who is answering
      */
-    Human responder();
+    Human responder() throws IOException;
 
     /**
      * All messages of it.

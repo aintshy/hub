@@ -21,6 +21,7 @@
 package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
+import java.io.IOException;
 
 /**
  * Message.
@@ -36,12 +37,12 @@ public interface Message {
      * Is it an asking message?
      * @return TRUE if this message is coming from the asker
      */
-    boolean asking();
+    boolean asking() throws IOException;
 
     /**
      * Text.
      * @return Text of it
      */
-    String text();
+    String text() throws IOException;
 
 }

@@ -24,6 +24,10 @@ import com.aintshy.api.Human;
 import com.aintshy.api.Messages;
 import com.aintshy.api.Talk;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.SingleOutcome;
+import java.io.IOException;
+import java.sql.SQLException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -65,13 +69,33 @@ final class PgTalk implements Talk {
     }
 
     @Override
-    public Human asker() {
-        return new PgHuman(this.src, 1L);
+    public Human asker() throws IOException {
+        try {
+            return new PgHuman(
+                this.src,
+                new JdbcSession(this.src.get())
+                    .sql("SELECT asker FROM question JOIN talk ON question.id=talk.question AND talk.id=?")
+                    .set(this.number)
+                    .select(new SingleOutcome<Long>(Long.class))
+            );
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override
-    public Human responder() {
-        return new PgHuman(this.src, 1L);
+    public Human responder() throws IOException {
+        try {
+            return new PgHuman(
+                this.src,
+                new JdbcSession(this.src.get())
+                    .sql("SELECT responder FROM talk WHERE id=?")
+                    .set(this.number)
+                    .select(new SingleOutcome<Long>(Long.class))
+            );
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override

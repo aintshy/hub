@@ -134,11 +134,7 @@ public class BaseRs extends BaseResource {
         final Identity identity = this.auth().identity();
         if (identity.equals(Identity.ANONYMOUS)) {
             throw this.flash().redirect(
-                this.uriInfo().getBaseUriBuilder()
-                    .clone()
-                    .path(AnonymousRs.class)
-                    .path(AnonymousRs.class, "index")
-                    .build(),
+                this.uriInfo().getBaseUri(),
                 "please login",
                 Level.INFO
             );

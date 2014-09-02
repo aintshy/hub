@@ -111,10 +111,13 @@ final class PgHuman implements Human {
                 .set(this.number)
                 .set(this.number)
                 .select(new SingleOutcome<Long>(Long.class, true));
+            final Talk talk;
             if (num == null) {
-                num = this.start();
+                talk = this.start();
+            } else {
+                talk = new PgTalk(this.src, num);
             }
-            return new PgTalk(this.src, num);
+            return talk;
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
@@ -122,9 +125,9 @@ final class PgHuman implements Human {
 
     /**
      * Start new talk for the current human.
-     * @return Talk number
+     * @return Talk
      */
-    private long start() throws SQLException {
+    private Talk start() throws SQLException {
         final Long question = new JdbcSession(this.src.get())
             .sql(
                 Joiner.on(' ').join(
@@ -136,11 +139,20 @@ final class PgHuman implements Human {
             )
             .set(this.number)
             .set(this.number)
-            .select(new SingleOutcome<Long>(Long.class));
-        return new JdbcSession(this.src.get())
-            .sql("INSERT INTO talk (question, responder) VALUES (?, ?)")
-            .set(question)
-            .set(this.number)
-            .insert(new SingleOutcome<Long>(Long.class));
+            .select(new SingleOutcome<Long>(Long.class, true));
+        final Talk talk;
+        if (question == null) {
+            talk = Talk.EMPTY;
+        } else {
+            talk = new PgTalk(
+                this.src,
+                new JdbcSession(this.src.get())
+                    .sql("INSERT INTO talk (question, responder) VALUES (?, ?)")
+                    .set(question)
+                    .set(this.number)
+                    .insert(new SingleOutcome<Long>(Long.class))
+            );
+        }
+        return talk;
     }
 }

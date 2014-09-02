@@ -29,14 +29,12 @@ import com.rexsl.page.JaxbGroup;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -77,7 +75,6 @@ public final class TalkRs extends BaseRs {
             .build(EmptyPage.class)
             .init(this)
             .link(new Link("answer", "./answer"))
-            .link(new Link("next", "./next"))
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(
@@ -99,6 +96,7 @@ public final class TalkRs extends BaseRs {
 
     /**
      * Answer the talk.
+     * @param text Text of the answer
      * @throws IOException If fails
      */
     @POST
@@ -108,31 +106,9 @@ public final class TalkRs extends BaseRs {
         final Talk talk = this.talk();
         talk.messages().post(talk.asker().equals(this.human()), text);
         throw this.flash().redirect(
-            this.uriInfo().getBaseUriBuilder()
-                .clone()
-                .path(TalkRs.class)
-                .path(TalkRs.class, "index")
-                .build(this.human().next().number()),
+            this.uriInfo().getBaseUri(),
             "thanks for the message",
             Level.INFO
-        );
-    }
-
-    /**
-     * Show the next talk.
-     * @throws IOException If fails
-     */
-    @GET
-    @Path("/next")
-    public void next() throws IOException {
-        throw new WebApplicationException(
-            Response.seeOther(
-                this.uriInfo().getBaseUriBuilder()
-                    .clone()
-                    .path(TalkRs.class)
-                    .path(TalkRs.class, "index")
-                    .build(this.human().next().number())
-            ).build()
         );
     }
 

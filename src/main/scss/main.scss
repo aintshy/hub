@@ -21,6 +21,13 @@
 
 @import "defs";
 
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
 body {
   width: 100%;
   padding: 2 * $em;
@@ -41,6 +48,7 @@ body {
   text-align: center;
   ul {
     list-style: none;
+    margin: .5 * $em 0;
     li {
       display: inline;
       margin: 0 .3 * $em;
@@ -51,6 +59,10 @@ body {
   font-size: .5 * $em;
 }
 
+.main {
+  min-height: 6 * $em;
+}
+
 .logo {
   width: 64px;
   height: 64px;
@@ -58,14 +70,30 @@ body {
 
 fieldset {
   border: 0;
-  label, input {
+  label, input, textarea {
     display: block;
     font-size: $em !important;
     font-family: $font;
-  }
-  input {
     padding: .2 * $em;
+    margin: .2 * $em 0;
   }
+  input[type='submit'] {
+    cursor: pointer;
+    &:hover {
+      background-color: $black;
+      color: $white;
+    }
+  }
+  &.inline {
+    label, input, textarea {
+      display: inline-block;
+      margin: 0 .2 * $em;
+    }
+  }
+}
+
+p, fieldset, pre {
+  margin: $em 0;
 }
 
 .flash {

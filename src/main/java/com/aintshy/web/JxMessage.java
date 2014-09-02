@@ -21,6 +21,7 @@
 package com.aintshy.web;
 
 import com.aintshy.api.Message;
+import java.io.IOException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -60,18 +61,20 @@ final class JxMessage {
     /**
      * Its asking?
      * @return TRUE if asking
+     * @throws IOException If fails
      */
     @XmlElement(name = "asking")
-    public boolean getAsking() {
+    public boolean getAsking() throws IOException {
         return this.message.asking();
     }
 
     /**
      * Its text.
      * @return Text
+     * @throws IOException If fails
      */
     @XmlElement(name = "text")
-    public String getText() {
+    public String getText() throws IOException {
         return this.message.text();
     }
 

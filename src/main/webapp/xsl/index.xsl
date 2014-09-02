@@ -36,10 +36,8 @@
         </p>
         <form action="{links/link[@rel='enter']/@href}" method="post">
             <fieldset>
-                <label for="email">Email:</label>
-                <input id="email" name="email" size="30"/>
-                <label for="password">Password:</label>
-                <input id="password" name="password" size="23"/>
+                <input id="email" name="email" size="30" placeholder="Email..."/>
+                <input id="password" name="password" size="23" placeholder="Password..."/>
                 <input type="submit" value="Login"/>
             </fieldset>
         </form>

@@ -21,6 +21,7 @@
 package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
+import java.io.IOException;
 
 /**
  * Messages in a talk.
@@ -44,6 +45,6 @@ public interface Messages {
      * Iterate them.
      * @return All messages
      */
-    Iterable<Message> iterate();
+    Iterable<Message> iterate() throws IOException;
 
 }

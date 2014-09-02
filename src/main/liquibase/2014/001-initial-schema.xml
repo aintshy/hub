@@ -44,13 +44,5 @@
         seen BOOLEAN DEFAULT false NOT NULL
       )
     </sql>
-    <sql>
-      INSERT INTO human (email, password, name, confirmed, age, sex, language)
-      VALUES ('team@aintshy.com', '', 'aintshy', true, 30, 'male', 'us')
-    </sql>
-    <sql>
-      INSERT INTO question (asker, text)
-      VALUES (1, 'How are you doing today?')
-    </sql>
   </changeSet>
 </databaseChangeLog>

@@ -1,4 +1,5 @@
-/**
+<?xml version="1.0"?>
+<!--
  * Copyright (c) 2014, Aintshy.com
  * All rights reserved.
  *
@@ -17,37 +18,19 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-package com.aintshy.web;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-
-/**
- * Profile.
- *
- * @author Yegor Bugayenko (yegor@tpc2.com)
- * @version $Id$
- * @since 0.1
- */
-@Path("/profile")
-public final class ProfileRs extends BaseRs {
-
-    /**
-     * Upload a photo.
-     * @throws IOException If fails
-     */
-    @POST
-    @Path("/upload")
-    public void upload(final InputStream photo) throws IOException {
-        throw this.flash().redirect(
-            this.uriInfo().getBaseUri(),
-            "photo updated, thanks",
-            Level.INFO
-        );
-    }
-
-}
+ -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns="http://www.w3.org/1999/xhtml" version="1.0">
+    <xsl:output method="xml" omit-xml-declaration="yes"/>
+    <xsl:include href="/xsl/layout.xsl"/>
+    <xsl:template match="page" mode="head">
+        <title><xsl:text>oops...</xsl:text></title>
+    </xsl:template>
+    <xsl:template match="page" mode="body">
+        <p>
+            <xsl:text>No more questions for you, sorry. </xsl:text>
+            <a href="{links/link[@rel='home']/@href}"><xsl:text>Click here</xsl:text></a>
+            <xsl:text> in a few minutes.</xsl:text>
+        </p>
+    </xsl:template>
+</xsl:stylesheet>

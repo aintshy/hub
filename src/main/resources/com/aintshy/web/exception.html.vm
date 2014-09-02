@@ -20,12 +20,12 @@
             Release: <code>${buildNumber}</code>
         </p>
         <p>
-            Sorry, something went terribly wrong. Please, copy
+            Oops, something went terribly wrong. Please, copy
             the text below and post it as a new issue into our
             <a href="https://github.com/aintshy/hub/issues">Github project</a>.
-            Sorry for inconvenience and thanks for your help
-            in making Aintshy better.
+            We're sorry for this inconvenience and thank you in advance for helping
+            us making our beautiful project even better :)
         </p>
-        <pre style="overflow-x:scroll">${text}</pre>
+        <pre style="overflow-x:scroll;font-size:0.6em">${text}</pre>
     </body>
 </html>

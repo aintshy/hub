@@ -22,10 +22,12 @@ package com.aintshy.web;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Talk;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -52,13 +54,24 @@ public final class AnonymousRs extends BaseRs {
     @Path("/")
     public Response index() throws IOException {
         if (!this.auth().identity().equals(Identity.ANONYMOUS)) {
+            final Talk talk = this.human().next();
+            if (Talk.EMPTY.equals(talk)) {
+                throw this.flash().redirect(
+                    this.uriInfo().getBaseUriBuilder().clone()
+                        .path(AnonymousRs.class)
+                        .path(AnonymousRs.class, "empty")
+                        .build(),
+                    "no more questions for you, please wait",
+                    Level.INFO
+                );
+            }
             throw new WebApplicationException(
                 Response.seeOther(
                     this.uriInfo().getBaseUriBuilder()
                         .clone()
                         .path(TalkRs.class)
                         .path(TalkRs.class, "index")
-                        .build(this.human().next().number())
+                        .build(talk.number())
                 ).build()
             );
         }
@@ -67,6 +80,22 @@ public final class AnonymousRs extends BaseRs {
             .build(EmptyPage.class)
             .init(this)
             .link(new Link("enter", "./enter"))
+            .render()
+            .build();
+    }
+
+    /**
+     * Nothing to show, no talks.
+     * @return JAX-RS response
+     */
+    @GET
+    @Path("/empty")
+    public Response empty() {
+        this.human();
+        return new PageBuilder()
+            .stylesheet("/xsl/empty.xsl")
+            .build(EmptyPage.class)
+            .init(this)
             .render()
             .build();
     }
@@ -97,13 +126,9 @@ public final class AnonymousRs extends BaseRs {
                 .build(human.urn())
         );
         throw new WebApplicationException(
-            Response.seeOther(
-                this.uriInfo().getBaseUriBuilder()
-                    .clone()
-                    .path(AnonymousRs.class)
-                    .path(AnonymousRs.class, "index")
-                    .build(human.next().number())
-            ).cookie(this.auth().cookie(identity)).build()
+            Response.seeOther(this.uriInfo().getBaseUri())
+                .cookie(this.auth().cookie(identity))
+                .build()
         );
     }
 

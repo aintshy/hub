@@ -59,6 +59,10 @@ public final class PgHumanITCase {
         final Human human = base.register("oi@aintshy.com", "-9w8(8s");
         final Talk talk = human.next();
         MatcherAssert.assertThat(
+            talk,
+            Matchers.not(Matchers.equalTo(Talk.EMPTY))
+        );
+        MatcherAssert.assertThat(
             talk.asker(),
             Matchers.not(Matchers.equalTo(human))
         );
