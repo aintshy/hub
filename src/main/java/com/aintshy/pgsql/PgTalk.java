@@ -35,8 +35,8 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode(of = { "src", "number" })
 final class PgTalk implements Talk {
 
     /**

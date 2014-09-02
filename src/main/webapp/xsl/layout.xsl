@@ -29,7 +29,7 @@
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta name="author" content="www.aintshy.com"/>
                 <link rel="stylesheet" type="text/css" media="all" href="/css/style.css?{version/revision}"/>
-                <link rel="icon" type="image/gif" href="//img.aintshy.com/heart.png?{version/revision}"/>
+                <link rel="icon" type="image/gif" href="//img.aintshy.com/logo.png?{version/revision}"/>
                 <xsl:apply-templates select="." mode="head"/>
                 <script type="text/javascript">//<![CDATA[
                     var _gaq = _gaq || [];
@@ -47,7 +47,7 @@
                     <header class="head">
                         <div>
                             <a href="{links/link[@rel='home']/@href}">
-                                <img src="//img.aintshy.com/heart.png" class="logo" alt="aintshy logo"/>
+                                <img src="//img.aintshy.com/logo.svg" class="logo" alt="aintshy logo"/>
                             </a>
                         </div>
                         <xsl:apply-templates select="identity"/>

@@ -22,6 +22,7 @@ package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.urn.URN;
+import java.io.IOException;
 
 /**
  * Human.
@@ -49,7 +50,7 @@ public interface Human {
      * Post a new question.
      * @param text Text to post
      */
-    void ask(String text);
+    void ask(String text) throws IOException;
 
     /**
      * Get talk by ID.
@@ -62,6 +63,6 @@ public interface Human {
      * Get next talk to watch.
      * @return Talk
      */
-    Talk next();
+    Talk next() throws IOException;
 
 }

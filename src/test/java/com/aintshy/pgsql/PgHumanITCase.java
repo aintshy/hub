@@ -22,38 +22,45 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Talk;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 /**
- * Integration case for {@link PgBase}.
+ * Integration case for {@link PgHuman}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-public final class PgBaseITCase {
+public final class PgHumanITCase {
 
     /**
-     * PgBase can register a human.
+     * PgHuman can ask a question.
      * @throws Exception If fails
      */
     @Test
-    public void registersHuman() throws Exception {
+    public void asksQuestion() throws Exception {
         final Base base = new PgBase();
-        final String email = "t@aintshy.com";
-        final String password = "\u20ac=*'";
-        final Human first = base.register(email, password);
+        final Human human = base.register("hs@aintshy.com", "-9w8skkha");
+        human.ask("how does it work for you?");
+    }
+
+    /**
+     * PgHuman can fetch next talk.
+     * @throws Exception If fails
+     */
+    @Test
+    public void fetchesNextTalk() throws Exception {
+        final Base base = new PgBase();
+        final Human friend = base.register("f8@aintshy.com", "--Iokha");
+        friend.ask("how are you doing this?");
+        final Human human = base.register("oi@aintshy.com", "-9w8(8s");
+        final Talk talk = human.next();
         MatcherAssert.assertThat(
-            first.profile().confirmed(),
-            Matchers.is(false)
-        );
-        first.profile().confirm();
-        final Human second = base.register(email, password);
-        MatcherAssert.assertThat(
-            second.profile().confirmed(),
-            Matchers.is(true)
+            talk.asker(),
+            Matchers.not(Matchers.equalTo(human))
         );
     }
 

@@ -23,8 +23,13 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
+import com.google.common.base.Joiner;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.urn.URN;
+import java.io.IOException;
+import java.sql.SQLException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -36,8 +41,8 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode(of = { "src", "number" })
 final class PgHuman implements Human {
 
     /**
@@ -71,17 +76,71 @@ final class PgHuman implements Human {
     }
 
     @Override
-    public void ask(final String text) {
-        throw new UnsupportedOperationException("#ask()");
+    public void ask(final String text) throws IOException {
+        try {
+            new JdbcSession(this.src.get())
+                .sql("INSERT INTO question (asker, text) VALUES (?, ?)")
+                .set(this.number)
+                .set(text)
+                .insert(new SingleOutcome<Long>(Long.class, true));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override
-    public Talk talk(final long number) {
-        return new PgTalk(this.src, 0L);
+    public Talk talk(final long num) {
+        return new PgTalk(this.src, num);
     }
 
     @Override
-    public Talk next() {
-        return new PgTalk(this.src, 0L);
+    public Talk next() throws IOException {
+        try {
+            Long num = new JdbcSession(this.src.get())
+                .sql(
+                    Joiner.on(' ').join(
+                        "SELECT talk FROM message",
+                        "JOIN talk ON talk.id=message.talk",
+                        "JOIN question ON question.id=talk.question",
+                        "WHERE seen=false",
+                        "AND ((asking=false AND responder=?)",
+                        "OR (asking=true AND asker=?))",
+                        "ORDER BY message.date DESC"
+                    )
+                )
+                .set(this.number)
+                .set(this.number)
+                .select(new SingleOutcome<Long>(Long.class, true));
+            if (num == null) {
+                num = this.start();
+            }
+            return new PgTalk(this.src, num);
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    /**
+     * Start new talk for the current human.
+     * @return Talk number
+     */
+    private long start() throws SQLException {
+        final Long question = new JdbcSession(this.src.get())
+            .sql(
+                Joiner.on(' ').join(
+                    "SELECT question.id FROM question",
+                    "LEFT JOIN talk",
+                    "ON talk.question=question.id AND responder=?",
+                    "WHERE talk.id IS NULL AND asker != ?"
+                )
+            )
+            .set(this.number)
+            .set(this.number)
+            .select(new SingleOutcome<Long>(Long.class));
+        return new JdbcSession(this.src.get())
+            .sql("INSERT INTO talk (question, responder) VALUES (?, ?)")
+            .set(question)
+            .set(this.number)
+            .insert(new SingleOutcome<Long>(Long.class));
     }
 }

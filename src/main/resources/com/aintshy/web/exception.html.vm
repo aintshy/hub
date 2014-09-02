@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>oops...</title>
-        <link rel="icon" type="image/gif" href="//img.aintshy.com/heart.png?${buildNumber}"/>
+        <link rel="icon" type="image/gif" href="//img.aintshy.com/logo.png?${buildNumber}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     </head>
     <body>
         <p>
             <a href="/">
-                <img src="http://img.aintshy.com/heart.png"
+                <img src="http://img.aintshy.com/logo.svg"
                      style="width:64px;height:64px;" alt="aintshy logo"/>
             </a>
         </p>
@@ -26,6 +26,6 @@
             Sorry for inconvenience and thanks for your help
             in making Aintshy better.
         </p>
-        <pre>${text}</pre>
+        <pre style="overflow-x:scroll">${text}</pre>
     </body>
 </html>
