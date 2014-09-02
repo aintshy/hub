@@ -1,4 +1,4 @@
-Aintshy-SecurityKey: ${security.key}
+Aintshy-SecurityKey: key
 Aintshy-Version: ${project.version}
 Aintshy-Revision: ${buildNumber}
-Aintshy-Date: ${buildDate}
+Aintshy-Date: 9-Dec-2012

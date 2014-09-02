@@ -75,7 +75,7 @@
         <servlet-class>com.rexsl.core.RestfulServlet</servlet-class>
         <init-param>
             <param-name>com.rexsl.PACKAGES</param-name>
-            <param-value>com.aintshy</param-value>
+            <param-value>com.aintshy.web</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

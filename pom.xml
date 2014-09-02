@@ -550,8 +550,8 @@
                             <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
                             <dataDir>${project.build.directory}/data</dataDir>
                             <databaseName>test</databaseName>
-                            <username>pgsql</username>
-                            <passwordFile>${project.build.directory}/test-classes/password.txt</passwordFile>
+                            <username>test</username>
+                            <passwordFile>${project.build.testOutputDirectory}/password.txt</passwordFile>
                             <port>${pgsql.port}</port>
                         </configuration>
                         <executions>
@@ -578,7 +578,7 @@
                         <artifactId>tomcat7-maven-plugin</artifactId>
                         <configuration>
                             <systemProperties combine.children="append">
-                                <pgsql.url>jdbc:postgresql://localhost:${pgsql.port}/test?username=jdbc&amp;password=jdbc</pgsql.url>
+                                <pgsql.url>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</pgsql.url>
                             </systemProperties>
                         </configuration>
                     </plugin>
@@ -587,7 +587,7 @@
                         <configuration>
                             <parallel>none</parallel>
                             <systemPropertyVariables combine.children="append">
-                                <pgsql.url>jdbc:postgresql://localhost:${pgsql.port}/test?username=jdbc&amp;password=jdbc</pgsql.url>
+                                <pgsql.url>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</pgsql.url>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
