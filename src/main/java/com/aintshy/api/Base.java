@@ -22,6 +22,7 @@ package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
 import com.jcabi.urn.URN;
+import java.io.IOException;
 
 /**
  * Base of the entire system.
@@ -34,10 +35,31 @@ import com.jcabi.urn.URN;
 public interface Base {
 
     /**
+     * Register user by email (throws
+     * {@link com.aintshy.api.Base.InvalidPasswordException} if password
+     * is not correct).
+     *
+     * @param email Email
+     * @param password Password
+     * @return Human
+     */
+    Human register(String email, String password) throws IOException;
+
+    /**
      * Get human by URN.
      * @param urn His URN
      * @return Human
      */
     Human human(URN urn);
+
+    /**
+     * Password is not correct.
+     */
+    final class InvalidPasswordException extends RuntimeException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 305929936831895556L;
+    }
 
 }

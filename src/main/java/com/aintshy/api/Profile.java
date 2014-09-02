@@ -18,53 +18,36 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.web;
+package com.aintshy.api;
 
-import com.aintshy.api.Base;
-import com.aintshy.pgsql.PgBase;
-import com.jcabi.aspects.Cacheable;
-import com.jcabi.aspects.Loggable;
-import com.jcabi.manifests.Manifests;
-import com.jolbox.bonecp.BoneCPDataSource;
+import com.jcabi.aspects.Immutable;
 import java.io.IOException;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
- * Lifespan.
+ * Human profile.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
-@Loggable(Loggable.INFO)
-public final class Lifespan implements ServletContextListener {
+@Immutable
+public interface Profile {
 
     /**
-     * Base.
+     * Email confirmed?
+     * @return TRUE if confirmed already
      */
-    private transient Base base;
+    boolean confirmed() throws IOException;
 
-    @Override
-    public void contextInitialized(final ServletContextEvent event) {
-        final Base base;
-        try {
-            Manifests.append(event.getServletContext());
-            base = new PgBase();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        event.getServletContext().setAttribute(Base.class.getName(), base);
-    }
+    /**
+     * Confirm email.
+     */
+    void confirm() throws IOException;
 
-    @Override
-    public void contextDestroyed(final ServletContextEvent event) {
-        // nothing
-    }
+    /**
+     * His name.
+     * @return Name
+     */
+    String name() throws IOException;
 
 }

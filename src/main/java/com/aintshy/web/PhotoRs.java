@@ -20,51 +20,33 @@
  */
 package com.aintshy.web;
 
-import com.aintshy.api.Base;
-import com.aintshy.pgsql.PgBase;
-import com.jcabi.aspects.Cacheable;
-import com.jcabi.aspects.Loggable;
-import com.jcabi.manifests.Manifests;
-import com.jolbox.bonecp.BoneCPDataSource;
+import com.jcabi.urn.URN;
 import java.io.IOException;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
- * Lifespan.
+ * Photo.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
-@Loggable(Loggable.INFO)
-public final class Lifespan implements ServletContextListener {
+@Path("/photo")
+public final class PhotoRs extends BaseRs {
 
     /**
-     * Base.
+     * Show a photo.
+     * @param urn URN of a user
+     * @throws IOException If fails
      */
-    private transient Base base;
-
-    @Override
-    public void contextInitialized(final ServletContextEvent event) {
-        final Base base;
-        try {
-            Manifests.append(event.getServletContext());
-            base = new PgBase();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        event.getServletContext().setAttribute(Base.class.getName(), base);
-    }
-
-    @Override
-    public void contextDestroyed(final ServletContextEvent event) {
-        // nothing
+    @GET
+    @Path("/")
+    @Produces("image/png")
+    public byte[] index(@QueryParam("urn") final URN urn) throws IOException {
+        return new byte[0];
     }
 
 }

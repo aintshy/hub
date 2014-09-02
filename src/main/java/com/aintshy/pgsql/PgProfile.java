@@ -20,16 +20,18 @@
  */
 package com.aintshy.pgsql;
 
-import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
-import com.aintshy.api.Talk;
 import com.jcabi.aspects.Immutable;
-import com.jcabi.urn.URN;
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.Outcome;
+import com.jcabi.jdbc.SingleOutcome;
+import java.io.IOException;
+import java.sql.SQLException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Human in PostgreSQL.
+ * Profile in PostgreSQL.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -38,7 +40,7 @@ import lombok.ToString;
 @Immutable
 @EqualsAndHashCode
 @ToString
-final class PgHuman implements Human {
+final class PgProfile implements Profile {
 
     /**
      * Data source.
@@ -55,33 +57,44 @@ final class PgHuman implements Human {
      * @param source Data source
      * @param num Number
      */
-    public PgHuman(final PgSource source, final long num) {
+    public PgProfile(final PgSource source, final long num) {
         this.src = source;
         this.number = num;
     }
 
     @Override
-    public URN urn() {
-        return URN.create(String.format("urn:aintshy:%d", this.number));
+    public boolean confirmed() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT confirmed FROM human WHERE id=?")
+                .set(this.number)
+                .select(new SingleOutcome<Boolean>(Boolean.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override
-    public Profile profile() {
-        return new PgProfile(this.src, this.number);
+    public void confirm() throws IOException {
+        try {
+            new JdbcSession(this.src.get())
+                .sql("UPDATE human SET confirmed=true WHERE id=?")
+                .set(this.number)
+                .update(Outcome.VOID);
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override
-    public void ask(final String text) {
-        throw new UnsupportedOperationException("#ask()");
-    }
-
-    @Override
-    public Talk talk(final long number) {
-        throw new UnsupportedOperationException("#talk()");
-    }
-
-    @Override
-    public Talk next() {
-        throw new UnsupportedOperationException("#next()");
+    public String name() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT name FROM human WHERE id=?")
+                .set(this.number)
+                .select(new SingleOutcome<String>(String.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 }

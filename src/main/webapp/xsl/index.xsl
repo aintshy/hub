@@ -29,17 +29,17 @@
     <xsl:template match="page" mode="body">
         <p>
             <xsl:text>
-                Give us your email and password and we let you in.
-                If you have never been here before, give us your
-                email and any password. We will register you right now.
+                Please, enter your email and password and we let you in.
+                If you've never been here before, give us your
+                email and any password, we'll register you right away.
             </xsl:text>
         </p>
         <form action="{links/link[@rel='enter']/@href}" method="post">
             <fieldset>
                 <label for="email">Email:</label>
-                <input id="email" name="email"/>
+                <input id="email" name="email" size="30"/>
                 <label for="password">Password:</label>
-                <input id="password" name="password"/>
+                <input id="password" name="password" size="23"/>
                 <input type="submit" value="Login"/>
             </fieldset>
         </form>

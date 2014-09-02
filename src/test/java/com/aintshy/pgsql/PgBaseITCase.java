@@ -18,53 +18,43 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.web;
+package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
-import com.aintshy.pgsql.PgBase;
-import com.jcabi.aspects.Cacheable;
-import com.jcabi.aspects.Loggable;
-import com.jcabi.manifests.Manifests;
-import com.jolbox.bonecp.BoneCPDataSource;
-import java.io.IOException;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.aintshy.api.Human;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Lifespan.
+ * Test case for {@link PgBase}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@ToString
-@EqualsAndHashCode
-@Loggable(Loggable.INFO)
-public final class Lifespan implements ServletContextListener {
+public final class PgBaseITCase {
 
     /**
-     * Base.
+     * PgBase can register a human.
+     * @throws Exception If fails
      */
-    private transient Base base;
-
-    @Override
-    public void contextInitialized(final ServletContextEvent event) {
-        final Base base;
-        try {
-            Manifests.append(event.getServletContext());
-            base = new PgBase();
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
-        event.getServletContext().setAttribute(Base.class.getName(), base);
-    }
-
-    @Override
-    public void contextDestroyed(final ServletContextEvent event) {
-        // nothing
+    @Test
+    public void registersHuman() throws Exception {
+        final Base base = new PgBase();
+        final String email = "t@aintshy.com";
+        final String password = "\u20ac=*'";
+        final Human first = base.register(email, password);
+        MatcherAssert.assertThat(
+            first.profile().confirmed(),
+            Matchers.is(false)
+        );
+        first.profile().confirm();
+        final Human second = base.register(email, password);
+        MatcherAssert.assertThat(
+            second.profile().confirmed(),
+            Matchers.is(true)
+        );
     }
 
 }

@@ -147,10 +147,6 @@
             <artifactId>jcabi-log</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-dynamo</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.jcabi.incubator</groupId>
             <artifactId>xembly</artifactId>
             <version>0.18</version>
@@ -186,6 +182,10 @@
         <dependency>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-matchers</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -419,9 +419,11 @@
                         <artifactId>build-helper-maven-plugin</artifactId>
                         <executions>
                             <execution>
+                                <id>reserve-tomcat-port</id>
                                 <goals>
                                     <goal>reserve-network-port</goal>
                                 </goals>
+                                <phase>initialize</phase>
                                 <configuration>
                                     <portNames>
                                         <portName>tomcat.port</portName>
@@ -550,10 +552,11 @@
                         <artifactId>build-helper-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>reserver-dynamodb-port</id>
+                                <id>reserver-pgsql-port</id>
                                 <goals>
                                     <goal>reserve-network-port</goal>
                                 </goals>
+                                <phase>initialize</phase>
                                 <configuration>
                                     <portNames>
                                         <portName>pgsql.port</portName>
@@ -592,24 +595,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <configuration>
-                            <systemProperties combine.children="append">
-                                <failsafe.pgsql.jdbc>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</failsafe.pgsql.jdbc>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <parallel>none</parallel>
-                            <systemPropertyVariables combine.children="append">
-                                <failsafe.pgsql.jdbc>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</failsafe.pgsql.jdbc>
-                            </systemPropertyVariables>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.liquibase</groupId>

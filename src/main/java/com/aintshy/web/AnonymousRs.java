@@ -20,12 +20,13 @@
  */
 package com.aintshy.web;
 
-import com.jcabi.urn.URN;
+import com.aintshy.api.Base;
+import com.aintshy.api.Human;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
-import java.net.URI;
+import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -81,10 +82,28 @@ public final class AnonymousRs extends BaseRs {
     @Path("/enter")
     public void enter(@FormParam("email") final String email,
         @FormParam("password") final String password) throws IOException {
+        final Human human;
+        try {
+            human = this.base().register(email, password);
+        } catch (final Base.InvalidPasswordException ex) {
+            throw this.flash().redirect(
+                this.uriInfo().getBaseUriBuilder()
+                    .clone()
+                    .path(AnonymousRs.class)
+                    .path(AnonymousRs.class, "index")
+                    .build(),
+                "password is not valid",
+                Level.WARNING
+            );
+        }
         final Identity identity = new Identity.Simple(
-            URN.create("urn:test:1"),
-            "jeff",
-            URI.create("http://img.aintshy.com/heart.png")
+            human.urn(),
+            human.profile().name(),
+            this.uriInfo().getBaseUriBuilder()
+                .clone()
+                .path(PhotoRs.class)
+                .path(PhotoRs.class, "index")
+                .build(human.urn())
         );
         throw new WebApplicationException(
             Response.seeOther(

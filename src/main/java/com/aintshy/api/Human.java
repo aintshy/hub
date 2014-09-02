@@ -21,6 +21,7 @@
 package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
+import com.jcabi.urn.URN;
 
 /**
  * Human.
@@ -31,6 +32,18 @@ import com.jcabi.aspects.Immutable;
  */
 @Immutable
 public interface Human {
+
+    /**
+     * His unique URN.
+     * @return URN
+     */
+    URN urn();
+
+    /**
+     * His profile.
+     * @return Profile
+     */
+    Profile profile();
 
     /**
      * Post a new question.

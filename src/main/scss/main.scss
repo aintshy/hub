@@ -25,6 +25,7 @@ body {
   width: 100%;
   padding: 2 * $em;
   font-size: $em;
+  color: $black;
 }
 
 .wrapper {
@@ -46,7 +47,7 @@ body {
   }
 }
 .foot {
-  font-size: 0.75 * $em;
+  font-size: .5 * $em;
 }
 
 .logo {
@@ -58,7 +59,8 @@ fieldset {
   border: 0;
   label, input {
     display: block;
-    font-size: $em;
+    font-size: $em !important;
+    font-family: $font;
   }
   input {
     padding: .2 * $em;

@@ -22,8 +22,15 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.SingleOutcome;
+import com.jcabi.manifests.Manifests;
 import com.jcabi.urn.URN;
+import com.jolbox.bonecp.BoneCPDataSource;
+import java.io.IOException;
+import java.sql.SQLException;
 import javax.sql.DataSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,6 +54,13 @@ public final class PgBase implements Base {
 
     /**
      * Ctor.
+     */
+    public PgBase() {
+        this(PgBase.source());
+    }
+
+    /**
+     * Ctor.
      * @param data Data source
      */
     public PgBase(final DataSource data) {
@@ -59,8 +73,43 @@ public final class PgBase implements Base {
     }
 
     @Override
+    public Human register(final String email, final String password)
+        throws IOException {
+        Long number;
+        try {
+            number = new JdbcSession(this.src.get())
+                .sql("SELECT id FROM human WHERE email=?")
+                .set(email)
+                .select(new SingleOutcome<Long>(Long.class, true));
+            if (number == null) {
+                number = new JdbcSession(this.src.get())
+                    .sql("INSERT INTO human (email, password, name) VALUES (?, ?, ?)")
+                    .set(email)
+                    .set(password)
+                    .set("jeff")
+                    .insert(new SingleOutcome<Long>(Long.class));
+            }
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+        return new PgHuman(this.src, number);
+    }
+
+    @Override
     public Human human(final URN urn) {
         return new PgHuman(this.src, Long.parseLong(urn.nss()));
+    }
+
+    /**
+     * Data source.
+     * @return Source
+     */
+    @Cacheable(forever = true)
+    private static DataSource source() {
+        final BoneCPDataSource src = new BoneCPDataSource();
+        src.setDriverClass("org.postgresql.Driver");
+        src.setJdbcUrl(Manifests.read("Aintshy-PgsqlJdbc"));
+        return src;
     }
 
 }

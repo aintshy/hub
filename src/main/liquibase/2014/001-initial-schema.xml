@@ -11,10 +11,11 @@
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(128) NOT NULL,
         name VARCHAR(40) UNIQUE NOT NULL,
-        age INTEGER NOT NULL,
-        sex gender NOT NULL,
-        photo BYTEA NOT NULL,
-        language CHAR(2) NOT NULL
+        confirmed BOOLEAN DEFAULT false NOT NULL,
+        age INTEGER DEFAULT 0 NOT NULL,
+        sex gender DEFAULT 'male' NOT NULL,
+        photo BYTEA,
+        language CHAR(2) DEFAULT 'en' NOT NULL
       )
     </sql>
     <sql>
