@@ -27,14 +27,20 @@
         <title><xsl:text>login</xsl:text></title>
     </xsl:template>
     <xsl:template match="page" mode="body">
-        <xsl:text>hello</xsl:text>
-        <form action="{links/link[@rel='self']/@href}" method="post">
+        <p>
+            <xsl:text>
+                Give us your email and password and we let you in.
+                If you have never been here before, give us your
+                email and any password. We will register you right now.
+            </xsl:text>
+        </p>
+        <form action="{links/link[@rel='enter']/@href}" method="post">
             <fieldset>
                 <label for="email">Email:</label>
                 <input id="email" name="email"/>
                 <label for="password">Password:</label>
                 <input id="password" name="password"/>
-                <input type="submit" value="login"/>
+                <input type="submit" value="Login"/>
             </fieldset>
         </form>
     </xsl:template>

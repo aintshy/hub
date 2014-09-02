@@ -137,7 +137,7 @@ public class BaseRs extends BaseResource {
                 this.uriInfo().getBaseUriBuilder()
                     .clone()
                     .path(AnonymousRs.class)
-                    .path(AnonymousRs.class, "login")
+                    .path(AnonymousRs.class, "index")
                     .build(),
                 "please login",
                 Level.INFO

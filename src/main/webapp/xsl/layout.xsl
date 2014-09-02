@@ -47,44 +47,13 @@
                     <header class="head">
                         <div>
                             <a href="{links/link[@rel='home']/@href}">
-                                <img src="//img.aintshy.com/logo.svg"
-                                    style="width:64px;height:64px;" alt="aintshy logo"/>
+                                <img src="//img.aintshy.com/heart.png" class="logo" alt="aintshy logo"/>
                             </a>
                         </div>
-                        <ul>
-                            <xsl:apply-templates select="identity"/>
-                            <xsl:if test="not(identity)">
-                                <li>
-                                    <a href="{links/link[@rel='rexsl:github']/@href}">
-                                        <xsl:text>login via Github</xsl:text>
-                                    </a>
-                                </li>
-                            </xsl:if>
-                        </ul>
-                        <xsl:if test="identity">
-                            <ul>
-                                <li>
-                                    <a href="{links/link[@rel='add']/@href}">
-                                        <xsl:text>Add New Quote</xsl:text>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{links/link[@rel='my-tags']/@href}">
-                                        <xsl:text>My Tags</xsl:text>
-                                    </a>
-                                </li>
-                            </ul>
-                        </xsl:if>
-                        <form id="search" method="get" action="{links/link[@rel='home']/@href}">
-                            <fieldset class="inline">
-                                <input name="q" id="q" size="40" maxlength="120"
-                                    autocomplete="off"
-                                    value="{term}" placeholder="search by keyword..."/>
-                            </fieldset>
-                        </form>
+                        <xsl:apply-templates select="identity"/>
                     </header>
+                    <xsl:apply-templates select="flash"/>
                     <div class="main">
-                        <xsl:apply-templates select="flash"/>
                         <xsl:apply-templates select="." mode="body"/>
                     </div>
                     <footer class="foot">
@@ -120,6 +89,27 @@
             </body>
         </html>
     </xsl:template>
+    <xsl:template match="identity">
+        <ul>
+            <li>
+                <xsl:value-of select="name"/>
+            </li>
+            <li>
+                <a href="{links/link[@rel='ask']/@href}">
+                    <xsl:text>ask</xsl:text>
+                </a>
+            </li>
+            <li>
+                <a title="log out" href="{/page/links/link[@rel='rexsl:logout']/@href}">
+                    <xsl:text>logout</xsl:text>
+                </a>
+            </li>
+        </ul>
+        <form action="{links/link[@rel='upload']/@href}" method="post">
+            <input type="file" name="photo"/>
+            <input type="submit" value="Upload photo"/>
+        </form>
+    </xsl:template>
     <xsl:template match="page/millis">
         <xsl:variable name="msec" select="number(.)"/>
         <li title="page load time">
@@ -152,15 +142,9 @@
         <li title="deployed version">
             <xsl:value-of select="name"/>
         </li>
-        <li>
-            <a title="see commit in Github"
-                href="https://github.com/aintshy/hub/commit/{revision}">
-                <xsl:value-of select="substring(revision,1,3)"/>
-            </a>
-        </li>
     </xsl:template>
     <xsl:template match="flash">
-        <p>
+        <div>
             <xsl:attribute name="class">
                 <xsl:text>flash </xsl:text>
                 <xsl:choose>
@@ -176,17 +160,6 @@
                 </xsl:choose>
             </xsl:attribute>
             <xsl:value-of select="message"/>
-        </p>
-    </xsl:template>
-    <xsl:template match="identity">
-        <li>
-            <xsl:text>@</xsl:text>
-            <xsl:value-of select="name"/>
-        </li>
-        <li>
-            <a title="log out" href="{/page/links/link[@rel='rexsl:logout']/@href}">
-                <xsl:text>logout</xsl:text>
-            </a>
-        </li>
+        </div>
     </xsl:template>
 </xsl:stylesheet>

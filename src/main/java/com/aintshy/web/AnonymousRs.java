@@ -21,6 +21,7 @@
 package com.aintshy.web;
 
 import com.jcabi.urn.URN;
+import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
@@ -65,18 +66,19 @@ public final class AnonymousRs extends BaseRs {
             .stylesheet("/xsl/index.xsl")
             .build(EmptyPage.class)
             .init(this)
+            .link(new Link("enter", "./enter"))
             .render()
             .build();
     }
 
     /**
-     * Login page, POST.
+     * Enter the system.
      * @param email Email
      * @param password Password
      * @throws IOException If fails
      */
     @POST
-    @Path("/login")
+    @Path("/enter")
     public void enter(@FormParam("email") final String email,
         @FormParam("password") final String password) throws IOException {
         final Identity identity = new Identity.Simple(
