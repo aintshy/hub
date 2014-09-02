@@ -1,4 +1,5 @@
-Aintshy-SecurityKey: key
+Aintshy-SecurityKey: test
 Aintshy-Version: ${project.version}
 Aintshy-Revision: ${buildNumber}
-Aintshy-Date: 9-Dec-2012
+Aintshy-Date: ${timestamp}
+Aintshy-PgsqlJdbc: ${failsafe.pgsql.jdbc}

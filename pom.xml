@@ -235,6 +235,12 @@
             <classifier>xpath</classifier>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.2-1002-jdbc4</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>
@@ -251,6 +257,15 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>1.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <changeLogFile>${basedir}/src/main/liquibase/master.xml</changeLogFile>
+                        <driver>org.postgresql.Driver</driver>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
@@ -578,7 +593,7 @@
                         <artifactId>tomcat7-maven-plugin</artifactId>
                         <configuration>
                             <systemProperties combine.children="append">
-                                <pgsql.url>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</pgsql.url>
+                                <failsafe.pgsql.jdbc>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</failsafe.pgsql.jdbc>
                             </systemProperties>
                         </configuration>
                     </plugin>
@@ -587,9 +602,27 @@
                         <configuration>
                             <parallel>none</parallel>
                             <systemPropertyVariables combine.children="append">
-                                <pgsql.url>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</pgsql.url>
+                                <failsafe.pgsql.jdbc>jdbc:postgresql://localhost:${pgsql.port}/test?username=test&amp;password=test</failsafe.pgsql.jdbc>
                             </systemPropertyVariables>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>update-test-db</id>
+                                <goals>
+                                    <goal>update</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <url>jdbc:postgresql://localhost:${pgsql.port}/test</url>
+                                    <username>test</username>
+                                    <password>test</password>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

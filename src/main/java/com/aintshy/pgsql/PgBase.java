@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Base in postgresql.
+ * Base in PostgreSQL.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
