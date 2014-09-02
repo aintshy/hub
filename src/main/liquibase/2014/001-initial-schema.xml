@@ -1,0 +1,46 @@
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
+  <changeSet id="001" author="yegor256">
+    <sql>
+      CREATE TYPE gender AS ENUM ('male', 'female', 'third');
+    </sql>
+    <sql>
+      CREATE TABLE human (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(128) NOT NULL,
+        name VARCHAR(40) UNIQUE NOT NULL,
+        age INTEGER NOT NULL,
+        sex gender NOT NULL,
+        photo BYTEA NOT NULL,
+        language CHAR(2) NOT NULL
+      )
+    </sql>
+    <sql>
+      CREATE TABLE question (
+        id SERIAL PRIMARY KEY,
+        asker INTEGER NOT NULL REFERENCES human(id),
+        date TIMESTAMP DEFAULT now() NOT NULL,
+        text VARCHAR(140) NOT NULL
+      )
+    </sql>
+    <sql>
+      CREATE TABLE talk (
+        id SERIAL PRIMARY KEY,
+        question INTEGER NOT NULL REFERENCES question(id),
+        responder INTEGER NOT NULL REFERENCES human(id),
+        date TIMESTAMP DEFAULT now() NOT NULL
+      )
+    </sql>
+    <sql>
+      CREATE TABLE message (
+        id SERIAL PRIMARY KEY,
+        talk INTEGER NOT NULL REFERENCES talk(id),
+        asking BOOLEAN NOT NULL,
+        date TIMESTAMP DEFAULT now() NOT NULL,
+        text VARCHAR(140) NOT NULL
+      )
+    </sql>
+  </changeSet>
+</databaseChangeLog>
