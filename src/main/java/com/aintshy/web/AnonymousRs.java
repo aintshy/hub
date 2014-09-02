@@ -73,12 +73,11 @@ public final class AnonymousRs extends BaseRs {
      * Login page, POST.
      * @param email Email
      * @param password Password
-     * @return The JAX-RS response
      * @throws IOException If fails
      */
     @POST
     @Path("/login")
-    public Response enter(@FormParam("email") final String email,
+    public void enter(@FormParam("email") final String email,
         @FormParam("password") final String password) throws IOException {
         final Identity identity = new Identity.Simple(
             URN.create("urn:test:1"),

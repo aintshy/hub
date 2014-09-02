@@ -22,11 +22,14 @@ package com.aintshy.web;
 
 import com.aintshy.api.Base;
 import com.aintshy.pgsql.PgBase;
+import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.manifests.Manifests;
+import com.jolbox.bonecp.BoneCPDataSource;
 import java.io.IOException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.sql.DataSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -52,7 +55,7 @@ public final class Lifespan implements ServletContextListener {
         final Base base;
         try {
             Manifests.append(event.getServletContext());
-            base = new PgBase();
+            base = new PgBase(Lifespan.source());
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }
@@ -62,6 +65,18 @@ public final class Lifespan implements ServletContextListener {
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
         // nothing
+    }
+
+    /**
+     * Data source.
+     * @return Source
+     */
+    @Cacheable(forever = true)
+    private static DataSource source() {
+        final BoneCPDataSource src = new BoneCPDataSource();
+        src.setDriverClass("org.postgresql.Driver");
+        src.setJdbcUrl(Manifests.read("Aintshy-PgsqlJdbc"));
+        return src;
     }
 
 }

@@ -1,12 +1,10 @@
 /*globals casper:false */
 [
-  "/xml/home.xml",
+  "/xml/index.xml",
   "/css/style.css",
   "/robots.txt",
   "/xsl/layout.xsl",
-  "/",
-  "/tags",
-  "/add-book"
+  "/"
 ].forEach(
   function (page) {
     "use strict";

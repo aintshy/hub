@@ -20,47 +20,23 @@
  */
 package com.aintshy.pgsql;
 
-import com.aintshy.api.Base;
-import com.aintshy.api.Human;
 import com.jcabi.aspects.Immutable;
-import com.jcabi.urn.URN;
 import javax.sql.DataSource;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
- * Base in PostgreSQL.
+ * Data source provider.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
 @Immutable
-@EqualsAndHashCode
-@ToString
-public final class PgBase implements Base {
+interface PgSource {
 
     /**
-     * Data source.
+     * Get data source.
+     * @return Data source
      */
-    private final transient PgSource src;
-
-    /**
-     * Ctor.
-     * @param data Data source
-     */
-    public PgBase(final DataSource data) {
-        this.src = new PgSource() {
-            @Override
-            public DataSource get() {
-                return data;
-            }
-        };
-    }
-
-    @Override
-    public Human human(final URN urn) {
-        return new PgHuman(this.src, Long.parseLong(urn.nss()));
-    }
+    DataSource get();
 
 }

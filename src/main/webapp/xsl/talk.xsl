@@ -24,7 +24,7 @@
     <xsl:output method="xml" omit-xml-declaration="yes"/>
     <xsl:include href="/xsl/layout.xsl"/>
     <xsl:template match="page" mode="head">
-        <title><xsl:text>aintshy</xsl:text></title>
+        <title><xsl:text>talk</xsl:text></title>
     </xsl:template>
     <xsl:template match="page" mode="body">
         <xsl:text>hello</xsl:text>

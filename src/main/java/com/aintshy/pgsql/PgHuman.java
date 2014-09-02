@@ -20,16 +20,14 @@
  */
 package com.aintshy.pgsql;
 
-import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Talk;
 import com.jcabi.aspects.Immutable;
-import com.jcabi.urn.URN;
-import javax.sql.DataSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Base in PostgreSQL.
+ * Human in PostgreSQL.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -38,7 +36,7 @@ import lombok.ToString;
 @Immutable
 @EqualsAndHashCode
 @ToString
-public final class PgBase implements Base {
+final class PgHuman implements Human {
 
     /**
      * Data source.
@@ -46,21 +44,32 @@ public final class PgBase implements Base {
     private final transient PgSource src;
 
     /**
-     * Ctor.
-     * @param data Data source
+     * Number of it.
      */
-    public PgBase(final DataSource data) {
-        this.src = new PgSource() {
-            @Override
-            public DataSource get() {
-                return data;
-            }
-        };
+    private final transient long number;
+
+    /**
+     * Ctor.
+     * @param source Data source
+     * @param num Number
+     */
+    public PgHuman(final PgSource source, final long num) {
+        this.src = source;
+        this.number = num;
     }
 
     @Override
-    public Human human(final URN urn) {
-        return new PgHuman(this.src, Long.parseLong(urn.nss()));
+    public void ask(final String text) {
+        throw new UnsupportedOperationException("#ask()");
     }
 
+    @Override
+    public Talk talk(final long number) {
+        throw new UnsupportedOperationException("#talk()");
+    }
+
+    @Override
+    public Talk next() {
+        throw new UnsupportedOperationException("#next()");
+    }
 }
