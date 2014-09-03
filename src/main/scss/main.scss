@@ -110,12 +110,11 @@ p, fieldset, pre {
   color: red;
 }
 
-.message {
-  width: 70%;
-}
 .message-asking {
   text-align: left;
+  margin-right: 5 * $em;
 }
 .message-answering {
   text-align: right;
+  margin-left: 5 * $em;
 }

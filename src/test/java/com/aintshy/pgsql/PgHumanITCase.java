@@ -23,6 +23,8 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
 import com.aintshy.api.Talk;
+import java.io.IOException;
+import org.hamcrest.CustomMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -70,6 +72,37 @@ public final class PgHumanITCase {
         MatcherAssert.assertThat(
             human.next().iterator().next(),
             Matchers.equalTo(talk)
+        );
+    }
+
+    /**
+     * PgHuman can fetch my own talk.
+     * @throws Exception If fails
+     */
+    @Test
+    public void fetchesMyOwnTalk() throws Exception {
+        final Base base = new PgBase();
+        final Human human = base.register("oi7@aintshy.com", "9*7kha");
+        human.ask("what is the weather today?");
+        final Human friend = base.register("yyt6@aintshy.com", "-9w0*8s");
+        for (final Talk talk : friend.next()) {
+            talk.messages().post(false, "just an answer");
+        }
+        MatcherAssert.assertThat(
+            human.next(),
+            Matchers.hasItem(
+                new CustomMatcher<Talk>("my own question") {
+                    @Override
+                    public boolean matches(final Object item) {
+                        final Talk talk = Talk.class.cast(item);
+                        try {
+                            return talk.question().contains("weather");
+                        } catch (final IOException ex) {
+                            throw new IllegalStateException(ex);
+                        }
+                    }
+                }
+            )
         );
     }
 
