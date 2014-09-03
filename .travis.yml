@@ -1,5 +1,8 @@
 language: ruby
-cache: bundler
+cache:
+  bundler
+  directories:
+    - $HOME/.m2
 branches:
   only:
     - master
