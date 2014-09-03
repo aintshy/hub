@@ -18,40 +18,12 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.web;
-
-import com.aintshy.api.Human;
-import java.io.IOException;
-import java.util.logging.Level;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 
 /**
- * Ask question.
+ * Mock of API.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@Path("/ask")
-public final class AskRs extends BaseRs {
-
-    /**
-     * Post a question.
-     * @param text Text to post
-     * @throws IOException If fails
-     */
-    @POST
-    @Path("/post")
-    public void post(@FormParam("text") final String text) throws IOException {
-        final Human human = new SafeHuman(this.human(), this);
-        human.ask(text);
-        throw this.flash().redirect(
-            this.uriInfo().getBaseUri(),
-            "thanks for the question",
-            Level.INFO
-        );
-    }
-
-}
+package com.aintshy.api.mock;

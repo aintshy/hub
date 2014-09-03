@@ -72,9 +72,10 @@ public final class MkProfile implements Profile {
         return Locale.ENGLISH;
     }
 
+    // @checkstyle ParameterNumberCheck (5 lines)
     @Override
     public void update(final String name, final int age,
-        final Sex sex, final Locale locale) throws IOException {
+        final Sex sex, final Locale locale) {
         throw new UnsupportedOperationException("#update()");
     }
 

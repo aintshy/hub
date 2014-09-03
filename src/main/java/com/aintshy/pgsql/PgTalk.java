@@ -74,6 +74,7 @@ final class PgTalk implements Talk {
             return new PgHuman(
                 this.src,
                 new JdbcSession(this.src.get())
+                    // @checkstyle LineLength (1 line)
                     .sql("SELECT asker FROM question JOIN talk ON question.id=talk.question AND talk.id=?")
                     .set(this.number)
                     .select(new SingleOutcome<Long>(Long.class))
@@ -102,6 +103,7 @@ final class PgTalk implements Talk {
     public String question() throws IOException {
         try {
             return new JdbcSession(this.src.get())
+                // @checkstyle LineLength (1 line)
                 .sql("SELECT text FROM question JOIN talk ON talk.question=question.id WHERE talk.id=?")
                 .set(this.number)
                 .select(new SingleOutcome<String>(String.class));

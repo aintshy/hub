@@ -43,6 +43,7 @@ import javax.ws.rs.core.Response;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
 @Path("/{number : \\d+}")
 public final class TalkRs extends BaseRs {
@@ -136,6 +137,7 @@ public final class TalkRs extends BaseRs {
     /**
      * Get current talk.
      * @return Talk
+     * @throws IOException If fails
      */
     private Talk talk() throws IOException {
         return new SafeHuman(this.human(), this).talk(this.number);

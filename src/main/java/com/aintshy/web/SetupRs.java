@@ -39,6 +39,7 @@ import javax.ws.rs.core.Response;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
 @Path("/setup")
 public final class SetupRs extends BaseRs {
@@ -134,6 +135,7 @@ public final class SetupRs extends BaseRs {
      * @param name Name
      * @param lang Lang
      * @throws IOException If fails
+     * @checkstyle ParameterNumberCheck (10 lines)
      */
     @POST
     @Path("/details")

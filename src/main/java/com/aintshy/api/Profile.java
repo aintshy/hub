@@ -88,8 +88,11 @@ public interface Profile {
      * @param age Age
      * @param sex Sex
      * @param locale Locale
+     * @throws IOException If fails
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
-    void update(String name, int age, Sex sex, Locale locale) throws IOException;
+    void update(String name, int age, Sex sex, Locale locale)
+        throws IOException;
 
     /**
      * Get photo.

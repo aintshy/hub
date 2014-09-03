@@ -43,6 +43,7 @@ public final class PhotoRs extends BaseRs {
     /**
      * Show a photo.
      * @param urn URN of a user
+     * @return PNG
      * @throws IOException If fails
      */
     @GET

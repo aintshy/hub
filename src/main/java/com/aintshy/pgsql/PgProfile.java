@@ -157,11 +157,13 @@ final class PgProfile implements Profile {
         }
     }
 
+    // @checkstyle ParameterNumberCheck (5 lines)
     @Override
     public void update(final String name, final int age,
         final Sex sex, final Locale locale) throws IOException {
         try {
             new JdbcSession(this.src.get())
+                // @checkstyle LineLength (1 line)
                 .sql("UPDATE human SET name=?, age=?, sex=gender(?), locale=? WHERE id=?")
                 .set(name)
                 .set(age)

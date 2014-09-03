@@ -43,6 +43,7 @@ import lombok.ToString;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @Immutable
 @ToString
@@ -72,14 +73,6 @@ public final class PgBase implements Base {
                 return data;
             }
         };
-    }
-
-    /**
-     * Get source.
-     * @return Source
-     */
-    PgSource source() {
-        return this.src;
     }
 
     @Override
@@ -131,6 +124,14 @@ public final class PgBase implements Base {
             );
         }
         return new PgHuman(this.src, number);
+    }
+
+    /**
+     * Get source.
+     * @return Source
+     */
+    PgSource source() {
+        return this.src;
     }
 
     /**

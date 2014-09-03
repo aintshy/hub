@@ -22,14 +22,11 @@ package com.aintshy.web;
 
 import com.aintshy.api.Base;
 import com.aintshy.pgsql.PgBase;
-import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.manifests.Manifests;
-import com.jolbox.bonecp.BoneCPDataSource;
 import java.io.IOException;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.sql.DataSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -52,14 +49,13 @@ public final class Lifespan implements ServletContextListener {
 
     @Override
     public void contextInitialized(final ServletContextEvent event) {
-        final Base base;
         try {
             Manifests.append(event.getServletContext());
-            base = new PgBase();
+            this.base = new PgBase();
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }
-        event.getServletContext().setAttribute(Base.class.getName(), base);
+        event.getServletContext().setAttribute(Base.class.getName(), this.base);
     }
 
     @Override

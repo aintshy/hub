@@ -37,7 +37,7 @@ import java.util.Collections;
 public final class MkMessages implements Messages {
 
     @Override
-    public Message post(final boolean asking, final String text) throws IOException {
+    public Message post(final boolean asking, final String text) {
         throw new UnsupportedOperationException("#post()");
     }
 

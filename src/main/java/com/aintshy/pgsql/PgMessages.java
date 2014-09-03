@@ -68,9 +68,11 @@ final class PgMessages implements Messages {
     }
 
     @Override
-    public Message post(final boolean asking, final String text) throws IOException {
+    public Message post(final boolean asking,
+        final String text) throws IOException {
         try {
             new JdbcSession(this.src.get())
+                // @checkstyle LineLength (1 line)
                 .sql("INSERT INTO message (talk, asking, text) VALUES (?, ?, ?)")
                 .set(this.number)
                 .set(asking)
@@ -87,6 +89,7 @@ final class PgMessages implements Messages {
     public Iterable<Message> iterate() throws IOException {
         try {
             final Collection<Message> msgs = new JdbcSession(this.src.get())
+                // @checkstyle LineLength (1 line)
                 .sql("SELECT asking, text FROM message WHERE talk=? ORDER BY date DESC")
                 .set(this.number)
                 .select(
@@ -105,6 +108,7 @@ final class PgMessages implements Messages {
                 );
             if (!msgs.isEmpty()) {
                 new JdbcSession(this.src.get())
+                    // @checkstyle LineLength (1 line)
                     .sql("UPDATE message SET seen=now() WHERE talk=? AND seen IS NULL")
                     .set(this.number)
                     .update(Outcome.VOID);

@@ -42,6 +42,7 @@ import javax.ws.rs.core.Response;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
 @Path("/")
 public final class AnonymousRs extends BaseRs {
@@ -89,6 +90,7 @@ public final class AnonymousRs extends BaseRs {
     /**
      * Nothing to show, no talks.
      * @return JAX-RS response
+     * @throws IOException If fails
      */
     @GET
     @Path("/empty")

@@ -53,6 +53,7 @@ public interface Base {
      *
      * @param urn His URN
      * @return Human
+     * @throws IOException If fails
      */
     Human human(URN urn) throws IOException;
 

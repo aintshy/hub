@@ -43,6 +43,7 @@ public final class ProfileRs extends BaseRs {
 
     /**
      * Upload a photo.
+     * @param photo Photo to upload
      * @throws IOException If fails
      */
     @POST

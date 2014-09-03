@@ -127,6 +127,8 @@ final class PgHuman implements Human {
      */
     private Collection<Talk> unread() throws SQLException {
         return new JdbcSession(this.src.get())
+            .set(this.number)
+            .set(this.number)
             .sql(
                 Joiner.on(' ').join(
                     "SELECT talk FROM message",
@@ -135,12 +137,9 @@ final class PgHuman implements Human {
                     "WHERE message.seen IS NULL",
                     "AND ((asking=true AND responder=?)",
                     "OR (asking=false AND asker=?))",
-                    "ORDER BY message.date DESC",
-                    "LIMIT 1"
+                    "ORDER BY message.date DESC LIMIT 1"
                 )
             )
-            .set(this.number)
-            .set(this.number)
             .select(
                 new Outcome<Collection<Talk>>() {
                     @Override
@@ -165,17 +164,16 @@ final class PgHuman implements Human {
      */
     private Collection<Talk> fresh() throws SQLException {
         final Collection<Talk> talks = new JdbcSession(this.src.get())
+            .set(this.number)
             .sql(
                 Joiner.on(' ').join(
                     "SELECT talk.id FROM talk",
                     "LEFT JOIN message ON message.talk=talk.id",
                     "WHERE message.id IS NULL",
                     "AND talk.seen IS NULL AND responder = ?",
-                    "ORDER BY talk.date DESC",
-                    "LIMIT 1"
+                    "ORDER BY talk.date DESC LIMIT 1"
                 )
             )
-            .set(this.number)
             .select(
                 new Outcome<Collection<Talk>>() {
                     @Override
@@ -216,9 +214,12 @@ final class PgHuman implements Human {
     /**
      * Start new talk for the current human.
      * @return Talk
+     * @throws SQLException If fails
      */
     private Collection<Talk> start() throws SQLException {
         final Long question = new JdbcSession(this.src.get())
+            .set(this.number)
+            .set(this.number)
             .sql(
                 Joiner.on(' ').join(
                     "SELECT question.id FROM question",
@@ -228,8 +229,6 @@ final class PgHuman implements Human {
                     "LIMIT 1"
                 )
             )
-            .set(this.number)
-            .set(this.number)
             .select(new SingleOutcome<Long>(Long.class, true));
         final Collection<Talk> talks = new ArrayList<Talk>(1);
         if (question != null) {

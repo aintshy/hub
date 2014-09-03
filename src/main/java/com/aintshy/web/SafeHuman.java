@@ -50,6 +50,7 @@ final class SafeHuman implements Human {
      * Ctor.
      * @param hmn Human
      * @param res Base resource
+     * @throws IOException If fails
      */
     SafeHuman(final Human hmn, final BaseRs res) throws IOException {
         if (!hmn.profile().confirmed()) {

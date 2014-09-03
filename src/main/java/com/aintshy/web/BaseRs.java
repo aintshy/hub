@@ -107,6 +107,7 @@ public class BaseRs extends BaseResource {
      */
     @Inset.Runtime
     public final Inset insetLinks() {
+        // @checkstyle AnonInnerLengthCheck (100 lines)
         return new Inset() {
             @Override
             public void render(final BasePage<?, ?> page,
@@ -152,6 +153,7 @@ public class BaseRs extends BaseResource {
     /**
      * Get current human.
      * @return Human
+     * @throws IOException If fails
      */
     protected final Human human() throws IOException {
         final Identity identity = this.auth().identity();
