@@ -22,7 +22,6 @@ deploy:
 
 release:
   script: |
-    sudo bundle install
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
     mvn clean deploy -Pqulice -Paintshy --errors --settings ../settings.xml
