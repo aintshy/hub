@@ -25,6 +25,7 @@ import com.aintshy.api.Human;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
@@ -113,8 +114,23 @@ public final class PgBase implements Base {
     }
 
     @Override
-    public Human human(final URN urn) {
-        return new PgHuman(this.src, Long.parseLong(urn.nss()));
+    public Human human(final URN urn) throws IOException {
+        final long number = Long.parseLong(urn.nss());
+        final boolean exists;
+        try {
+            exists = new JdbcSession(this.src.get())
+                .sql("SELECT id FROM human WHERE id=?")
+                .set(number)
+                .select(Outcome.NOT_EMPTY);
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+        if (!exists) {
+            throw new Base.HumanNotFoundException(
+                String.format("user #%d not found", number)
+            );
+        }
+        return new PgHuman(this.src, number);
     }
 
     /**

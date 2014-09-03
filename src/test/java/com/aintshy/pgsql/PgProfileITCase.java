@@ -18,46 +18,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.web;
+package com.aintshy.pgsql;
 
-import com.jcabi.urn.URN;
-import java.io.IOException;
-import java.net.URI;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import com.aintshy.api.Base;
+import com.aintshy.api.Human;
+import com.aintshy.api.Profile;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Photo.
+ * Integration case for {@link PgProfile}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@Path("/photo")
-public final class PhotoRs extends BaseRs {
+public final class PgProfileITCase {
 
     /**
-     * Show a photo.
-     * @param urn URN of a user
-     * @throws IOException If fails
+     * PgProfile can expose data.
+     * @throws Exception If fails
      */
-    @GET
-    @Path("/")
-    @Produces("image/png")
-    public byte[] index(@QueryParam("urn") final URN urn) throws IOException {
-        final byte[] png = this.base().human(urn).profile().photo();
-        if (png == null) {
-            throw new WebApplicationException(
-                Response.seeOther(
-                    URI.create("http://img.aintshy.com/no-photo.png")
-                ).build()
-            );
-        }
-        return png;
+    @Test
+    public void exposesData() throws Exception {
+        final Base base = new PgBase();
+        final Human human = base.register("h3es@aintshy.com", "-9w8skkha");
+        final Profile profile = human.profile();
+        MatcherAssert.assertThat(profile.age(), Matchers.notNullValue());
+        MatcherAssert.assertThat(profile.sex(), Matchers.notNullValue());
+        MatcherAssert.assertThat(profile.locale(), Matchers.notNullValue());
+        MatcherAssert.assertThat(profile.name(), Matchers.notNullValue());
+        MatcherAssert.assertThat(profile.photo(), Matchers.notNullValue());
     }
 
 }

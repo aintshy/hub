@@ -78,4 +78,34 @@ final class JxHuman {
         return this.human.profile().name();
     }
 
+    /**
+     * His age.
+     * @return Age
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "age")
+    public int getAge() throws IOException {
+        return this.human.profile().age();
+    }
+
+    /**
+     * His sex.
+     * @return Sex
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "sex")
+    public String getSex() throws IOException {
+        return this.human.profile().sex();
+    }
+
+    /**
+     * His locale.
+     * @return Locale
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "locale")
+    public String getLocale() throws IOException {
+        return this.human.profile().locale().toString();
+    }
+
 }

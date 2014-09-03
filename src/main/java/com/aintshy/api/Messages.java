@@ -38,12 +38,14 @@ public interface Messages {
      * @param asking Is it an asking message?
      * @param text The text
      * @return Message posted
+     * @throws IOException If fails
      */
     Message post(boolean asking, String text) throws IOException;
 
     /**
      * Iterate them.
      * @return All messages
+     * @throws IOException If fails
      */
     Iterable<Message> iterate() throws IOException;
 

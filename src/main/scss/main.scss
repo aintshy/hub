@@ -118,3 +118,18 @@ p, fieldset, pre {
   text-align: right;
   margin-left: 5 * $em;
 }
+
+.photos {
+  position: relative;
+  height: 160px;
+  min-height: 160px;
+  .answer {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  img {
+    width: 160px;
+    height: 160px;
+  }
+}

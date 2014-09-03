@@ -20,9 +20,14 @@
  */
 package com.aintshy.web;
 
+import com.jcabi.aspects.Tv;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
+import javax.imageio.ImageIO;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
@@ -43,6 +48,18 @@ public final class ProfileRs extends BaseRs {
     @POST
     @Path("/upload")
     public void upload(final InputStream photo) throws IOException {
+        final BufferedImage image = ImageIO.read(photo);
+        final Image thumb = image.getScaledInstance(
+            Tv.FOUR * Tv.HUNDRED, -1, Image.SCALE_SMOOTH
+        );
+        final BufferedImage nice = new BufferedImage(
+            thumb.getWidth(null), thumb.getHeight(null),
+            BufferedImage.TYPE_INT_RGB
+        );
+        nice.getGraphics().drawImage(thumb, 0, 0, null);
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(nice, "png", baos);
+        this.human().profile().photo(baos.toByteArray());
         throw this.flash().redirect(
             this.uriInfo().getBaseUri(),
             "photo updated, thanks",

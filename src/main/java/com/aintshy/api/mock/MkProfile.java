@@ -22,7 +22,9 @@ package com.aintshy.api.mock;
 
 import com.aintshy.api.Profile;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Tv;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Mock Profile.
@@ -47,5 +49,30 @@ public final class MkProfile implements Profile {
     @Override
     public String name() throws IOException {
         return "Jeff Lebowski";
+    }
+
+    @Override
+    public int age() throws IOException {
+        return Tv.THIRTY;
+    }
+
+    @Override
+    public String sex() throws IOException {
+        return "male";
+    }
+
+    @Override
+    public Locale locale() throws IOException {
+        return Locale.ENGLISH;
+    }
+
+    @Override
+    public byte[] photo() throws IOException {
+        return new byte[0];
+    }
+
+    @Override
+    public void photo(final byte[] bytes) throws IOException {
+        throw new UnsupportedOperationException("#photo()");
     }
 }

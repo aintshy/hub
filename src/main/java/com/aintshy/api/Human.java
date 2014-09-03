@@ -49,6 +49,7 @@ public interface Human {
     /**
      * Post a new question.
      * @param text Text to post
+     * @throws IOException If fails
      */
     void ask(String text) throws IOException;
 
@@ -62,6 +63,7 @@ public interface Human {
     /**
      * Get next talks to watch.
      * @return Talks
+     * @throws IOException If fails
      */
     Iterable<Talk> next() throws IOException;
 

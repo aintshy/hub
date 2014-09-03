@@ -76,6 +76,26 @@ public final class TalkRs extends BaseRs {
             .init(this)
             .link(new Link("post", "./post"))
             .link(new Link("next", "/"))
+            .link(
+                new Link(
+                    "ask-photo",
+                    this.uriInfo().getBaseUriBuilder().clone()
+                        .path(PhotoRs.class)
+                        .path(PhotoRs.class, "index")
+                        .queryParam("urn", "{x}")
+                        .build(talk.asker().urn())
+                )
+            )
+            .link(
+                new Link(
+                    "answer-photo",
+                    this.uriInfo().getBaseUriBuilder().clone()
+                        .path(PhotoRs.class)
+                        .path(PhotoRs.class, "index")
+                        .queryParam("urn", "{x}")
+                        .build(talk.responder().urn())
+                )
+            )
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(
@@ -117,7 +137,7 @@ public final class TalkRs extends BaseRs {
      * Get current talk.
      * @return Talk
      */
-    private Talk talk() {
+    private Talk talk() throws IOException {
         return this.human().talk(this.number);
     }
 

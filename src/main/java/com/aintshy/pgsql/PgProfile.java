@@ -27,7 +27,10 @@ import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Locale;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -95,6 +98,81 @@ final class PgProfile implements Profile {
                 .sql("SELECT name FROM human WHERE id=?")
                 .set(this.number)
                 .select(new SingleOutcome<String>(String.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public int age() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT age FROM human WHERE id=?")
+                .set(this.number)
+                .select(new SingleOutcome<Long>(Long.class))
+                .intValue();
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public String sex() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT sex FROM human WHERE id=?")
+                .set(this.number)
+                .select(new SingleOutcome<String>(String.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public Locale locale() throws IOException {
+        try {
+            return new Locale(
+                new JdbcSession(this.src.get())
+                    .sql("SELECT locale FROM human WHERE id=?")
+                    .set(this.number)
+                    .select(new SingleOutcome<String>(String.class))
+            );
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public byte[] photo() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT photo FROM human WHERE id=?")
+                .set(this.number)
+                .select(
+                    new Outcome<byte[]>() {
+                        @Override
+                        public byte[] handle(final ResultSet rset,
+                            final Statement stmt) throws SQLException {
+                            if (!rset.next()) {
+                                throw new IllegalStateException("no human");
+                            }
+                            return rset.getBytes(1);
+                        }
+                    }
+                );
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public void photo(final byte[] bytes) throws IOException {
+        try {
+            new JdbcSession(this.src.get())
+                .sql("UPDATE human SET photo=? WHERE id=?")
+                .set(bytes)
+                .set(this.number)
+                .update(Outcome.VOID);
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }

@@ -91,7 +91,7 @@ public final class AnonymousRs extends BaseRs {
      */
     @GET
     @Path("/empty")
-    public Response empty() {
+    public Response empty() throws IOException {
         this.human();
         return new PageBuilder()
             .stylesheet("/xsl/empty.xsl")

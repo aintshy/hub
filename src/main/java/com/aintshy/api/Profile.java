@@ -22,6 +22,7 @@ package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Human profile.
@@ -36,18 +37,56 @@ public interface Profile {
     /**
      * Email confirmed?
      * @return TRUE if confirmed already
+     * @throws IOException If fails
      */
     boolean confirmed() throws IOException;
 
     /**
      * Confirm email.
+     * @throws IOException If fails
      */
     void confirm() throws IOException;
 
     /**
      * His name.
      * @return Name
+     * @throws IOException If fails
      */
     String name() throws IOException;
+
+    /**
+     * His age.
+     * @return Age
+     * @throws IOException If fails
+     */
+    int age() throws IOException;
+
+    /**
+     * His sex.
+     * @return Sex ("male", "female", or "third")
+     * @throws IOException If fails
+     */
+    String sex() throws IOException;
+
+    /**
+     * His language.
+     * @return Language
+     * @throws IOException If fails
+     */
+    Locale locale() throws IOException;
+
+    /**
+     * Get photo.
+     * @return PNG image
+     * @throws IOException If fails
+     */
+    byte[] photo() throws IOException;
+
+    /**
+     * Upload photo.
+     * @param bytes PNG image
+     * @throws IOException If fails
+     */
+    void photo(byte[] bytes) throws IOException;
 
 }

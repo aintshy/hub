@@ -97,8 +97,17 @@
                 <xsl:value-of select="name"/>
             </li>
             <li>
+                <xsl:value-of select="age"/>
+            </li>
+            <li>
+                <xsl:value-of select="sex"/>
+            </li>
+            <li>
+                <xsl:value-of select="locale"/>
+            </li>
+            <li>
                 <a title="log out" href="{/page/links/link[@rel='rexsl:logout']/@href}">
-                    <xsl:text>logout</xsl:text>
+                    <xsl:text>exit</xsl:text>
                 </a>
             </li>
         </ul>

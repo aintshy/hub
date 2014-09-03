@@ -42,15 +42,19 @@ public interface Base {
      * @param email Email
      * @param password Password
      * @return Human
+     * @throws IOException If fails
      */
     Human register(String email, String password) throws IOException;
 
     /**
-     * Get human by URN.
+     * Get human by URN (throws
+     * {@link com.aintshy.api.Base.HumanNotFoundException} if this user
+     * is absent).
+     *
      * @param urn His URN
      * @return Human
      */
-    Human human(URN urn);
+    Human human(URN urn) throws IOException;
 
     /**
      * Password is not correct.
@@ -65,6 +69,23 @@ public interface Base {
          * @param cause Cause
          */
         public InvalidPasswordException(final String cause) {
+            super(cause);
+        }
+    }
+
+    /**
+     * User not found.
+     */
+    final class HumanNotFoundException extends RuntimeException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 305929936831895556L;
+        /**
+         * Ctor.
+         * @param cause Cause
+         */
+        public HumanNotFoundException(final String cause) {
             super(cause);
         }
     }

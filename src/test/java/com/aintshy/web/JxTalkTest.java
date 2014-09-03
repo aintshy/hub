@@ -45,9 +45,12 @@ public final class JxTalkTest {
         MatcherAssert.assertThat(
             JaxbConverter.the(talk),
             XhtmlMatchers.hasXPaths(
-                "/talk/questioni",
+                "/talk/question",
                 "/talk/asker/name",
-                "/talk/responder/urn"
+                "/talk/responder/urn",
+                "/talk/responder/age",
+                "/talk/responder/locale",
+                "/talk/responder/sex"
             )
         );
     }

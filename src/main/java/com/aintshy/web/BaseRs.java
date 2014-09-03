@@ -33,7 +33,9 @@ import com.rexsl.page.auth.Identity;
 import com.rexsl.page.inset.FlashInset;
 import com.rexsl.page.inset.LinksInset;
 import com.rexsl.page.inset.VersionInset;
+import java.io.IOException;
 import java.util.logging.Level;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -76,6 +78,27 @@ public class BaseRs extends BaseResource {
             Manifests.read("Aintshy-Revision"),
             Manifests.read("Aintshy-Date")
         );
+    }
+
+    /**
+     * Human inset (if logged in).
+     * @return The inset
+     */
+    @Inset.Runtime
+    public final Inset humanLinks() {
+        return new Inset() {
+            @Override
+            public void render(final BasePage<?, ?> page,
+                final Response.ResponseBuilder builder) {
+                if (!BaseRs.this.auth().identity().equals(Identity.ANONYMOUS)) {
+                    try {
+                        page.append(new JxHuman(BaseRs.this.human()));
+                    } catch (final IOException ex) {
+                        throw new IllegalStateException(ex);
+                    }
+                }
+            }
+        };
     }
 
     /**
@@ -130,7 +153,7 @@ public class BaseRs extends BaseResource {
      * Get current human.
      * @return Human
      */
-    protected final Human human() {
+    protected final Human human() throws IOException {
         final Identity identity = this.auth().identity();
         if (identity.equals(Identity.ANONYMOUS)) {
             throw this.flash().redirect(
@@ -139,7 +162,17 @@ public class BaseRs extends BaseResource {
                 Level.INFO
             );
         }
-        return this.base().human(identity.urn());
+        try {
+            return this.base().human(identity.urn());
+        } catch (final Base.HumanNotFoundException ex) {
+            throw new WebApplicationException(
+                ex,
+                Response.seeOther(this.uriInfo().getBaseUri())
+                    .cookie(this.auth().logout())
+                    .entity(ex.getLocalizedMessage())
+                    .build()
+            );
+        }
     }
 
     /**

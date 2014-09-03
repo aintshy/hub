@@ -27,16 +27,20 @@
         <title><xsl:text>talk</xsl:text></title>
     </xsl:template>
     <xsl:template match="page" mode="body">
-        <form action="{links/link[@rel='post']/@href}" method="post">
-            <fieldset>
-                <input name="text" style="width:100%" placeholder="Post your answer..." maxlength="140"/>
-            </fieldset>
-        </form>
         <p style="text-align:center">
             <a href="{links/link[@rel='next']/@href}">
                 <xsl:text>next</xsl:text>
             </a>
         </p>
+        <p class="photos">
+            <img src="{links/link[@rel='ask-photo']/@href}" class="ask"/>
+            <img src="{links/link[@rel='answer-photo']/@href}" class="answer"/>
+        </p>
+        <form action="{links/link[@rel='post']/@href}" method="post">
+            <fieldset>
+                <input name="text" style="width:100%" placeholder="Post your answer..." maxlength="140"/>
+            </fieldset>
+        </form>
         <xsl:apply-templates select="messages/message"/>
         <xsl:apply-templates select="talk/question"/>
     </xsl:template>

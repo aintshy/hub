@@ -42,18 +42,21 @@ public interface Talk {
     /**
      * Who asked the question.
      * @return Human who asked
+     * @throws IOException If fails
      */
     Human asker() throws IOException;
 
     /**
      * Who is answering.
      * @return Human who is answering
+     * @throws IOException If fails
      */
     Human responder() throws IOException;
 
     /**
      * Original question.
      * @return The question
+     * @throws IOException If fails
      */
     String question() throws IOException;
 

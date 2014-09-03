@@ -38,12 +38,14 @@ public interface Message {
     /**
      * Is it an asking message?
      * @return TRUE if this message is coming from the asker
+     * @throws IOException If fails
      */
     boolean asking() throws IOException;
 
     /**
      * Text.
      * @return Text of it
+     * @throws IOException If fails
      */
     String text() throws IOException;
 
