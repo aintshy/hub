@@ -20,62 +20,36 @@
  */
 package com.aintshy.web;
 
-import com.aintshy.api.Human;
-import java.io.IOException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.aintshy.api.mock.MkTalk;
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 
 /**
- * Jaxb Human.
+ * Test case for {@link JxTalk}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@XmlRootElement(name = "human")
-@XmlAccessorType(XmlAccessType.NONE)
-final class JxHuman {
+public final class JxTalkTest {
 
     /**
-     * Human.
+     * JxTalk can be converted to XML.
+     * @throws Exception If fails
      */
-    private final transient Human human;
-
-    /**
-     * Ctor.
-     */
-    JxHuman() {
-        throw new UnsupportedOperationException("#JxHuman()");
-    }
-
-    /**
-     * Ctor.
-     * @param hmn Human
-     */
-    JxHuman(final Human hmn) {
-        this.human = hmn;
-    }
-
-    /**
-     * His URN.
-     * @return URN
-     * @throws IOException If fails
-     */
-    @XmlElement(name = "urn")
-    public String getUrn() throws IOException {
-        return this.human.urn().toString();
-    }
-
-    /**
-     * His name.
-     * @return Name
-     * @throws IOException If fails
-     */
-    @XmlElement(name = "name")
-    public String getName() throws IOException {
-        return this.human.profile().name();
+    @Test
+    public void convertsToXml() throws Exception {
+        final JxTalk talk = new JxTalk(new MkTalk());
+        MatcherAssert.assertThat(
+            JaxbConverter.the(talk),
+            XhtmlMatchers.hasXPaths(
+                "/talk/questioni",
+                "/talk/asker/name",
+                "/talk/responder/urn"
+            )
+        );
     }
 
 }

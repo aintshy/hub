@@ -18,64 +18,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.web;
+package com.aintshy.api.mock;
 
 import com.aintshy.api.Human;
+import com.aintshy.api.Messages;
+import com.aintshy.api.Talk;
+import com.jcabi.aspects.Immutable;
 import java.io.IOException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Jaxb Human.
+ * Mock Talk.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@XmlRootElement(name = "human")
-@XmlAccessorType(XmlAccessType.NONE)
-final class JxHuman {
+@Immutable
+public final class MkTalk implements Talk {
 
-    /**
-     * Human.
-     */
-    private final transient Human human;
-
-    /**
-     * Ctor.
-     */
-    JxHuman() {
-        throw new UnsupportedOperationException("#JxHuman()");
+    @Override
+    public long number() {
+        return 1L;
     }
 
-    /**
-     * Ctor.
-     * @param hmn Human
-     */
-    JxHuman(final Human hmn) {
-        this.human = hmn;
+    @Override
+    public Human asker() throws IOException {
+        return new MkHuman();
     }
 
-    /**
-     * His URN.
-     * @return URN
-     * @throws IOException If fails
-     */
-    @XmlElement(name = "urn")
-    public String getUrn() throws IOException {
-        return this.human.urn().toString();
+    @Override
+    public Human responder() throws IOException {
+        return new MkHuman();
     }
 
-    /**
-     * His name.
-     * @return Name
-     * @throws IOException If fails
-     */
-    @XmlElement(name = "name")
-    public String getName() throws IOException {
-        return this.human.profile().name();
+    @Override
+    public String question() throws IOException {
+        return "how are you?";
     }
 
+    @Override
+    public Messages messages() {
+        return new MkMessages();
+    }
 }

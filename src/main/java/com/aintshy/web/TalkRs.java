@@ -75,7 +75,7 @@ public final class TalkRs extends BaseRs {
             .build(EmptyPage.class)
             .init(this)
             .link(new Link("post", "./post"))
-            .link(new Link("next", "."))
+            .link(new Link("next", "/"))
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(
