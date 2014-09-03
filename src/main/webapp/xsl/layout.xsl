@@ -105,7 +105,7 @@
                 <input style="width:90%" name="text" placeholder="Ask a question..."/>
             </fieldset>
         </form>
-        <form action="{/page/links/link[@rel='upload']/@href}" method="post">
+        <form action="{/page/links/link[@rel='upload-photo']/@href}" method="post">
             <fieldset class="inline">
                 <input type="file" name="photo"/>
                 <input type="submit" value="Upload photo"/>

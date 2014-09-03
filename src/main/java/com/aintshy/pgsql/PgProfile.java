@@ -25,6 +25,7 @@ import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.sql.SQLException;
 import lombok.EqualsAndHashCode;
@@ -81,6 +82,7 @@ final class PgProfile implements Profile {
                 .sql("UPDATE human SET confirmed=true WHERE id=?")
                 .set(this.number)
                 .update(Outcome.VOID);
+            Logger.info(this, "email confirmed by human #%d", this.number);
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }

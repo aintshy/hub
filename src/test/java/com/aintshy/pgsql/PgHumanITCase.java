@@ -66,6 +66,10 @@ public final class PgHumanITCase {
             talk.asker(),
             Matchers.not(Matchers.equalTo(human))
         );
+        MatcherAssert.assertThat(
+            human.next(),
+            Matchers.equalTo(talk)
+        );
     }
 
 }

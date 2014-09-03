@@ -27,6 +27,7 @@ import com.google.common.base.Joiner;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.SingleOutcome;
+import com.jcabi.log.Logger;
 import com.jcabi.urn.URN;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -78,11 +79,12 @@ final class PgHuman implements Human {
     @Override
     public void ask(final String text) throws IOException {
         try {
-            new JdbcSession(this.src.get())
+            final long num = new JdbcSession(this.src.get())
                 .sql("INSERT INTO question (asker, text) VALUES (?, ?)")
                 .set(this.number)
                 .set(text)
                 .insert(new SingleOutcome<Long>(Long.class, true));
+            Logger.info(this, "question #%d asked by #%d", num, this.number);
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
@@ -96,26 +98,12 @@ final class PgHuman implements Human {
     @Override
     public Talk next() throws IOException {
         try {
-            Long num = new JdbcSession(this.src.get())
-                .sql(
-                    Joiner.on(' ').join(
-                        "SELECT talk FROM message",
-                        "JOIN talk ON talk.id=message.talk",
-                        "JOIN question ON question.id=talk.question",
-                        "WHERE seen=false",
-                        "AND ((asking=false AND responder=?)",
-                        "OR (asking=true AND asker=?))",
-                        "ORDER BY message.date DESC"
-                    )
-                )
-                .set(this.number)
-                .set(this.number)
-                .select(new SingleOutcome<Long>(Long.class, true));
-            final Talk talk;
-            if (num == null) {
-                talk = this.start();
-            } else {
-                talk = new PgTalk(this.src, num);
+            Talk talk = this.unread();
+            if (Talk.EMPTY.equals(talk)) {
+                talk = this.fresh();
+                if (Talk.EMPTY.equals(talk)) {
+                    talk = this.start();
+                }
             }
             return talk;
         } catch (final SQLException ex) {
@@ -134,7 +122,8 @@ final class PgHuman implements Human {
                     "SELECT question.id FROM question",
                     "LEFT JOIN talk",
                     "ON talk.question=question.id AND responder=?",
-                    "WHERE talk.id IS NULL AND asker != ?"
+                    "WHERE talk.id IS NULL AND asker != ?",
+                    "LIMIT 1"
                 )
             )
             .set(this.number)
@@ -152,6 +141,69 @@ final class PgHuman implements Human {
                     .set(this.number)
                     .insert(new SingleOutcome<Long>(Long.class))
             );
+            Logger.info(
+                this, "talk #%d started by #%d from question #%d",
+                talk.number(), this.number, question
+            );
+        }
+        return talk;
+    }
+
+    /**
+     * Get unread talk.
+     * @return Unread talk
+     * @throws SQLException If fails
+     */
+    private Talk unread() throws SQLException {
+        final Long num = new JdbcSession(this.src.get())
+            .sql(
+                Joiner.on(' ').join(
+                    "SELECT talk FROM message",
+                    "JOIN talk ON talk.id=message.talk",
+                    "JOIN question ON question.id=talk.question",
+                    "WHERE seen=false",
+                    "AND ((asking=false AND responder=?)",
+                    "OR (asking=true AND asker=?))",
+                    "ORDER BY message.date DESC",
+                    "LIMIT 1"
+                )
+            )
+            .set(this.number)
+            .set(this.number)
+            .select(new SingleOutcome<Long>(Long.class, true));
+        final Talk talk;
+        if (num == null) {
+            talk = Talk.EMPTY;
+        } else {
+            talk = new PgTalk(this.src, num);
+        }
+        return talk;
+    }
+
+    /**
+     * Get fresh talk, with no messages, but waiting for response.
+     * @return Fresh talk
+     * @throws SQLException If fails
+     */
+    private Talk fresh() throws SQLException {
+        final Long num = new JdbcSession(this.src.get())
+            .sql(
+                Joiner.on(' ').join(
+                    "SELECT talk.id FROM talk",
+                    "LEFT JOIN message ON message.talk=talk.id",
+                    "WHERE message.id IS NULL",
+                    "AND responder = ?",
+                    "ORDER BY talk.date DESC",
+                    "LIMIT 1"
+                )
+            )
+            .set(this.number)
+            .select(new SingleOutcome<Long>(Long.class, true));
+        final Talk talk;
+        if (num == null) {
+            talk = Talk.EMPTY;
+        } else {
+            talk = new PgTalk(this.src, num);
         }
         return talk;
     }

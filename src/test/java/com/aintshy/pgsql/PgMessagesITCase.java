@@ -44,9 +44,9 @@ public final class PgMessagesITCase {
     @Test
     public void postsMessage() throws Exception {
         final Base base = new PgBase();
-        final Human friend = base.register("f8@aintshy.com", "--Iokha");
+        final Human friend = base.register("i09@aintshy.com", "--Iokha");
         friend.ask("how are you doing this?");
-        final Human human = base.register("oi@aintshy.com", "-9w8(8s");
+        final Human human = base.register("pp09@aintshy.com", "-9w8(8s");
         final Messages msgs = human.next().messages();
         msgs.post(false, "I'm fine, thanks!");
         MatcherAssert.assertThat(

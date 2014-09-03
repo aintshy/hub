@@ -38,7 +38,7 @@
       CREATE TABLE message (
         id SERIAL PRIMARY KEY,
         talk INTEGER NOT NULL REFERENCES talk(id),
-        asking BOOLEAN NOT NULL,
+        asking BOOLEAN DEFAULT false NOT NULL,
         date TIMESTAMP DEFAULT now() NOT NULL,
         text VARCHAR(140) NOT NULL,
         seen BOOLEAN DEFAULT false NOT NULL

@@ -27,6 +27,27 @@
         <title><xsl:text>talk</xsl:text></title>
     </xsl:template>
     <xsl:template match="page" mode="body">
-        <xsl:text>hello</xsl:text>
+        <xsl:apply-templates select="talk"/>
+        <xsl:apply-templates select="messages/message"/>
+    </xsl:template>
+    <xsl:template match="talk">
+        <p>
+            <xsl:text>talk #</xsl:text>
+            <xsl:value-of select="number"/>
+        </p>
+    </xsl:template>
+    <xsl:template match="message">
+        <p>
+            <xsl:attribute name="class">
+                <xsl:text>message message-</xsl:text>
+                <xsl:if test="asking = 'true'">
+                    <xsl:text>asking</xsl:text>
+                </xsl:if>
+                <xsl:if test="asking = 'false'">
+                    <xsl:text>answering</xsl:text>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:value-of select="text"/>
+        </p>
     </xsl:template>
 </xsl:stylesheet>

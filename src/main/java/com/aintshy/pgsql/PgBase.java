@@ -26,6 +26,7 @@ import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.SingleOutcome;
+import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.jcabi.urn.URN;
 import com.jolbox.bonecp.BoneCPDataSource;
@@ -87,6 +88,7 @@ public final class PgBase implements Base {
                     .set(email)
                     .set(password)
                     .insert(new SingleOutcome<Long>(Long.class));
+                Logger.info(this, "user registered as %s", email);
             } else {
                 final String pwd = new JdbcSession(this.src.get())
                     .sql("SELECT password FROM human WHERE id=?")

@@ -22,6 +22,8 @@ package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Message.
@@ -44,5 +46,39 @@ public interface Message {
      * @return Text of it
      */
     String text() throws IOException;
+
+    /**
+     * Simple implementation.
+     */
+    @Immutable
+    @ToString
+    @EqualsAndHashCode(of = { "askng", "txt" })
+    final class Simple implements Message {
+        /**
+         * Asking.
+         */
+        private final transient boolean askng;
+        /**
+         * Text.
+         */
+        private final transient String txt;
+        /**
+         * Ctor.
+         * @param asking Asking
+         * @param text Text
+         */
+        public Simple(final boolean asking, final String text) {
+            this.askng = asking;
+            this.txt = text;
+        }
+        @Override
+        public boolean asking() {
+            return this.askng;
+        }
+        @Override
+        public String text() {
+            return this.txt;
+        }
+    }
 
 }

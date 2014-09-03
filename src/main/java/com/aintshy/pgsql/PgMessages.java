@@ -67,8 +67,18 @@ final class PgMessages implements Messages {
     }
 
     @Override
-    public Message post(final boolean asking, final String text) {
-        throw new UnsupportedOperationException("#post()");
+    public Message post(final boolean asking, final String text) throws IOException {
+        try {
+            new JdbcSession(this.src.get())
+                .sql("INSERT INTO message (talk, asking, text) VALUES (?, ?, ?)")
+                .set(this.number)
+                .set(asking)
+                .set(text)
+                .insert(Outcome.VOID);
+            return new Message.Simple(asking, text);
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
     }
 
     @Override
@@ -100,26 +110,10 @@ final class PgMessages implements Messages {
      * Make a message from result set.
      * @param rset Result set
      * @return Message
+     * @throws SQLException If fails
      */
-    private static Message message(final ResultSet rset) {
-        return new Message() {
-            @Override
-            public boolean asking() throws IOException {
-                try {
-                    return rset.getBoolean(1);
-                } catch (final SQLException ex) {
-                    throw new IOException(ex);
-                }
-            }
-            @Override
-            public String text() throws IOException {
-                try {
-                    return rset.getString(2);
-                } catch (final SQLException ex) {
-                    throw new IOException(ex);
-                }
-            }
-        };
+    private static Message message(final ResultSet rset) throws SQLException {
+        return new Message.Simple(rset.getBoolean(1), rset.getString(2));
     }
 
 }

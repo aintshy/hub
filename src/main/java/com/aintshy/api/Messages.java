@@ -39,7 +39,7 @@ public interface Messages {
      * @param text The text
      * @return Message posted
      */
-    Message post(boolean asking, String text);
+    Message post(boolean asking, String text) throws IOException;
 
     /**
      * Iterate them.
