@@ -73,7 +73,7 @@ public interface Profile {
      * @return Sex ("male", "female", or "third")
      * @throws IOException If fails
      */
-    String sex() throws IOException;
+    Sex sex() throws IOException;
 
     /**
      * His language.
@@ -81,6 +81,15 @@ public interface Profile {
      * @throws IOException If fails
      */
     Locale locale() throws IOException;
+
+    /**
+     * Update profile.
+     * @param name Name
+     * @param age Age
+     * @param sex Sex
+     * @param locale Locale
+     */
+    void update(String name, int age, Sex sex, Locale locale) throws IOException;
 
     /**
      * Get photo.

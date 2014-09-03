@@ -3,7 +3,7 @@
   xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'>
   <changeSet id='001' author='yegor256'>
     <sql>
-      CREATE TYPE gender AS ENUM ('male', 'female', 'third');
+      CREATE TYPE gender AS ENUM ('M', 'F', 'T');
     </sql>
     <sql>
       CREATE TABLE human (
@@ -13,7 +13,7 @@
         name VARCHAR(40) UNIQUE,
         confirmed BOOLEAN DEFAULT false NOT NULL,
         age INTEGER DEFAULT 0 NOT NULL,
-        sex gender DEFAULT 'male' NOT NULL,
+        sex gender DEFAULT 'M' NOT NULL,
         photo BYTEA,
         locale CHAR(2) DEFAULT 'en' NOT NULL
       )

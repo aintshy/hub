@@ -23,6 +23,9 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
+import com.aintshy.api.Sex;
+import com.jcabi.aspects.Tv;
+import java.util.Locale;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -45,6 +48,7 @@ public final class PgProfileITCase {
         final Base base = new PgBase();
         final Human human = base.register("h3es@aintshy.com", "-9w8skkha");
         final Profile profile = human.profile();
+        profile.update("Jeffrey", Tv.THIRTY, Sex.M, Locale.GERMAN);
         MatcherAssert.assertThat(profile.email(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.age(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.sex(), Matchers.notNullValue());

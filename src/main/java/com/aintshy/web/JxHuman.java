@@ -95,7 +95,7 @@ final class JxHuman {
      */
     @XmlElement(name = "sex")
     public String getSex() throws IOException {
-        return this.human.profile().sex();
+        return this.human.profile().sex().toString();
     }
 
     /**

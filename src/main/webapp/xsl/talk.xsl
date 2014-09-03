@@ -32,10 +32,28 @@
                 <xsl:text>next</xsl:text>
             </a>
         </p>
-        <p class="photos">
-            <img src="{links/link[@rel='ask-photo']/@href}" class="ask"/>
-            <img src="{links/link[@rel='answer-photo']/@href}" class="answer"/>
-        </p>
+        <div class="p photos">
+            <div class="ask">
+                <img src="{links/link[@rel='ask-photo']/@href}"/>
+                <div>
+                    <xsl:value-of select="talk/asker/name"/>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="talk/asker/sex"/>
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="talk/asker/age"/>
+                </div>
+            </div>
+            <div class="answer">
+                <img src="{links/link[@rel='answer-photo']/@href}"/>
+                <div>
+                    <xsl:value-of select="talk/responder/name"/>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="talk/responder/sex"/>
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="talk/responder/age"/>
+                </div>
+            </div>
+        </div>
         <form action="{links/link[@rel='post']/@href}" method="post">
             <fieldset>
                 <input name="text" style="width:100%" placeholder="Post your answer..." maxlength="140"/>

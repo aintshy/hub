@@ -21,6 +21,7 @@
 package com.aintshy.api.mock;
 
 import com.aintshy.api.Profile;
+import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Tv;
 import java.io.IOException;
@@ -62,13 +63,19 @@ public final class MkProfile implements Profile {
     }
 
     @Override
-    public String sex() throws IOException {
-        return "male";
+    public Sex sex() throws IOException {
+        return Sex.F;
     }
 
     @Override
     public Locale locale() throws IOException {
         return Locale.ENGLISH;
+    }
+
+    @Override
+    public void update(final String name, final int age,
+        final Sex sex, final Locale locale) throws IOException {
+        throw new UnsupportedOperationException("#update()");
     }
 
     @Override

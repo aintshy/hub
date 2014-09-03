@@ -70,7 +70,7 @@ body {
 
 fieldset {
   border: 0;
-  label, input, textarea {
+  label, input, textarea, select {
     display: block;
     font-size: $em !important;
     font-family: $font;
@@ -85,14 +85,14 @@ fieldset {
     }
   }
   &.inline {
-    label, input, textarea {
+    label, input, textarea, select {
       display: inline-block;
       margin: 0 .2 * $em;
     }
   }
 }
 
-p, fieldset, pre {
+p, fieldset, pre, .p {
   margin: $em 0;
 }
 
