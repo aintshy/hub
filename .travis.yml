@@ -1,13 +1,10 @@
-language: ruby
+language: java
 cache:
-  bundler
   directories:
     - $HOME/.m2
 branches:
   only:
     - master
-install:
-  - travis_retry bundle install
 script:
-  - rake
+  - mvn clean install -Pqulice
 
