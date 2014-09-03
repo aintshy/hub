@@ -64,7 +64,7 @@ public final class MkProfile implements Profile {
 
     @Override
     public Sex sex() throws IOException {
-        return Sex.F;
+        return Sex.M;
     }
 
     @Override

@@ -31,8 +31,7 @@
         id SERIAL PRIMARY KEY,
         question INTEGER NOT NULL REFERENCES question(id),
         responder INTEGER NOT NULL REFERENCES human(id),
-        date TIMESTAMP DEFAULT now() NOT NULL,
-        seen TIMESTAMP DEFAULT NULL
+        date TIMESTAMP DEFAULT now() NOT NULL
       )
     </sql>
     <sql>

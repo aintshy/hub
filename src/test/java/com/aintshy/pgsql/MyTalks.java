@@ -24,6 +24,7 @@ import com.aintshy.api.Human;
 import com.aintshy.api.Talk;
 import com.google.common.collect.Lists;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Tv;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -62,6 +63,13 @@ final class MyTalks {
             final Iterable<Talk> next = this.human.next();
             if (!next.iterator().hasNext()) {
                 break;
+            }
+            if (mine.size() > Tv.HUNDRED) {
+                throw new IllegalStateException(
+                    String.format(
+                        "too many talks, something is wrong: %s", mine
+                    )
+                );
             }
             mine.addAll(Lists.newArrayList(next));
             for (final Talk talk : next) {

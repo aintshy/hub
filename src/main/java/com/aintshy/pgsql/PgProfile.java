@@ -169,7 +169,7 @@ final class PgProfile implements Profile {
                 .set(name)
                 .set(age)
                 .set(sex)
-                .set(locale.getCountry())
+                .set(locale.getLanguage())
                 .set(this.number)
                 .update(Outcome.VOID);
         } catch (final SQLException ex) {

@@ -23,9 +23,7 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
@@ -110,10 +108,7 @@ final class PgHuman implements Human {
             final Collection<Talk> talks = new LinkedList<Talk>();
             talks.addAll(this.unread());
             if (talks.isEmpty()) {
-                talks.addAll(this.fresh());
-                if (talks.isEmpty()) {
-                    talks.addAll(this.start());
-                }
+                talks.addAll(this.start());
             }
             return talks;
         } catch (final SQLException ex) {
@@ -156,60 +151,6 @@ final class PgHuman implements Human {
                     }
                 }
             );
-    }
-
-    /**
-     * Get fresh talk, with no messages, but waiting for response.
-     * @return Fresh talk
-     * @throws SQLException If fails
-     */
-    private Collection<Talk> fresh() throws SQLException {
-        final Collection<Talk> talks = new JdbcSession(this.src.get())
-            .set(this.number)
-            .sql(
-                Joiner.on(' ').join(
-                    "SELECT talk.id FROM talk",
-                    "LEFT JOIN message ON message.talk=talk.id",
-                    "WHERE message.id IS NULL",
-                    "AND talk.seen IS NULL AND responder = ?",
-                    "ORDER BY talk.date DESC LIMIT 1"
-                )
-            )
-            .select(
-                new Outcome<Collection<Talk>>() {
-                    @Override
-                    public Collection<Talk> handle(final ResultSet rset,
-                        final Statement stmt) throws SQLException {
-                        final Collection<Talk> tlks = new ArrayList<Talk>(1);
-                        if (rset.next()) {
-                            tlks.add(
-                                new PgTalk(PgHuman.this.src, rset.getLong(1))
-                            );
-                        }
-                        return tlks;
-                    }
-                }
-            );
-        if (!talks.isEmpty()) {
-            final String nums = Joiner.on(',').join(
-                Iterables.transform(
-                    talks,
-                    new Function<Talk, Long>() {
-                        @Override
-                        public Long apply(final Talk talk) {
-                            return talk.number();
-                        }
-                    }
-                )
-            );
-            new JdbcSession(this.src.get()).sql(
-                String.format(
-                    "UPDATE talk SET seen=now() WHERE id IN (%s)", nums
-                )
-            ).update(Outcome.VOID);
-            Logger.info(this, "%s seen by #%d", nums, this.number);
-        }
-        return talks;
     }
 
     /**
