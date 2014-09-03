@@ -34,6 +34,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.sql.DataSource;
+import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -66,7 +67,7 @@ public final class PgBase implements Base {
      * Ctor.
      * @param data Data source
      */
-    public PgBase(final DataSource data) {
+    public PgBase(@NotNull final DataSource data) {
         this.src = new PgSource() {
             @Override
             public DataSource get() {
