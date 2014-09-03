@@ -44,7 +44,7 @@ public final class AskRs extends BaseRs {
     @POST
     @Path("/post")
     public void post(@FormParam("text") final String text) throws IOException {
-        final Human human = this.human();
+        final Human human = new SafeHuman(this.human(), this);
         human.ask(text);
         throw this.flash().redirect(
             this.uriInfo().getBaseUri(),

@@ -138,7 +138,7 @@ public final class TalkRs extends BaseRs {
      * @return Talk
      */
     private Talk talk() throws IOException {
-        return this.human().talk(this.number);
+        return new SafeHuman(this.human(), this).talk(this.number);
     }
 
 }

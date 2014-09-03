@@ -50,7 +50,7 @@
                                 <img src="//img.aintshy.com/logo.svg" class="logo" alt="aintshy logo"/>
                             </a>
                         </div>
-                        <xsl:apply-templates select="identity"/>
+                        <xsl:apply-templates select="human"/>
                     </header>
                     <xsl:apply-templates select="flash"/>
                     <div class="main">
@@ -91,7 +91,7 @@
             </body>
         </html>
     </xsl:template>
-    <xsl:template match="identity">
+    <xsl:template match="human">
         <ul>
             <li>
                 <xsl:value-of select="name"/>

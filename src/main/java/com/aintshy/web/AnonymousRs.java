@@ -55,7 +55,8 @@ public final class AnonymousRs extends BaseRs {
     @Path("/")
     public Response index() throws IOException {
         if (!this.auth().identity().equals(Identity.ANONYMOUS)) {
-            final Iterable<Talk> talks = this.human().next();
+            final Iterable<Talk> talks =
+                new SafeHuman(this.human(), this).next();
             if (Iterables.isEmpty(talks)) {
                 throw this.flash().redirect(
                     this.uriInfo().getBaseUriBuilder().clone()

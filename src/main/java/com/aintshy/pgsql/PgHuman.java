@@ -27,7 +27,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
-import com.jcabi.aspects.Loggable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
@@ -126,7 +125,6 @@ final class PgHuman implements Human {
      * @return Unread talk
      * @throws SQLException If fails
      */
-    @Loggable(Loggable.INFO)
     private Collection<Talk> unread() throws SQLException {
         return new JdbcSession(this.src.get())
             .sql(
@@ -165,7 +163,6 @@ final class PgHuman implements Human {
      * @return Fresh talk
      * @throws SQLException If fails
      */
-    @Loggable(Loggable.INFO)
     private Collection<Talk> fresh() throws SQLException {
         final Collection<Talk> talks = new JdbcSession(this.src.get())
             .sql(
@@ -220,7 +217,6 @@ final class PgHuman implements Human {
      * Start new talk for the current human.
      * @return Talk
      */
-    @Loggable(Loggable.INFO)
     private Collection<Talk> start() throws SQLException {
         final Long question = new JdbcSession(this.src.get())
             .sql(

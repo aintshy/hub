@@ -45,6 +45,7 @@ public final class PgProfileITCase {
         final Base base = new PgBase();
         final Human human = base.register("h3es@aintshy.com", "-9w8skkha");
         final Profile profile = human.profile();
+        MatcherAssert.assertThat(profile.email(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.age(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.sex(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.locale(), Matchers.notNullValue());

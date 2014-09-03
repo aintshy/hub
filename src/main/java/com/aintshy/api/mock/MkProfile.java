@@ -52,6 +52,11 @@ public final class MkProfile implements Profile {
     }
 
     @Override
+    public String email() throws IOException {
+        return "test@aintshy.com";
+    }
+
+    @Override
     public int age() throws IOException {
         return Tv.THIRTY;
     }

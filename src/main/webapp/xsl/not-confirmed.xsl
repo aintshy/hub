@@ -24,21 +24,20 @@
     <xsl:output method="xml" omit-xml-declaration="yes"/>
     <xsl:include href="/xsl/layout.xsl"/>
     <xsl:template match="page" mode="head">
-        <title><xsl:text>login</xsl:text></title>
+        <title><xsl:text>email is not confirmed</xsl:text></title>
     </xsl:template>
     <xsl:template match="page" mode="body">
         <p>
             <xsl:text>
-                Please, enter your email and password and we let you in.
-                If you've never been here before, give us your
-                email and any password, we'll register you right away.
+                Please, check your inbox. There should be a message
+                from us. In the message you should find
+                a digital code. Post it here and you're all set.
             </xsl:text>
         </p>
-        <form action="{links/link[@rel='enter']/@href}" method="post">
+        <form action="{links/link[@rel='confirm']/@href}" method="post">
             <fieldset>
-                <input name="email" size="30" placeholder="Email..."/>
-                <input name="password" size="23" placeholder="Password..."/>
-                <input type="submit" value="Login"/>
+                <input name="code" size="30" placeholder="Confirmation code..."/>
+                <input type="submit" value="Confirm"/>
             </fieldset>
         </form>
     </xsl:template>

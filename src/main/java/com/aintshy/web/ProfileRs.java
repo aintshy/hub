@@ -59,7 +59,7 @@ public final class ProfileRs extends BaseRs {
         nice.getGraphics().drawImage(thumb, 0, 0, null);
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(nice, "png", baos);
-        this.human().profile().photo(baos.toByteArray());
+        new SafeHuman(this.human(), this).profile().photo(baos.toByteArray());
         throw this.flash().redirect(
             this.uriInfo().getBaseUri(),
             "photo updated, thanks",

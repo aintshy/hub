@@ -104,6 +104,18 @@ final class PgProfile implements Profile {
     }
 
     @Override
+    public String email() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT email FROM human WHERE id=?")
+                .set(this.number)
+                .select(new SingleOutcome<String>(String.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
     public int age() throws IOException {
         try {
             return new JdbcSession(this.src.get())

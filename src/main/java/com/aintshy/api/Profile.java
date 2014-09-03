@@ -55,6 +55,13 @@ public interface Profile {
     String name() throws IOException;
 
     /**
+     * His email.
+     * @return Email
+     * @throws IOException If fails
+     */
+    String email() throws IOException;
+
+    /**
      * His age.
      * @return Age
      * @throws IOException If fails
