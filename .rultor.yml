@@ -1,19 +1,40 @@
 assets:
-  database.yml: "yegor256/home#assets/aintshy/database.yml"
+  settings.xml: "yegor256/home#assets/aintshy/settings.xml"
+  pubring.gpg: "yegor256/home#assets/pubring.gpg"
+  secring.gpg: "yegor256/home#assets/secring.gpg"
   id_rsa: "yegor256/home#assets/aintshy/id_rsa"
   id_rsa.pub: "yegor256/home#assets/aintshy/id_rsa.pub"
   s3cfg: "yegor256/home#assets/s3cfg"
 
+env:
+  MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1g"
+
+install:
+  - "sudo apt-get install bsdmainutils"
+  - "sudo gem install pdd"
+
+deploy:
+  script: |
+    mvn clean deploy -Prultor --errors --settings ../settings.xml
+    mvn clean
+    pdd --source=$(pwd) --verbose --file=aintshy-hub.xml
+    s3cmd --no-progress put aintshy-hub.xml --config=../s3cfg s3://pdd.teamed.io/aintshy-hub.xml
+
 release:
   script: |
     sudo bundle install
-    rake
-    pdd --source=$(pwd) --verbose --file=aintshy-web.xml
-    s3cmd --no-progress put aintshy-web.xml --config=../s3cfg s3://pdd.teamed.io/aintshy-web.xml
-    sed -i "s/1\\.0\\.snapshot/${tag}/g" lib/aintshy/version.rb
-    sequel --migrate-directory db ../database.yml
+    mvn versions:set "-DnewVersion=${tag}"
+    git commit -am "${tag}"
+    mvn clean deploy -Pqulice -Prultor --errors --settings ../settings.xml
     git remote add heroku git@heroku.com:aintshy.git
     mkdir /home/r/.ssh
     mv ../id_rsa ../id_rsa.pub /home/r/.ssh
     chmod -R 600 /home/r/.ssh
     git push heroku master
+
+merge:
+  script: |
+    mvn help:system clean install -Pqulice --errors --settings ../settings.xml
+    mvn clean
+    pdd --source=$(pwd) --verbose --file=/dev/null
+
