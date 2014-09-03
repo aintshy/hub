@@ -15,7 +15,7 @@ install:
 
 deploy:
   script: |
-    mvn clean deploy -Prultor --errors --settings ../settings.xml
+    mvn clean deploy -Paintshy --errors --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=aintshy-hub.xml
     s3cmd --no-progress put aintshy-hub.xml --config=../s3cfg s3://pdd.teamed.io/aintshy-hub.xml
@@ -25,7 +25,8 @@ release:
     sudo bundle install
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
-    mvn clean deploy -Pqulice -Prultor --errors --settings ../settings.xml
+    mvn clean deploy -Pqulice -Paintshy --errors --settings ../settings.xml
+    mvn liquibase:update -Paintshy --errors --settings ../settings.xml
     git remote add heroku git@heroku.com:aintshy.git
     mkdir /home/r/.ssh
     mv ../id_rsa ../id_rsa.pub /home/r/.ssh
