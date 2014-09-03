@@ -42,20 +42,16 @@ import lombok.ToString;
 @Loggable(Loggable.INFO)
 public final class Lifespan implements ServletContextListener {
 
-    /**
-     * Base.
-     */
-    private transient Base base;
-
     @Override
     public void contextInitialized(final ServletContextEvent event) {
+        final Base base;
         try {
             Manifests.append(event.getServletContext());
-            this.base = new PgBase();
+            base = new PgBase();
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }
-        event.getServletContext().setAttribute(Base.class.getName(), this.base);
+        event.getServletContext().setAttribute(Base.class.getName(), base);
     }
 
     @Override

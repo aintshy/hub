@@ -42,20 +42,15 @@ final class SafeHuman implements Human {
     private final transient Human human;
 
     /**
-     * Base.
-     */
-    private final transient BaseRs base;
-
-    /**
      * Ctor.
      * @param hmn Human
-     * @param res Base resource
+     * @param base Base resource
      * @throws IOException If fails
      */
-    SafeHuman(final Human hmn, final BaseRs res) throws IOException {
+    SafeHuman(final Human hmn, final BaseRs base) throws IOException {
         if (!hmn.profile().confirmed()) {
-            throw res.flash().redirect(
-                res.uriInfo().getBaseUriBuilder().clone()
+            throw base.flash().redirect(
+                base.uriInfo().getBaseUriBuilder().clone()
                     .path(SetupRs.class)
                     .path(SetupRs.class, "notConfirmed")
                     .build(),
@@ -64,8 +59,8 @@ final class SafeHuman implements Human {
             );
         }
         if (hmn.profile().age() == 0) {
-            throw res.flash().redirect(
-                res.uriInfo().getBaseUriBuilder().clone()
+            throw base.flash().redirect(
+                base.uriInfo().getBaseUriBuilder().clone()
                     .path(SetupRs.class)
                     .path(SetupRs.class, "noDetails")
                     .build(),
@@ -74,7 +69,6 @@ final class SafeHuman implements Human {
             );
         }
         this.human = hmn;
-        this.base = res;
     }
 
     @Override

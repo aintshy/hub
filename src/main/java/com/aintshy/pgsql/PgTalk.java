@@ -39,8 +39,8 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@ToString(of = "number")
-@EqualsAndHashCode(of = { "src", "number" })
+@ToString(of = "num")
+@EqualsAndHashCode(of = { "src", "num" })
 final class PgTalk implements Talk {
 
     /**
@@ -51,21 +51,21 @@ final class PgTalk implements Talk {
     /**
      * Number of it.
      */
-    private final transient long number;
+    private final transient long num;
 
     /**
      * Ctor.
      * @param source Data source
-     * @param num Number
+     * @param number Number
      */
-    PgTalk(final PgSource source, final long num) {
+    PgTalk(final PgSource source, final long number) {
         this.src = source;
-        this.number = num;
+        this.num = number;
     }
 
     @Override
     public long number() {
-        return this.number;
+        return this.num;
     }
 
     @Override
@@ -76,7 +76,7 @@ final class PgTalk implements Talk {
                 new JdbcSession(this.src.get())
                     // @checkstyle LineLength (1 line)
                     .sql("SELECT asker FROM question JOIN talk ON question.id=talk.question AND talk.id=?")
-                    .set(this.number)
+                    .set(this.num)
                     .select(new SingleOutcome<Long>(Long.class))
             );
         } catch (final SQLException ex) {
@@ -91,7 +91,7 @@ final class PgTalk implements Talk {
                 this.src,
                 new JdbcSession(this.src.get())
                     .sql("SELECT responder FROM talk WHERE id=?")
-                    .set(this.number)
+                    .set(this.num)
                     .select(new SingleOutcome<Long>(Long.class))
             );
         } catch (final SQLException ex) {
@@ -105,7 +105,7 @@ final class PgTalk implements Talk {
             return new JdbcSession(this.src.get())
                 // @checkstyle LineLength (1 line)
                 .sql("SELECT text FROM question JOIN talk ON talk.question=question.id WHERE talk.id=?")
-                .set(this.number)
+                .set(this.num)
                 .select(new SingleOutcome<String>(String.class));
         } catch (final SQLException ex) {
             throw new IOException(ex);
@@ -114,6 +114,6 @@ final class PgTalk implements Talk {
 
     @Override
     public Messages messages() {
-        return new PgMessages(this.src, this.number);
+        return new PgMessages(this.src, this.num);
     }
 }

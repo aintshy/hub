@@ -130,7 +130,7 @@ public final class PgBase implements Base {
      * Get source.
      * @return Source
      */
-    PgSource source() {
+    public PgSource source() {
         return this.src;
     }
 

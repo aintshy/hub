@@ -139,6 +139,7 @@ public final class SetupRs extends BaseRs {
      */
     @POST
     @Path("/details")
+    @SuppressWarnings("PMD.UseObjectForClearerAPI")
     public void details(
         @FormParam("age") final String age,
         @FormParam("sex") final String sex,

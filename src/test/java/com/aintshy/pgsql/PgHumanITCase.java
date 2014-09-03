@@ -85,7 +85,8 @@ public final class PgHumanITCase {
         final Human human = base.register("oi17@aintshy.com", "9*7kha");
         human.ask("what is the weather today?");
         final Human friend = base.register("yyft6@aintshy.com", "-9w0*8s");
-        for (final Talk talk : new MyTalks(friend).fetch()) {
+        final Iterable<Talk> talks = new MyTalks(friend).fetch();
+        for (final Talk talk : talks) {
             talk.messages().post(false, "just an answer");
         }
         new PgDump(PgBase.class.cast(base).source()).print();

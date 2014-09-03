@@ -61,7 +61,7 @@ final class PgDump {
      * Dump the entire DB to log (for testing mostly).
      * @throws SQLException If fails
      */
-    void print() throws SQLException {
+    public void print() throws SQLException {
         final String[] tables = {"human", "question", "talk", "message"};
         final JdbcSession jdbc = new JdbcSession(this.src.get());
         final StringBuilder txt = new StringBuilder(Tv.THOUSAND);

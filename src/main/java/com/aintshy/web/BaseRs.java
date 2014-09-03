@@ -49,6 +49,7 @@ import javax.ws.rs.core.Response;
  */
 @Resource.Forwarded
 @Inset.Default(LinksInset.class)
+@SuppressWarnings("PMD.TooManyMethods")
 public class BaseRs extends BaseResource {
 
     /**

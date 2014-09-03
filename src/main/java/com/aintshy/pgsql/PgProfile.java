@@ -45,6 +45,7 @@ import lombok.ToString;
 @Immutable
 @ToString(of = "number")
 @EqualsAndHashCode(of = { "src", "number" })
+@SuppressWarnings("PMD.TooManyMethods")
 final class PgProfile implements Profile {
 
     /**

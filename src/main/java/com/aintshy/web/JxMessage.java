@@ -64,7 +64,7 @@ final class JxMessage {
      * @throws IOException If fails
      */
     @XmlElement(name = "asking")
-    public boolean getAsking() throws IOException {
+    public boolean isAsking() throws IOException {
         return this.message.asking();
     }
 
