@@ -62,6 +62,16 @@ final class SafeHuman implements Human {
                 Level.INFO
             );
         }
+        if (hmn.profile().age() == 0) {
+            throw res.flash().redirect(
+                res.uriInfo().getBaseUriBuilder().clone()
+                    .path(SetupRs.class)
+                    .path(SetupRs.class, "noDetails")
+                    .build(),
+                "please give us more details about yourself",
+                Level.INFO
+            );
+        }
         this.human = hmn;
         this.base = res;
     }

@@ -21,9 +21,11 @@
 package com.aintshy.web;
 
 import com.aintshy.api.Profile;
+import com.aintshy.api.Sex;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -92,4 +94,63 @@ public final class SetupRs extends BaseRs {
         );
     }
 
+    /**
+     * No details yet.
+     * @return The JAX-RS response
+     * @throws IOException If fails
+     */
+    @GET
+    @Path("/no-details")
+    public Response noDetails() throws IOException {
+        final Profile profile = this.human().profile();
+        if (profile.age() != 0) {
+            throw this.flash().redirect(
+                this.uriInfo().getBaseUri(),
+                "your details are all set",
+                Level.INFO
+            );
+        }
+        return new PageBuilder()
+            .stylesheet("/xsl/no-details.xsl")
+            .build(EmptyPage.class)
+            .init(this)
+            .link(
+                new Link(
+                    "enter",
+                    this.uriInfo().getBaseUriBuilder().clone()
+                        .path(SetupRs.class)
+                        .path(SetupRs.class, "details")
+                        .build()
+                )
+            )
+            .render()
+            .build();
+    }
+
+    /**
+     * Set profile details.
+     * @param age Age
+     * @param sex Sex
+     * @param name Name
+     * @param lang Lang
+     * @throws IOException If fails
+     */
+    @POST
+    @Path("/details")
+    public void details(
+        @FormParam("age") final String age,
+        @FormParam("sex") final String sex,
+        @FormParam("name") final String name,
+        @FormParam("lang") final String lang) throws IOException {
+        final Profile profile = this.human().profile();
+        profile.update(
+            name, Integer.parseInt(age),
+            Sex.valueOf(sex), new Locale(lang)
+        );
+        throw this.flash().redirect(
+            this.uriInfo().getBaseUri(),
+            "profile updated successfully",
+            Level.INFO
+        );
+    }
 }

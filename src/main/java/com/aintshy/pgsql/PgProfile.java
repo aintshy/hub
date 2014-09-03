@@ -21,6 +21,7 @@
 package com.aintshy.pgsql;
 
 import com.aintshy.api.Profile;
+import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
@@ -149,6 +150,23 @@ final class PgProfile implements Profile {
                     .set(this.number)
                     .select(new SingleOutcome<String>(String.class))
             );
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public void update(final String name, final int age,
+        final Sex sex, final Locale locale) throws IOException {
+        try {
+            new JdbcSession(this.src.get())
+                .sql("UPDATE human SET name=?, age=?, sex=?, locale=? WHERE id=?")
+                .set(name)
+                .set(age)
+                .set(sex)
+                .set(locale.getCountry())
+                .set(this.number)
+                .select(Outcome.VOID);
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
