@@ -54,7 +54,6 @@ public final class PgProfileITCase {
         MatcherAssert.assertThat(profile.sex(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.locale(), Matchers.notNullValue());
         MatcherAssert.assertThat(profile.name(), Matchers.notNullValue());
-        MatcherAssert.assertThat(profile.photo(), Matchers.notNullValue());
     }
 
 }
