@@ -99,6 +99,18 @@ final class PgTalk implements Talk {
     }
 
     @Override
+    public String question() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT text FROM question JOIN talk ON talk.question=question.id WHERE talk.id=?")
+                .set(this.number)
+                .select(new SingleOutcome<String>(String.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
     public Messages messages() {
         return new PgMessages(this.src, this.number);
     }

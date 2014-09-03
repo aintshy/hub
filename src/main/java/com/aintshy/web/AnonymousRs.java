@@ -23,6 +23,7 @@ package com.aintshy.web;
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
 import com.aintshy.api.Talk;
+import com.google.common.collect.Iterables;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
@@ -54,8 +55,8 @@ public final class AnonymousRs extends BaseRs {
     @Path("/")
     public Response index() throws IOException {
         if (!this.auth().identity().equals(Identity.ANONYMOUS)) {
-            final Talk talk = this.human().next();
-            if (Talk.EMPTY.equals(talk)) {
+            final Iterable<Talk> talks = this.human().next();
+            if (Iterables.isEmpty(talks)) {
                 throw this.flash().redirect(
                     this.uriInfo().getBaseUriBuilder().clone()
                         .path(AnonymousRs.class)
@@ -71,7 +72,7 @@ public final class AnonymousRs extends BaseRs {
                         .clone()
                         .path(TalkRs.class)
                         .path(TalkRs.class, "index")
-                        .build(talk.number())
+                        .build(talks.iterator().next().number())
                 ).build()
             );
         }

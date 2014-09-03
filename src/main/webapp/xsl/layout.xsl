@@ -77,6 +77,7 @@
                                 <xsl:value-of select="@sla"/>
                             </li>
                         </ul>
+                        <!--
                         <ul>
                             <li>
                                 <a href="http://www.teamed.io">
@@ -84,6 +85,7 @@
                                 </a>
                             </li>
                         </ul>
+                        -->
                     </footer>
                 </div>
             </body>
@@ -102,7 +104,7 @@
         </ul>
         <form action="{/page/links/link[@rel='ask']/@href}" method="post">
             <fieldset class="inline">
-                <input style="width:90%" name="text" placeholder="Ask a question..."/>
+                <input style="width:90%" name="text" placeholder="Ask a question..." maxlength="140"/>
             </fieldset>
         </form>
         <form action="{/page/links/link[@rel='upload-photo']/@href}" method="post">

@@ -57,17 +57,18 @@ public final class PgHumanITCase {
         final Human friend = base.register("f8@aintshy.com", "--Iokha");
         friend.ask("how are you doing this?");
         final Human human = base.register("oi@aintshy.com", "-9w8(8s");
-        final Talk talk = human.next();
+        final Iterable<Talk> talks = human.next();
         MatcherAssert.assertThat(
-            talk,
-            Matchers.not(Matchers.equalTo(Talk.EMPTY))
+            talks,
+            Matchers.not(Matchers.emptyIterable())
         );
+        final Talk talk = talks.iterator().next();
         MatcherAssert.assertThat(
             talk.asker(),
             Matchers.not(Matchers.equalTo(human))
         );
         MatcherAssert.assertThat(
-            human.next(),
+            human.next().iterator().next(),
             Matchers.equalTo(talk)
         );
     }

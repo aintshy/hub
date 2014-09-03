@@ -74,7 +74,7 @@ public final class TalkRs extends BaseRs {
             .stylesheet("/xsl/talk.xsl")
             .build(EmptyPage.class)
             .init(this)
-            .link(new Link("answer", "./answer"))
+            .link(new Link("post", "./post"))
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(
@@ -100,7 +100,7 @@ public final class TalkRs extends BaseRs {
      * @throws IOException If fails
      */
     @POST
-    @Path("/answer")
+    @Path("/post")
     public void answer(
         @FormParam("text") final String text) throws IOException {
         final Talk talk = this.talk();

@@ -34,28 +34,6 @@ import java.io.IOException;
 public interface Talk {
 
     /**
-     * Nothing to talk about.
-     */
-    Talk EMPTY = new Talk() {
-        @Override
-        public long number() {
-            throw new UnsupportedOperationException("#number()");
-        }
-        @Override
-        public Human asker() throws IOException {
-            throw new UnsupportedOperationException("#asker()");
-        }
-        @Override
-        public Human responder() throws IOException {
-            throw new UnsupportedOperationException("#responder()");
-        }
-        @Override
-        public Messages messages() {
-            throw new UnsupportedOperationException("#messages()");
-        }
-    };
-
-    /**
      * Its number.
      * @return The number
      */
@@ -72,6 +50,12 @@ public interface Talk {
      * @return Human who is answering
      */
     Human responder() throws IOException;
+
+    /**
+     * Original question.
+     * @return The question
+     */
+    String question() throws IOException;
 
     /**
      * All messages of it.

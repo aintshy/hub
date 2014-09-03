@@ -85,7 +85,7 @@ final class PgMessages implements Messages {
     public Iterable<Message> iterate() throws IOException {
         try {
             return new JdbcSession(this.src.get())
-                .sql("SELECT asking, text FROM message WHERE talk=?")
+                .sql("SELECT asking, text FROM message WHERE talk=? ORDER BY date DESC")
                 .set(this.number)
                 .select(
                     new Outcome<Iterable<Message>>() {

@@ -21,6 +21,7 @@
 package com.aintshy.web;
 
 import com.aintshy.api.Talk;
+import java.io.IOException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -64,6 +65,36 @@ final class JxTalk {
     @XmlElement(name = "number")
     public long getNumber() {
         return this.talk.number();
+    }
+
+    /**
+     * Its question.
+     * @return Question text
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "question")
+    public String getQuestion() throws IOException {
+        return this.talk.question();
+    }
+
+    /**
+     * Asker.
+     * @return Asker
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "asker")
+    public JxHuman getAsker() throws IOException {
+        return new JxHuman(this.talk.asker());
+    }
+
+    /**
+     * Responder.
+     * @return Responder
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "responder")
+    public JxHuman getResponder() throws IOException {
+        return new JxHuman(this.talk.responder());
     }
 
 }

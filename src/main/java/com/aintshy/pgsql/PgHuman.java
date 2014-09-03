@@ -31,6 +31,9 @@ import com.jcabi.log.Logger;
 import com.jcabi.urn.URN;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -96,16 +99,17 @@ final class PgHuman implements Human {
     }
 
     @Override
-    public Talk next() throws IOException {
+    public Iterable<Talk> next() throws IOException {
         try {
-            Talk talk = this.unread();
-            if (Talk.EMPTY.equals(talk)) {
-                talk = this.fresh();
-                if (Talk.EMPTY.equals(talk)) {
-                    talk = this.start();
+            final Collection<Talk> talks = new LinkedList<Talk>();
+            talks.addAll(this.unread());
+            if (talks.isEmpty()) {
+                talks.addAll(this.fresh());
+                if (talks.isEmpty()) {
+                    talks.addAll(this.start());
                 }
             }
-            return talk;
+            return talks;
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
@@ -115,7 +119,7 @@ final class PgHuman implements Human {
      * Start new talk for the current human.
      * @return Talk
      */
-    private Talk start() throws SQLException {
+    private Collection<Talk> start() throws SQLException {
         final Long question = new JdbcSession(this.src.get())
             .sql(
                 Joiner.on(' ').join(
@@ -129,11 +133,9 @@ final class PgHuman implements Human {
             .set(this.number)
             .set(this.number)
             .select(new SingleOutcome<Long>(Long.class, true));
-        final Talk talk;
-        if (question == null) {
-            talk = Talk.EMPTY;
-        } else {
-            talk = new PgTalk(
+        final Collection<Talk> talks = new ArrayList<Talk>(1);
+        if (question != null) {
+            final Talk talk = new PgTalk(
                 this.src,
                 new JdbcSession(this.src.get())
                     .sql("INSERT INTO talk (question, responder) VALUES (?, ?)")
@@ -141,12 +143,13 @@ final class PgHuman implements Human {
                     .set(this.number)
                     .insert(new SingleOutcome<Long>(Long.class))
             );
+            talks.add(talk);
             Logger.info(
                 this, "talk #%d started by #%d from question #%d",
                 talk.number(), this.number, question
             );
         }
-        return talk;
+        return talks;
     }
 
     /**
@@ -154,7 +157,7 @@ final class PgHuman implements Human {
      * @return Unread talk
      * @throws SQLException If fails
      */
-    private Talk unread() throws SQLException {
+    private Collection<Talk> unread() throws SQLException {
         final Long num = new JdbcSession(this.src.get())
             .sql(
                 Joiner.on(' ').join(
@@ -171,13 +174,11 @@ final class PgHuman implements Human {
             .set(this.number)
             .set(this.number)
             .select(new SingleOutcome<Long>(Long.class, true));
-        final Talk talk;
-        if (num == null) {
-            talk = Talk.EMPTY;
-        } else {
-            talk = new PgTalk(this.src, num);
+        final Collection<Talk> talks = new ArrayList<Talk>(1);
+        if (num != null) {
+            talks.add(new PgTalk(this.src, num));
         }
-        return talk;
+        return talks;
     }
 
     /**
@@ -185,7 +186,7 @@ final class PgHuman implements Human {
      * @return Fresh talk
      * @throws SQLException If fails
      */
-    private Talk fresh() throws SQLException {
+    private Collection<Talk> fresh() throws SQLException {
         final Long num = new JdbcSession(this.src.get())
             .sql(
                 Joiner.on(' ').join(
@@ -199,12 +200,10 @@ final class PgHuman implements Human {
             )
             .set(this.number)
             .select(new SingleOutcome<Long>(Long.class, true));
-        final Talk talk;
-        if (num == null) {
-            talk = Talk.EMPTY;
-        } else {
-            talk = new PgTalk(this.src, num);
+        final Collection<Talk> talks = new ArrayList<Talk>(1);
+        if (num != null) {
+            talks.add(new PgTalk(this.src, num));
         }
-        return talk;
+        return talks;
     }
 }

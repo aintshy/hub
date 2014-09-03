@@ -47,7 +47,7 @@ public final class PgMessagesITCase {
         final Human friend = base.register("i09@aintshy.com", "--Iokha");
         friend.ask("how are you doing this?");
         final Human human = base.register("pp09@aintshy.com", "-9w8(8s");
-        final Messages msgs = human.next().messages();
+        final Messages msgs = human.next().iterator().next().messages();
         msgs.post(false, "I'm fine, thanks!");
         MatcherAssert.assertThat(
             msgs.iterate(),

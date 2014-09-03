@@ -18,51 +18,54 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.api;
+package com.aintshy.web;
 
-import com.jcabi.aspects.Immutable;
-import com.jcabi.urn.URN;
+import com.aintshy.api.Human;
 import java.io.IOException;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Human.
+ * Jaxb Human.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
  */
-@Immutable
-public interface Human {
+@XmlRootElement(name = "human")
+@XmlAccessorType(XmlAccessType.NONE)
+final class JxHuman {
 
     /**
-     * His unique URN.
-     * @return URN
+     * Human.
      */
-    URN urn();
+    private final transient Human human;
 
     /**
-     * His profile.
-     * @return Profile
+     * Ctor.
      */
-    Profile profile();
+    JxHuman() {
+        throw new UnsupportedOperationException("#JxHuman()");
+    }
 
     /**
-     * Post a new question.
-     * @param text Text to post
+     * Ctor.
+     * @param hmn Human
      */
-    void ask(String text) throws IOException;
+    JxHuman(final Human hmn) {
+        this.human = hmn;
+    }
 
     /**
-     * Get talk by ID.
-     * @param number Talk number
-     * @return Talk
+     * His name.
+     * @return Name
+     * @throws IOException If fails
      */
-    Talk talk(long number);
-
-    /**
-     * Get next talks to watch.
-     * @return Talks
-     */
-    Iterable<Talk> next() throws IOException;
+    @XmlElement(name = "name")
+    public String getName() throws IOException {
+        return this.human.profile().name();
+    }
 
 }
