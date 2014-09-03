@@ -82,14 +82,15 @@ public final class PgHumanITCase {
     @Test
     public void fetchesMyOwnTalk() throws Exception {
         final Base base = new PgBase();
-        final Human human = base.register("oi7@aintshy.com", "9*7kha");
+        final Human human = base.register("oi17@aintshy.com", "9*7kha");
         human.ask("what is the weather today?");
-        final Human friend = base.register("yyt6@aintshy.com", "-9w0*8s");
-        for (final Talk talk : friend.next()) {
+        final Human friend = base.register("yyft6@aintshy.com", "-9w0*8s");
+        for (final Talk talk : new MyTalks(friend).fetch()) {
             talk.messages().post(false, "just an answer");
         }
+        new PgDump(PgBase.class.cast(base).source()).print();
         MatcherAssert.assertThat(
-            human.next(),
+            new MyTalks(human).fetch(),
             Matchers.hasItem(
                 new CustomMatcher<Talk>("my own question") {
                     @Override

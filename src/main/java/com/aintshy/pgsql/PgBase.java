@@ -44,8 +44,8 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode(of = "src")
 public final class PgBase implements Base {
 
     /**
@@ -57,7 +57,7 @@ public final class PgBase implements Base {
      * Ctor.
      */
     public PgBase() {
-        this(PgBase.source());
+        this(PgBase.bonecp());
     }
 
     /**
@@ -71,6 +71,14 @@ public final class PgBase implements Base {
                 return data;
             }
         };
+    }
+
+    /**
+     * Get source.
+     * @return Source
+     */
+    PgSource source() {
+        return this.src;
     }
 
     @Override
@@ -88,7 +96,7 @@ public final class PgBase implements Base {
                     .set(email)
                     .set(password)
                     .insert(new SingleOutcome<Long>(Long.class));
-                Logger.info(this, "user registered as %s", email);
+                Logger.info(this, "user #%d registered as %s", number, email);
             } else {
                 final String pwd = new JdbcSession(this.src.get())
                     .sql("SELECT password FROM human WHERE id=?")
@@ -114,7 +122,7 @@ public final class PgBase implements Base {
      * @return Source
      */
     @Cacheable(forever = true)
-    private static DataSource source() {
+    private static DataSource bonecp() {
         final BoneCPDataSource src = new BoneCPDataSource();
         src.setDriverClass("org.postgresql.Driver");
         src.setJdbcUrl(Manifests.read("Aintshy-PgsqlJdbc"));

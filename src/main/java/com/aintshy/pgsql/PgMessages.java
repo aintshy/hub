@@ -25,6 +25,7 @@ import com.aintshy.api.Messages;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
+import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,7 +43,7 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@ToString
+@ToString(of = "number")
 @EqualsAndHashCode(of = { "src", "number" })
 final class PgMessages implements Messages {
 
@@ -75,6 +76,7 @@ final class PgMessages implements Messages {
                 .set(asking)
                 .set(text)
                 .insert(Outcome.VOID);
+            Logger.info(this, "posted in #%d, asking=%B", this.number, asking);
             return new Message.Simple(asking, text);
         } catch (final SQLException ex) {
             throw new IOException(ex);
@@ -84,23 +86,31 @@ final class PgMessages implements Messages {
     @Override
     public Iterable<Message> iterate() throws IOException {
         try {
-            return new JdbcSession(this.src.get())
+            final Collection<Message> msgs = new JdbcSession(this.src.get())
                 .sql("SELECT asking, text FROM message WHERE talk=? ORDER BY date DESC")
                 .set(this.number)
                 .select(
-                    new Outcome<Iterable<Message>>() {
+                    new Outcome<Collection<Message>>() {
                         @Override
-                        public Iterable<Message> handle(final ResultSet rset,
+                        public Collection<Message> handle(final ResultSet rset,
                             final Statement stmt) throws SQLException {
-                            final Collection<Message> msgs =
+                            final Collection<Message> messages =
                                 new LinkedList<Message>();
                             while (rset.next()) {
-                                msgs.add(PgMessages.message(rset));
+                                messages.add(PgMessages.message(rset));
                             }
-                            return msgs;
+                            return messages;
                         }
                     }
                 );
+            if (!msgs.isEmpty()) {
+                new JdbcSession(this.src.get())
+                    .sql("UPDATE message SET seen=now() WHERE talk=? AND seen IS NULL")
+                    .set(this.number)
+                    .update(Outcome.VOID);
+                Logger.info(this, "%d seen in #%d", msgs.size(), this.number);
+            }
+            return msgs;
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }

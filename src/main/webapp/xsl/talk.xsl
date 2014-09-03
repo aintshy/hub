@@ -32,6 +32,11 @@
                 <input name="text" style="width:100%" placeholder="Post your answer..." maxlength="140"/>
             </fieldset>
         </form>
+        <p style="text-align:center">
+            <a href="{links/link[@rel='next']/@href}">
+                <xsl:text>next</xsl:text>
+            </a>
+        </p>
         <xsl:apply-templates select="messages/message"/>
         <xsl:apply-templates select="talk/question"/>
     </xsl:template>

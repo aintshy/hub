@@ -23,14 +23,20 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Loggable;
 import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.log.Logger;
 import com.jcabi.urn.URN;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -45,7 +51,7 @@ import lombok.ToString;
  * @since 0.1
  */
 @Immutable
-@ToString
+@ToString(of = "number")
 @EqualsAndHashCode(of = { "src", "number" })
 final class PgHuman implements Human {
 
@@ -116,9 +122,105 @@ final class PgHuman implements Human {
     }
 
     /**
+     * Get unread talk.
+     * @return Unread talk
+     * @throws SQLException If fails
+     */
+    @Loggable(Loggable.INFO)
+    private Collection<Talk> unread() throws SQLException {
+        return new JdbcSession(this.src.get())
+            .sql(
+                Joiner.on(' ').join(
+                    "SELECT talk FROM message",
+                    "JOIN talk ON talk.id=message.talk",
+                    "JOIN question ON question.id=talk.question",
+                    "WHERE message.seen IS NULL",
+                    "AND ((asking=true AND responder=?)",
+                    "OR (asking=false AND asker=?))",
+                    "ORDER BY message.date DESC",
+                    "LIMIT 1"
+                )
+            )
+            .set(this.number)
+            .set(this.number)
+            .select(
+                new Outcome<Collection<Talk>>() {
+                    @Override
+                    public Collection<Talk> handle(final ResultSet rset,
+                        final Statement stmt) throws SQLException {
+                        final Collection<Talk> talks = new ArrayList<Talk>(1);
+                        if (rset.next()) {
+                            talks.add(
+                                new PgTalk(PgHuman.this.src, rset.getLong(1))
+                            );
+                        }
+                        return talks;
+                    }
+                }
+            );
+    }
+
+    /**
+     * Get fresh talk, with no messages, but waiting for response.
+     * @return Fresh talk
+     * @throws SQLException If fails
+     */
+    @Loggable(Loggable.INFO)
+    private Collection<Talk> fresh() throws SQLException {
+        final Collection<Talk> talks = new JdbcSession(this.src.get())
+            .sql(
+                Joiner.on(' ').join(
+                    "SELECT talk.id FROM talk",
+                    "LEFT JOIN message ON message.talk=talk.id",
+                    "WHERE message.id IS NULL",
+                    "AND talk.seen IS NULL AND responder = ?",
+                    "ORDER BY talk.date DESC",
+                    "LIMIT 1"
+                )
+            )
+            .set(this.number)
+            .select(
+                new Outcome<Collection<Talk>>() {
+                    @Override
+                    public Collection<Talk> handle(final ResultSet rset,
+                        final Statement stmt) throws SQLException {
+                        final Collection<Talk> tlks = new ArrayList<Talk>(1);
+                        if (rset.next()) {
+                            tlks.add(
+                                new PgTalk(PgHuman.this.src, rset.getLong(1))
+                            );
+                        }
+                        return tlks;
+                    }
+                }
+            );
+        if (!talks.isEmpty()) {
+            final String nums = Joiner.on(',').join(
+                Iterables.transform(
+                    talks,
+                    new Function<Talk, Long>() {
+                        @Override
+                        public Long apply(final Talk talk) {
+                            return talk.number();
+                        }
+                    }
+                )
+            );
+            new JdbcSession(this.src.get()).sql(
+                String.format(
+                    "UPDATE talk SET seen=now() WHERE id IN (%s)", nums
+                )
+            ).update(Outcome.VOID);
+            Logger.info(this, "%s seen by #%d", nums, this.number);
+        }
+        return talks;
+    }
+
+    /**
      * Start new talk for the current human.
      * @return Talk
      */
+    @Loggable(Loggable.INFO)
     private Collection<Talk> start() throws SQLException {
         final Long question = new JdbcSession(this.src.get())
             .sql(
@@ -152,58 +254,4 @@ final class PgHuman implements Human {
         return talks;
     }
 
-    /**
-     * Get unread talk.
-     * @return Unread talk
-     * @throws SQLException If fails
-     */
-    private Collection<Talk> unread() throws SQLException {
-        final Long num = new JdbcSession(this.src.get())
-            .sql(
-                Joiner.on(' ').join(
-                    "SELECT talk FROM message",
-                    "JOIN talk ON talk.id=message.talk",
-                    "JOIN question ON question.id=talk.question",
-                    "WHERE seen=false",
-                    "AND ((asking=false AND responder=?)",
-                    "OR (asking=true AND asker=?))",
-                    "ORDER BY message.date DESC",
-                    "LIMIT 1"
-                )
-            )
-            .set(this.number)
-            .set(this.number)
-            .select(new SingleOutcome<Long>(Long.class, true));
-        final Collection<Talk> talks = new ArrayList<Talk>(1);
-        if (num != null) {
-            talks.add(new PgTalk(this.src, num));
-        }
-        return talks;
-    }
-
-    /**
-     * Get fresh talk, with no messages, but waiting for response.
-     * @return Fresh talk
-     * @throws SQLException If fails
-     */
-    private Collection<Talk> fresh() throws SQLException {
-        final Long num = new JdbcSession(this.src.get())
-            .sql(
-                Joiner.on(' ').join(
-                    "SELECT talk.id FROM talk",
-                    "LEFT JOIN message ON message.talk=talk.id",
-                    "WHERE message.id IS NULL",
-                    "AND responder = ?",
-                    "ORDER BY talk.date DESC",
-                    "LIMIT 1"
-                )
-            )
-            .set(this.number)
-            .select(new SingleOutcome<Long>(Long.class, true));
-        final Collection<Talk> talks = new ArrayList<Talk>(1);
-        if (num != null) {
-            talks.add(new PgTalk(this.src, num));
-        }
-        return talks;
-    }
 }

@@ -31,7 +31,8 @@
         id SERIAL PRIMARY KEY,
         question INTEGER NOT NULL REFERENCES question(id),
         responder INTEGER NOT NULL REFERENCES human(id),
-        date TIMESTAMP DEFAULT now() NOT NULL
+        date TIMESTAMP DEFAULT now() NOT NULL,
+        seen TIMESTAMP DEFAULT NULL
       )
     </sql>
     <sql>
@@ -41,7 +42,7 @@
         asking BOOLEAN DEFAULT false NOT NULL,
         date TIMESTAMP DEFAULT now() NOT NULL,
         text VARCHAR(140) NOT NULL,
-        seen BOOLEAN DEFAULT false NOT NULL
+        seen TIMESTAMP DEFAULT NULL
       )
     </sql>
   </changeSet>
