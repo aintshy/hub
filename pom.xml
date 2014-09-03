@@ -609,6 +609,7 @@
                                 <exclude>xml:/src/main/webapp/WEB-INF/web.xml</exclude>
                                 <exclude>xml:/src/test/webapp/xml/.*</exclude>
                                 <exclude>duplicatefinder:.*</exclude>
+                                <exclude>enforcer:.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
