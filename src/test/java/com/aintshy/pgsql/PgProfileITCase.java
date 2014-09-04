@@ -65,7 +65,7 @@ public final class PgProfileITCase {
         final Base base = new PgBase();
         final Human human = base.register("f8ke@aintshy.com", "-9w9lKha");
         final Profile profile = human.profile();
-        final byte[] bytes = { 0x00, 0x7f, 0x1f, 0x09 };
+        final byte[] bytes = {0x00, 0x7f, 0x1f, 0x09};
         profile.photo(bytes);
         MatcherAssert.assertThat(
             profile.photo(), Matchers.equalTo(bytes)
