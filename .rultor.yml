@@ -33,7 +33,7 @@ release:
     echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
     git add settings.xml
     git commit -m 'settings.xml'
-    git push heroku "${tag}"
+    git push heroku $(git symbolic-ref --short HEAD)
     curl http://i.aintshy.com -f
 
 merge:
