@@ -2,4 +2,6 @@ Aintshy-SecurityKey: test-security-key
 Aintshy-Version: ${project.version}
 Aintshy-Revision: ${buildNumber}
 Aintshy-Date: ${timestamp}
-Aintshy-PgsqlJdbc: jdbc:postgresql://localhost:${pgsql.port}/test?user=test&password=test
+Aintshy-PgsqlJdbc: jdbc:postgresql://localhost:${pgsql.port}/test
+Aintshy-PgsqlUser: test
+Aintshy-PgsqlPassword: test

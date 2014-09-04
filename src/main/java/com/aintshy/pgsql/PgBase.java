@@ -144,6 +144,8 @@ public final class PgBase implements Base {
         final BoneCPDataSource src = new BoneCPDataSource();
         src.setDriverClass("org.postgresql.Driver");
         src.setJdbcUrl(Manifests.read("Aintshy-PgsqlJdbc"));
+        src.setUser(Manifests.read("Aintshy-PgsqlUser"));
+        src.setPassword(Manifests.read("Aintshy-PgsqlPassword"));
         return src;
     }
 

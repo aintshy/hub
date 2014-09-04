@@ -3,3 +3,5 @@ Aintshy-Version: ${project.version}
 Aintshy-Revision: ${buildNumber}
 Aintshy-Date: ${timestamp}
 Aintshy-PgsqlJdbc: ${pgsql.jdbc}
+Aintshy-PgsqlUser: ${pgsql.user}
+Aintshy-PgsqlPassword: ${pgsql.password}
