@@ -31,7 +31,7 @@
     <groupId>com.aintshy</groupId>
     <artifactId>aintshy</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>aintshy</name>
     <description>I aint shy</description>
     <url>http://www.aintshy.com</url>
@@ -290,15 +290,6 @@
                         </resource>
                     </webResources>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>create-webapp-files</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exploded</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jasig.maven</groupId>
@@ -854,23 +845,17 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>appassembler-maven-plugin</artifactId>
-                        <version>1.1.1</version>
+                        <artifactId>maven-jar-plugin</artifactId>
                         <executions>
                             <execution>
                                 <phase>package</phase>
                                 <goals>
-                                    <goal>assemble</goal>
+                                    <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <assembleDirectory>${project.build.directory}</assembleDirectory>
-                                    <programs>
-                                        <program>
-                                            <mainClass>com.aintshy.web.Launch</mainClass>
-                                            <name>aintshy</name>
-                                        </program>
-                                    </programs>
+                                    <archive>
+                                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                                    </archive>
                                 </configuration>
                             </execution>
                         </executions>
