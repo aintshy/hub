@@ -250,6 +250,7 @@
                         <url>${pgsql.jdbc}</url>
                         <username>${pgsql.user}</username>
                         <password>${pgsql.password}</password>
+                        <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     </configuration>
                 </plugin>
                 <plugin>
