@@ -247,6 +247,7 @@
                     <configuration>
                         <changeLogFile>${basedir}/src/main/liquibase/master.xml</changeLogFile>
                         <driver>org.postgresql.Driver</driver>
+                        <url>${pgsql.jdbc}</url>
                     </configuration>
                 </plugin>
                 <plugin>
