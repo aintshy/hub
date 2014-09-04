@@ -696,7 +696,7 @@
                         <executions>
                             <execution>
                                 <id>unpack-postgresql-osx</id>
-                                <phase>pre-integration-test</phase>
+                                <phase>prepare-package</phase>
                                 <goals>
                                     <goal>unpack</goal>
                                 </goals>
