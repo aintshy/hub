@@ -21,7 +21,6 @@
 package com.aintshy.web;
 
 import com.jcabi.aspects.Tv;
-import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -53,8 +52,7 @@ public final class ProfileRs extends BaseRs {
     @POST
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public void upload(@FormDataParam("photo") final InputStream photo,
-        @FormDataParam("photo") final FormDataContentDisposition disposition)
+    public void upload(@FormDataParam("photo") final InputStream photo)
         throws IOException {
         final BufferedImage image = ImageIO.read(photo);
         final Image thumb = image.getScaledInstance(

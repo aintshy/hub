@@ -28,7 +28,6 @@ import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -59,13 +58,13 @@ public final class AnonymousRs extends BaseRs {
             final Iterable<Talk> talks =
                 new SafeHuman(this.human(), this).next();
             if (Iterables.isEmpty(talks)) {
-                throw this.flash().redirect(
-                    this.uriInfo().getBaseUriBuilder().clone()
-                        .path(AnonymousRs.class)
-                        .path(AnonymousRs.class, "empty")
-                        .build(),
-                    "no more questions for you, please wait",
-                    Level.INFO
+                throw new WebApplicationException(
+                    Response.seeOther(
+                        this.uriInfo().getBaseUriBuilder().clone()
+                            .path(AnonymousRs.class)
+                            .path(AnonymousRs.class, "empty")
+                            .build()
+                    ).build()
                 );
             }
             throw new WebApplicationException(
