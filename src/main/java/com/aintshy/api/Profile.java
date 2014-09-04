@@ -108,4 +108,21 @@ public interface Profile {
      */
     void photo(byte[] bytes) throws IOException;
 
+    /**
+     * Profile can't be updated.
+     */
+    final class UpdateException extends RuntimeException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 305929936831895556L;
+        /**
+         * Ctor.
+         * @param cause Cause
+         */
+        public UpdateException(final String cause) {
+            super(cause);
+        }
+    }
+
 }

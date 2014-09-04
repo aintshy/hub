@@ -79,6 +79,16 @@ public final class PgBase implements Base {
     @Override
     public Human register(final String email, final String password)
         throws IOException {
+        if (!email.matches(".+@.+")) {
+            throw new Base.InvalidEmailFormatException(
+                "email format is not correct"
+            );
+        }
+        if (!password.matches(".{3,}")) {
+            throw new Base.InvalidPasswordException(
+                "password is not good enough, should be 3+ characters"
+            );
+        }
         Long number;
         try {
             number = new JdbcSession(this.src.get())

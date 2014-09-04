@@ -23,6 +23,7 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Tv;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.Preparation;
@@ -164,6 +165,21 @@ final class PgProfile implements Profile {
     @Override
     public void update(final String name, final int age,
         final Sex sex, final Locale locale) throws IOException {
+        if (!name.matches("[a-zA-Z0-9\\- ]{4,36}")) {
+            throw new Profile.UpdateException(
+                "name should be 4-36 letters, spaces or numbers"
+            );
+        }
+        if (age <= Tv.TEN) {
+            throw new Profile.UpdateException(
+                "you're too young for our system"
+            );
+        }
+        if (age > Tv.HUNDRED) {
+            throw new Profile.UpdateException(
+                "you're too old for us, sorry"
+            );
+        }
         try {
             new JdbcSession(this.src.get())
                 // @checkstyle LineLength (1 line)

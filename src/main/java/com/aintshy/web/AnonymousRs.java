@@ -118,6 +118,10 @@ public final class AnonymousRs extends BaseRs {
             human = this.base().register(email, password);
         } catch (final Base.InvalidPasswordException ex) {
             throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
+        } catch (final Base.InvalidEmailFormatException ex) {
+            throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
+        } catch (final Base.InvalidPasswordFormatException ex) {
+            throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
         }
         final Identity identity = new Identity.Simple(
             human.urn(),

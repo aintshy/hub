@@ -39,6 +39,12 @@ public interface Base {
      * {@link com.aintshy.api.Base.InvalidPasswordException} if password
      * is not correct).
      *
+     * <p>Throws {@link com.aintshy.api.Base.InvalidEmailFormatException}
+     * if email is in a wrong format.
+     *
+     * <p>Throws {@link com.aintshy.api.Base.InvalidPasswordFormatException}
+     * if password is not good enough.
+     *
      * @param email Email
      * @param password Password
      * @return Human
@@ -87,6 +93,40 @@ public interface Base {
          * @param cause Cause
          */
         public HumanNotFoundException(final String cause) {
+            super(cause);
+        }
+    }
+
+    /**
+     * Invalid email format.
+     */
+    final class InvalidEmailFormatException extends RuntimeException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 305929936831895556L;
+        /**
+         * Ctor.
+         * @param cause Cause
+         */
+        public InvalidEmailFormatException(final String cause) {
+            super(cause);
+        }
+    }
+
+    /**
+     * Invalid email format.
+     */
+    final class InvalidPasswordFormatException extends RuntimeException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 305929936831895556L;
+        /**
+         * Ctor.
+         * @param cause Cause
+         */
+        public InvalidPasswordFormatException(final String cause) {
             super(cause);
         }
     }
