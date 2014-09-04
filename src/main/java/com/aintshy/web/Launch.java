@@ -24,7 +24,7 @@ import java.io.File;
 import org.apache.catalina.startup.Tomcat;
 
 /**
- * Launch.
+ * Launch (used only for heroku).
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
@@ -48,7 +48,7 @@ public final class Launch {
         final Tomcat tomcat = new Tomcat();
         final String port = System.getenv("PORT");
         tomcat.setPort(Integer.valueOf(port));
-        tomcat.addWebapp("/", new File("src/main/webapp/").getAbsolutePath());
+        tomcat.addWebapp("/", new File("target/aintshy").getAbsolutePath());
         tomcat.start();
         tomcat.getServer().await();
     }

@@ -219,6 +219,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>aintshy</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
