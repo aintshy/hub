@@ -600,6 +600,7 @@
                     <plugin>
                         <groupId>com.qulice</groupId>
                         <artifactId>qulice-maven-plugin</artifactId>
+                        <version>0.11</version>
                         <configuration>
                             <excludes>
                                 <exclude>checkstyle:/src/main/webapp/.*</exclude>
@@ -609,7 +610,8 @@
                                 <exclude>xml:/src/main/webapp/WEB-INF/web.xml</exclude>
                                 <exclude>xml:/src/test/webapp/xml/.*</exclude>
                                 <exclude>duplicatefinder:.*</exclude>
-                                <exclude>enforcer:.*</exclude>
+                                <exclude>snapshots:.*</exclude>
+                                <exclude>dependencies:.*</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
