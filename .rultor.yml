@@ -28,6 +28,7 @@ release:
     git remote add heroku git@heroku.com:aintshy.git
     mkdir /home/r/.ssh
     mv ../id_rsa ../id_rsa.pub /home/r/.ssh
+    ls -al /home/r/.ssh
     chmod -R 600 /home/r/.ssh
     git push heroku master
 
