@@ -27,10 +27,10 @@ release:
     mvn clean install -Pqulice --errors
     mvn liquibase:update -Paintshy --errors --settings settings.xml
     git remote add heroku git@heroku.com:aintshy.git
-    mkdir /home/r/.ssh
-    mv ../id_rsa ../id_rsa.pub /home/r/.ssh
-    ls -al /home/r/.ssh
-    chmod -R 600 /home/r/.ssh/*
+    mkdir ~/.ssh
+    mv ../id_rsa ../id_rsa.pub ~/.ssh
+    chmod -R 600 ~/.ssh/*
+    echo -e 'Host 192.168.0.*\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null' > ~/.ssh/config
     git add settings.xml
     git commit -m 'settings.xml'
     git push heroku master
