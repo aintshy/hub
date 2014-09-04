@@ -24,7 +24,7 @@ release:
   script: |
     mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
-    mvn clean deploy -Pqulice -Paintshy --errors --settings ../settings.xml
+    mvn clean install -Pqulice -Paintshy --errors --settings ../settings.xml
     mvn liquibase:update -Paintshy --errors --settings ../settings.xml
     git remote add heroku git@heroku.com:aintshy.git
     mkdir /home/r/.ssh
