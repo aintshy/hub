@@ -45,6 +45,11 @@
                 </select>
                 <select name="lang">
                     <option selected="selected" value="EN">English</option>
+                    <option value="SP">Spanish</option>
+                    <option value="ZH">Chinese</option>
+                    <option value="AR">Arabic</option>
+                    <option value="HI">Hindi</option>
+                    <option value="RU">Russian</option>
                 </select>
                 <input type="submit" value="Save"/>
             </fieldset>

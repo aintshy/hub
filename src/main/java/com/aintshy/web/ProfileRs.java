@@ -21,6 +21,8 @@
 package com.aintshy.web;
 
 import com.jcabi.aspects.Tv;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -28,8 +30,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Profile.
@@ -48,7 +52,10 @@ public final class ProfileRs extends BaseRs {
      */
     @POST
     @Path("/upload")
-    public void upload(final InputStream photo) throws IOException {
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public void upload(@FormDataParam("photo") final InputStream photo,
+        @FormDataParam("photo") final FormDataContentDisposition disposition)
+        throws IOException {
         final BufferedImage image = ImageIO.read(photo);
         final Image thumb = image.getScaledInstance(
             Tv.FOUR * Tv.HUNDRED, -1, Image.SCALE_SMOOTH
