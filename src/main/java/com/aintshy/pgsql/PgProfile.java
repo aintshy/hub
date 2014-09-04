@@ -167,7 +167,7 @@ final class PgProfile implements Profile {
         try {
             new JdbcSession(this.src.get())
                 // @checkstyle LineLength (1 line)
-                .sql("UPDATE human SET name=?, age=?, sex=gender(?), locale=? WHERE id=?")
+                .sql("UPDATE human SET name=?, age=?, sex=sex(?), locale=? WHERE id=?")
                 .set(name)
                 .set(age)
                 .set(sex)
