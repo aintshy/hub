@@ -25,9 +25,11 @@ import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
+import com.jcabi.jdbc.Preparation;
 import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -205,8 +207,16 @@ final class PgProfile implements Profile {
         try {
             new JdbcSession(this.src.get())
                 .sql("UPDATE human SET photo=? WHERE id=?")
-                .set(bytes)
-                .set(this.number)
+                .prepare(
+                    new Preparation() {
+                        @Override
+                        public void prepare(final PreparedStatement stmt)
+                            throws SQLException {
+                            stmt.setBytes(1, bytes);
+                            stmt.setLong(2, PgProfile.this.number);
+                        }
+                    }
+                )
                 .update(Outcome.VOID);
         } catch (final SQLException ex) {
             throw new IOException(ex);
