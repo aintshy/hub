@@ -34,6 +34,7 @@ release:
     git add settings.xml
     git commit -m 'settings.xml'
     git push heroku master
+    curl http://i.aintshy.com -f
 
 merge:
   script: |
