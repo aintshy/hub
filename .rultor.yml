@@ -30,7 +30,7 @@ release:
     mkdir /home/r/.ssh
     mv ../id_rsa ../id_rsa.pub /home/r/.ssh
     ls -al /home/r/.ssh
-    chmod -R 600 /home/r/.ssh
+    chmod -R 600 /home/r/.ssh/*
     git add settings.xml
     git commit -m 'settings.xml'
     git push heroku master
