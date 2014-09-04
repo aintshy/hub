@@ -111,17 +111,19 @@
                 </a>
             </li>
         </ul>
-        <form action="{/page/links/link[@rel='ask']/@href}" method="post">
-            <fieldset class="inline">
-                <input style="width:90%" name="text" placeholder="Ask a question..." maxlength="140"/>
-            </fieldset>
-        </form>
-        <form action="{/page/links/link[@rel='upload-photo']/@href}" method="post" enctype="multipart/form-data">
-            <fieldset class="inline">
-                <input type="file" name="photo"/>
-                <input type="submit" value="Upload photo"/>
-            </fieldset>
-        </form>
+        <xsl:if test="@confirmed='true'">
+            <form action="{/page/links/link[@rel='ask']/@href}" method="post">
+                <fieldset class="inline">
+                    <input style="width:90%" name="text" placeholder="Ask a question..." maxlength="140"/>
+                </fieldset>
+            </form>
+            <form action="{/page/links/link[@rel='upload-photo']/@href}" method="post" enctype="multipart/form-data">
+                <fieldset class="inline">
+                    <input type="file" name="photo"/>
+                    <input type="submit" value="Upload photo"/>
+                </fieldset>
+            </form>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="page/millis">
         <xsl:variable name="msec" select="number(.)"/>

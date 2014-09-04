@@ -24,6 +24,7 @@ import com.aintshy.api.Human;
 import java.io.IOException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -56,6 +57,16 @@ final class JxHuman {
      */
     JxHuman(final Human hmn) {
         this.human = hmn;
+    }
+
+    /**
+     * Is confirmed?
+     * @return URN
+     * @throws IOException If fails
+     */
+    @XmlAttribute(name = "confirmed")
+    public boolean isConfirmed() throws IOException {
+        return this.human.profile().confirmed();
     }
 
     /**
