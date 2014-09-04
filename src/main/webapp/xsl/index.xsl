@@ -37,7 +37,7 @@
         <form action="{links/link[@rel='enter']/@href}" method="post">
             <fieldset>
                 <input name="email" size="30" placeholder="Email..."/>
-                <input name="password" size="23" placeholder="Password..."/>
+                <input name="password" type="password" size="23" placeholder="Password..."/>
                 <input type="submit" value="Login"/>
             </fieldset>
         </form>
