@@ -17,9 +17,6 @@
             Internal Application Error
         </h1>
         <p>
-            Release: <code>${buildNumber}</code>
-        </p>
-        <p>
             Oops, something went terribly wrong. Please, copy
             the text below and post it as a new issue into our
             <a href="https://github.com/aintshy/hub/issues">Github project</a>.
