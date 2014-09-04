@@ -31,7 +31,7 @@
     <groupId>com.aintshy</groupId>
     <artifactId>aintshy</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>aintshy</name>
     <description>I aint shy</description>
     <url>http://www.aintshy.com</url>
@@ -290,6 +290,15 @@
                         </resource>
                     </webResources>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>create-webapp-files</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jasig.maven</groupId>
@@ -378,6 +387,7 @@
                                 <goals>
                                     <goal>exploded</goal>
                                 </goals>
+                                <phase>pre-integration-test</phase>
                                 <configuration>
                                     <warSourceExcludes>nothing/**</warSourceExcludes>
                                     <webappDirectory>${tomcat.home}</webappDirectory>
@@ -404,7 +414,7 @@
                                 <goals>
                                     <goal>reserve-network-port</goal>
                                 </goals>
-                                <phase>initialize</phase>
+                                <phase>pre-integration-test</phase>
                                 <configuration>
                                     <portNames>
                                         <portName>tomcat.port</portName>
@@ -843,22 +853,6 @@
             </dependencies>
             <build>
                 <plugins>
-                    <plugin>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                                <configuration>
-                                    <archive>
-                                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-                                    </archive>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>appassembler-maven-plugin</artifactId>
