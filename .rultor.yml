@@ -30,7 +30,7 @@ release:
     mkdir ~/.ssh
     mv ../id_rsa ../id_rsa.pub ~/.ssh
     chmod -R 600 ~/.ssh/*
-    echo -e 'Host 192.168.0.*\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null' > ~/.ssh/config
+    echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
     git add settings.xml
     git commit -m 'settings.xml'
     git push heroku master
