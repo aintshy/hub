@@ -22,6 +22,7 @@ package com.aintshy.web;
 
 import com.aintshy.api.Human;
 import java.io.IOException;
+import java.util.Calendar;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -96,7 +97,8 @@ final class JxHuman {
      */
     @XmlElement(name = "age")
     public int getAge() throws IOException {
-        return this.human.profile().age();
+        return Calendar.getInstance().get(Calendar.YEAR)
+            - this.human.profile().year();
     }
 
     /**

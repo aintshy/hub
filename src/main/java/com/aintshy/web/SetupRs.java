@@ -104,7 +104,7 @@ public final class SetupRs extends BaseRs {
     @Path("/no-details")
     public Response noDetails() throws IOException {
         final Profile profile = this.human().profile();
-        if (profile.age() != 0) {
+        if (profile.year() != 0) {
             throw this.flash().redirect(
                 this.uriInfo().getBaseUri(),
                 "your details are all set",

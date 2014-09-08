@@ -34,6 +34,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 import java.util.Locale;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -121,10 +122,10 @@ final class PgProfile implements Profile {
     }
 
     @Override
-    public int age() throws IOException {
+    public int year() throws IOException {
         try {
             return new JdbcSession(this.src.get())
-                .sql("SELECT age FROM human WHERE id=?")
+                .sql("SELECT year FROM human WHERE id=?")
                 .set(this.number)
                 .select(new SingleOutcome<Long>(Long.class))
                 .intValue();
@@ -163,13 +164,14 @@ final class PgProfile implements Profile {
 
     // @checkstyle ParameterNumberCheck (5 lines)
     @Override
-    public void update(final String name, final int age,
+    public void update(final String name, final int year,
         final Sex sex, final Locale locale) throws IOException {
         if (!name.matches("[a-zA-Z0-9\\- ]{4,36}")) {
             throw new Profile.UpdateException(
                 "name should be 4-36 letters, spaces or numbers"
             );
         }
+        final int age = Calendar.getInstance().get(Calendar.YEAR) - year;
         if (age <= Tv.TEN) {
             throw new Profile.UpdateException(
                 "you're too young for our system"
@@ -183,9 +185,9 @@ final class PgProfile implements Profile {
         try {
             new JdbcSession(this.src.get())
                 // @checkstyle LineLength (1 line)
-                .sql("UPDATE human SET name=?, age=?, sex=sex(?), locale=? WHERE id=?")
+                .sql("UPDATE human SET name=?, year=?, sex=sex(?), locale=? WHERE id=?")
                 .set(name)
-                .set(age)
+                .set(year)
                 .set(sex)
                 .set(locale.getLanguage())
                 .set(this.number)

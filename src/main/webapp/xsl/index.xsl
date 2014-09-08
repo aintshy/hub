@@ -41,5 +41,11 @@
                 <input type="submit" value="Login"/>
             </fieldset>
         </form>
+        <p>
+            <xsl:text>
+                We never share your email with anyone and never send
+                any promotional messages.
+            </xsl:text>
+        </p>
     </xsl:template>
 </xsl:stylesheet>

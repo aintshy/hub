@@ -58,7 +58,7 @@ final class SafeHuman implements Human {
                 Level.INFO
             );
         }
-        if (hmn.profile().age() == 0) {
+        if (hmn.profile().year() == 0) {
             throw base.flash().redirect(
                 base.uriInfo().getBaseUriBuilder().clone()
                     .path(SetupRs.class)

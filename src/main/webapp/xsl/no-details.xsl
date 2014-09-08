@@ -36,23 +36,34 @@
         </p>
         <form action="{links/link[@rel='details']/@href}" method="post">
             <fieldset>
-                <input name="name" size="20" placeholder="Name..."/>
-                <input name="age" size="4" placeholder="Age..."/>
-                <select name="sex">
+                <label for="name">Everybody will see this name of yours</label>
+                <input id="name" name="name" size="20" placeholder="Name..."/>
+                <label for="year">We don't need an exact date, just a year</label>
+                <input id="year" name="year" size="10" placeholder="Year of birth..."/>
+                <label for="sex">Yes, we need to know your gender</label>
+                <select id="sex" name="sex">
                     <option value="M">male</option>
                     <option selected="selected" value="F">female</option>
                     <option value="T">third</option>
                 </select>
-                <select name="lang">
+                <label for="lang">Which language you prefer to speak?</label>
+                <select id="lang" name="lang">
                     <option selected="selected" value="EN">English</option>
-                    <option value="SP">Spanish</option>
                     <option value="ZH">Chinese</option>
                     <option value="AR">Arabic</option>
                     <option value="HI">Hindi</option>
+                    <option value="SP">Spanish</option>
                     <option value="RU">Russian</option>
                 </select>
                 <input type="submit" value="Save"/>
             </fieldset>
         </form>
+        <p>
+            <xsl:text>
+                You will NOT be able to change this information later,
+                please be careful and accurate. The information you enter here will
+                be publicly available to all other users.
+            </xsl:text>
+        </p>
     </xsl:template>
 </xsl:stylesheet>

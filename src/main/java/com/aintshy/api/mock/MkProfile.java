@@ -25,6 +25,7 @@ import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Tv;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -58,8 +59,8 @@ public final class MkProfile implements Profile {
     }
 
     @Override
-    public int age() throws IOException {
-        return Tv.THIRTY;
+    public int year() throws IOException {
+        return Calendar.getInstance().get(Calendar.YEAR) - Tv.THIRTY;
     }
 
     @Override

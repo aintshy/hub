@@ -62,11 +62,11 @@ public interface Profile {
     String email() throws IOException;
 
     /**
-     * His age.
-     * @return Age
+     * His year of birth.
+     * @return Year of birth
      * @throws IOException If fails
      */
-    int age() throws IOException;
+    int year() throws IOException;
 
     /**
      * His sex.

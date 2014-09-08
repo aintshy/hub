@@ -25,6 +25,7 @@ import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Sex;
 import com.jcabi.aspects.Tv;
+import java.util.Calendar;
 import java.util.Locale;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -48,12 +49,13 @@ public final class PgProfileITCase {
         final Base base = new PgBase();
         final Human human = base.register("h3es@aintshy.com", "-9w8skkha");
         final Profile profile = human.profile();
-        profile.update("Jeffrey", Tv.THIRTY, Sex.M, Locale.GERMAN);
-        MatcherAssert.assertThat(profile.email(), Matchers.notNullValue());
-        MatcherAssert.assertThat(profile.age(), Matchers.notNullValue());
-        MatcherAssert.assertThat(profile.sex(), Matchers.notNullValue());
-        MatcherAssert.assertThat(profile.locale(), Matchers.notNullValue());
-        MatcherAssert.assertThat(profile.name(), Matchers.notNullValue());
+        final int year = Calendar.getInstance().get(Calendar.YEAR) - Tv.THIRTY;
+        profile.update("Jeffrey", year, Sex.M, Locale.GERMAN);
+        MatcherAssert.assertThat(profile.email(), Matchers.startsWith("h3es"));
+        MatcherAssert.assertThat(profile.year(), Matchers.equalTo(year));
+        MatcherAssert.assertThat(profile.sex(), Matchers.equalTo(Sex.M));
+        MatcherAssert.assertThat(profile.locale(), Matchers.is(Locale.GERMAN));
+        MatcherAssert.assertThat(profile.name(), Matchers.startsWith("Jeff"));
     }
 
     /**
