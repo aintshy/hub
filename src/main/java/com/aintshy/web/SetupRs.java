@@ -130,7 +130,7 @@ public final class SetupRs extends BaseRs {
 
     /**
      * Set profile details.
-     * @param age Age
+     * @param year Year
      * @param sex Sex
      * @param name Name
      * @param lang Lang
@@ -141,15 +141,19 @@ public final class SetupRs extends BaseRs {
     @Path("/details")
     @SuppressWarnings("PMD.UseObjectForClearerAPI")
     public void details(
-        @FormParam("age") final String age,
+        @FormParam("year") final String year,
         @FormParam("sex") final String sex,
         @FormParam("name") final String name,
         @FormParam("lang") final String lang) throws IOException {
         final Profile profile = this.human().profile();
-        profile.update(
-            name, Integer.parseInt(age),
-            Sex.valueOf(sex), new Locale(lang)
-        );
+        try {
+            profile.update(
+                name, Integer.parseInt(year),
+                Sex.valueOf(sex), new Locale(lang)
+            );
+        } catch (final Profile.UpdateException ex) {
+            throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
+        }
         throw this.flash().redirect(
             this.uriInfo().getBaseUri(),
             "profile updated successfully",
