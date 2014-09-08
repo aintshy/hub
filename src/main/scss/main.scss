@@ -33,7 +33,7 @@ body {
   padding: 2 * $em;
   font-size: $em;
   color: $black;
-  background-color: lightblue;
+  background-color: #ccc;
 }
 
 .wrapper {
@@ -135,4 +135,16 @@ p, fieldset, pre, .p {
   width: 160px;
   height: 160px;
   border: 1px solid darkgray;
+}
+.my-photo {
+  width: $em;
+  height: $em;
+  border: 1px solid darkgray;
+  vertical-align: middle;
+}
+
+.nav {
+  li {
+    vertical-align: middle;
+  }
 }

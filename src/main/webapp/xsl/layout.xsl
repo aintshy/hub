@@ -50,7 +50,7 @@
                                 <img src="//img.aintshy.com/logo.svg" class="logo" alt="aintshy logo"/>
                             </a>
                         </div>
-                        <xsl:apply-templates select="human"/>
+                        <xsl:apply-templates select="human[age!=0]"/>
                     </header>
                     <xsl:apply-templates select="flash"/>
                     <div class="main">
@@ -92,7 +92,12 @@
         </html>
     </xsl:template>
     <xsl:template match="human">
-        <ul>
+        <ul class="nav">
+            <li>
+                <a href="{/page/links/link[@rel='upload-photo']/@href}">
+                    <img src="{links/link[@rel='photo']/@href}" class="my-photo"/>
+                </a>
+            </li>
             <li>
                 <xsl:value-of select="name"/>
             </li>
@@ -115,12 +120,6 @@
             <form action="{/page/links/link[@rel='ask']/@href}" method="post">
                 <fieldset class="inline">
                     <input style="width:90%" name="text" placeholder="Ask a question..." maxlength="140"/>
-                </fieldset>
-            </form>
-            <form action="{/page/links/link[@rel='upload-photo']/@href}" method="post" enctype="multipart/form-data">
-                <fieldset class="inline">
-                    <input type="file" name="photo"/>
-                    <input type="submit" value="Upload photo"/>
                 </fieldset>
             </form>
         </xsl:if>

@@ -21,12 +21,16 @@
 package com.aintshy.web;
 
 import com.aintshy.api.Human;
+import com.rexsl.page.Link;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -46,6 +50,11 @@ final class JxHuman {
     private final transient Human human;
 
     /**
+     * Base.
+     */
+    private final transient BaseRs base;
+
+    /**
      * Ctor.
      */
     JxHuman() {
@@ -55,9 +64,11 @@ final class JxHuman {
     /**
      * Ctor.
      * @param hmn Human
+     * @param res Base resource
      */
-    JxHuman(final Human hmn) {
+    JxHuman(final Human hmn, final BaseRs res) {
         this.human = hmn;
+        this.base = res;
     }
 
     /**
@@ -97,8 +108,14 @@ final class JxHuman {
      */
     @XmlElement(name = "age")
     public int getAge() throws IOException {
-        return Calendar.getInstance().get(Calendar.YEAR)
-            - this.human.profile().year();
+        final int year = this.human.profile().year();
+        final int age;
+        if (year == 0) {
+            age = 0;
+        } else {
+            age = Calendar.getInstance().get(Calendar.YEAR) - year;
+        }
+        return age;
     }
 
     /**
@@ -119,6 +136,27 @@ final class JxHuman {
     @XmlElement(name = "locale")
     public String getLocale() throws IOException {
         return this.human.profile().locale().toString();
+    }
+
+    /**
+     * Its links.
+     * @return Links
+     * @throws IOException If fails
+     */
+    @XmlElementWrapper(name = "links")
+    @XmlElement(name = "link")
+    public Collection<Link> getLinks() throws IOException {
+        final Collection<Link> links = new LinkedList<Link>();
+        links.add(
+            new Link(
+                "photo",
+                this.base.uriInfo().getBaseUriBuilder().clone()
+                    .path(PhotoRs.class)
+                    .path(PhotoRs.class, "index")
+                    .build(this.human.urn().nss())
+            )
+        );
+        return links;
     }
 
 }

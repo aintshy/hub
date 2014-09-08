@@ -93,7 +93,9 @@ public class BaseRs extends BaseResource {
                 final Response.ResponseBuilder builder) {
                 if (!BaseRs.this.auth().identity().equals(Identity.ANONYMOUS)) {
                     try {
-                        page.append(new JxHuman(BaseRs.this.human()));
+                        page.append(
+                            new JxHuman(BaseRs.this.human(), BaseRs.this)
+                        );
                     } catch (final IOException ex) {
                         throw new IllegalStateException(ex);
                     }
@@ -126,7 +128,7 @@ public class BaseRs extends BaseResource {
                         "upload-photo",
                         BaseRs.this.uriInfo().getBaseUriBuilder().clone()
                             .path(ProfileRs.class)
-                            .path(ProfileRs.class, "upload")
+                            .path(ProfileRs.class, "photo")
                     )
                 );
             }

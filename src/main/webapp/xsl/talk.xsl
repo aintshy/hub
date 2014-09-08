@@ -66,7 +66,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:value-of select="."/>
+            <span><xsl:value-of select="."/></span>
         </p>
     </xsl:template>
     <xsl:template match="message">
@@ -82,7 +82,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:value-of select="text"/>
+            <span><xsl:value-of select="text"/></span>
         </p>
     </xsl:template>
 </xsl:stylesheet>

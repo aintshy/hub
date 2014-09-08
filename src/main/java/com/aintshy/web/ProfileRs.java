@@ -21,6 +21,8 @@
 package com.aintshy.web;
 
 import com.jcabi.aspects.Tv;
+import com.rexsl.page.Link;
+import com.rexsl.page.PageBuilder;
 import com.sun.jersey.multipart.FormDataParam;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -30,9 +32,11 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Profile.
@@ -43,6 +47,32 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/profile")
 public final class ProfileRs extends BaseRs {
+
+    /**
+     * Upload photo.
+     * @return The JAX-RS response
+     * @throws IOException If fails
+     */
+    @GET
+    @Path("/photo")
+    public Response photo() throws IOException {
+        new SafeHuman(this.human(), this);
+        return new PageBuilder()
+            .stylesheet("/xsl/photo.xsl")
+            .build(EmptyPage.class)
+            .init(this)
+            .link(
+                new Link(
+                    "upload",
+                    this.uriInfo().getBaseUriBuilder().clone()
+                        .path(ProfileRs.class)
+                        .path(ProfileRs.class, "upload")
+                        .build()
+                )
+            )
+            .render()
+            .build();
+    }
 
     /**
      * Upload a photo.
