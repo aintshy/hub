@@ -20,6 +20,7 @@
  */
 package com.aintshy.api.mock;
 
+import com.aintshy.api.History;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
@@ -61,5 +62,10 @@ public final class MkHuman implements Human {
     @Override
     public Iterable<Talk> next() throws IOException {
         return Collections.<Talk>singleton(new MkTalk());
+    }
+
+    @Override
+    public History history() throws IOException {
+        return new MkHistory();
     }
 }

@@ -142,9 +142,14 @@ p, fieldset, pre, .p {
   border: 1px solid darkgray;
   vertical-align: middle;
 }
+.history-photo {
+  width: 3 * $em;
+  height: 3 * $em;
+  border: 1px solid darkgray;
+}
 
 .nav {
-  li {
+  li, li a {
     vertical-align: middle;
   }
 }

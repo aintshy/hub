@@ -111,6 +111,11 @@
                 <xsl:value-of select="locale"/>
             </li>
             <li>
+                <a title="history" href="{/page/links/link[@rel='history']/@href}">
+                    <xsl:text>history</xsl:text>
+                </a>
+            </li>
+            <li>
                 <a title="log out" href="{/page/links/link[@rel='rexsl:logout']/@href}">
                     <xsl:text>exit</xsl:text>
                 </a>

@@ -18,42 +18,38 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.api;
+package com.aintshy.pgsql;
 
-import com.jcabi.aspects.Immutable;
-import java.io.IOException;
+import com.aintshy.api.Base;
+import com.aintshy.api.Human;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 /**
- * Messages in a talk.
+ * Integration case for {@link PgHistory}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.1
+ * @since 0.4
  */
-@Immutable
-public interface Messages {
+public final class PgHistoryITCase {
 
     /**
-     * Post a new message.
-     * @param asking Is it an asking message?
-     * @param text The text
-     * @return Message posted
-     * @throws IOException If fails
+     * PgHistory can list talks.
+     * @throws Exception If fails
      */
-    Message post(boolean asking, String text) throws IOException;
-
-    /**
-     * Iterate them.
-     * @return All messages
-     * @throws IOException If fails
-     */
-    Iterable<Message> iterate() throws IOException;
-
-    /**
-     * Total number of them.
-     * @return Total
-     * @throws IOException If fails
-     */
-    int size() throws IOException;
+    @Test
+    public void listsTalks() throws Exception {
+        final Base base = new PgBase();
+        final Human friend = base.register("r43@aintshy.com", "--Iokha");
+        friend.ask("how are you doing this?");
+        final Human human = base.register("e21i@aintshy.com", "-9w8(8s");
+        human.next().iterator().next().messages().post(false, "easy!");
+        MatcherAssert.assertThat(
+            human.history().iterate(),
+            Matchers.not(Matchers.emptyIterable())
+        );
+    }
 
 }

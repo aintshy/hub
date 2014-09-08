@@ -18,42 +18,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.api;
+package com.aintshy.api.mock;
 
+import com.aintshy.api.History;
+import com.aintshy.api.Talk;
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Date;
 
 /**
- * Messages in a talk.
+ * Mock history.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.1
+ * @since 0.4
  */
 @Immutable
-public interface Messages {
+public final class MkHistory implements History {
 
-    /**
-     * Post a new message.
-     * @param asking Is it an asking message?
-     * @param text The text
-     * @return Message posted
-     * @throws IOException If fails
-     */
-    Message post(boolean asking, String text) throws IOException;
+    @Override
+    public Iterable<Talk> iterate() throws IOException {
+        return Collections.<Talk>singleton(new MkTalk());
+    }
 
-    /**
-     * Iterate them.
-     * @return All messages
-     * @throws IOException If fails
-     */
-    Iterable<Message> iterate() throws IOException;
-
-    /**
-     * Total number of them.
-     * @return Total
-     * @throws IOException If fails
-     */
-    int size() throws IOException;
+    @Override
+    public History since(final Date date) throws IOException {
+        return new MkHistory();
+    }
 
 }

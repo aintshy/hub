@@ -22,16 +22,19 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Message;
 import com.aintshy.api.Messages;
+import com.google.common.base.Joiner;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Tv;
 import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.Outcome;
+import com.jcabi.jdbc.SingleOutcome;
+import com.jcabi.jdbc.Utc;
 import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Collection;
-import java.util.LinkedList;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -89,22 +92,23 @@ final class PgMessages implements Messages {
     public Iterable<Message> iterate() throws IOException {
         try {
             final Collection<Message> msgs = new JdbcSession(this.src.get())
-                // @checkstyle LineLength (1 line)
-                .sql("SELECT asking, text FROM message WHERE talk=? ORDER BY date DESC")
                 .set(this.number)
+                .sql(
+                    Joiner.on(' ').join(
+                        "SELECT asking, text, date FROM message",
+                        "WHERE talk=? ORDER BY date DESC"
+                    )
+                )
                 .select(
-                    new Outcome<Collection<Message>>() {
-                        @Override
-                        public Collection<Message> handle(final ResultSet rset,
-                            final Statement stmt) throws SQLException {
-                            final Collection<Message> messages =
-                                new LinkedList<Message>();
-                            while (rset.next()) {
-                                messages.add(PgMessages.message(rset));
+                    new ListOutcome<Message>(
+                        new ListOutcome.Mapping<Message>() {
+                            @Override
+                            public Message map(final ResultSet rset)
+                                throws SQLException {
+                                return PgMessages.message(rset);
                             }
-                            return messages;
                         }
-                    }
+                    )
                 );
             if (!msgs.isEmpty()) {
                 new JdbcSession(this.src.get())
@@ -120,6 +124,19 @@ final class PgMessages implements Messages {
         }
     }
 
+    @Override
+    public int size() throws IOException {
+        try {
+            return new JdbcSession(this.src.get())
+                .sql("SELECT COUNT(id) FROM message WHERE talk=?")
+                .set(this.number)
+                .select(new SingleOutcome<Long>(Long.class))
+                .intValue();
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
     /**
      * Make a message from result set.
      * @param rset Result set
@@ -127,7 +144,11 @@ final class PgMessages implements Messages {
      * @throws SQLException If fails
      */
     private static Message message(final ResultSet rset) throws SQLException {
-        return new Message.Simple(rset.getBoolean(1), rset.getString(2));
+        return new Message.Simple(
+            rset.getBoolean(1),
+            rset.getString(2),
+            Utc.getTimestamp(rset, Tv.THREE)
+        );
     }
 
 }

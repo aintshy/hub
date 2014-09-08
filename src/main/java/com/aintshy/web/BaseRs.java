@@ -131,6 +131,14 @@ public class BaseRs extends BaseResource {
                             .path(ProfileRs.class, "photo")
                     )
                 );
+                page.link(
+                    new Link(
+                        "history",
+                        BaseRs.this.uriInfo().getBaseUriBuilder().clone()
+                            .path(HistoryRs.class)
+                            .path(HistoryRs.class, "index")
+                    )
+                );
             }
         };
     }

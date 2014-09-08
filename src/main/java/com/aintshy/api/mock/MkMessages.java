@@ -47,4 +47,9 @@ public final class MkMessages implements Messages {
             new Message.Simple(false, "I'm fine, thanks!")
         );
     }
+
+    @Override
+    public int size() throws IOException {
+        return 1;
+    }
 }

@@ -20,6 +20,7 @@
  */
 package com.aintshy.web;
 
+import com.aintshy.api.History;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
@@ -94,5 +95,10 @@ final class SafeHuman implements Human {
     @Override
     public Iterable<Talk> next() throws IOException {
         return this.human.next();
+    }
+
+    @Override
+    public History history() throws IOException {
+        return this.human.history();
     }
 }

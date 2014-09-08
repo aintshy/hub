@@ -20,10 +20,11 @@
  */
 package com.aintshy.web;
 
+import com.aintshy.api.Human;
 import com.aintshy.api.Role;
+import com.aintshy.api.Talk;
 import com.rexsl.page.Link;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -33,20 +34,25 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Role in JAXB.
+ * JAXB story.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.2
+ * @since 0.4
  */
-@XmlRootElement(name = "role")
+@XmlRootElement(name = "story")
 @XmlAccessorType(XmlAccessType.NONE)
-final class JxRole {
+final class JxStory {
 
     /**
-     * Role.
+     * Talk.
      */
-    private final transient Role role;
+    private final transient Talk talk;
+
+    /**
+     * Human.
+     */
+    private final transient Human human;
 
     /**
      * Base.
@@ -56,59 +62,50 @@ final class JxRole {
     /**
      * Ctor.
      */
-    JxRole() {
-        throw new UnsupportedOperationException("#JxRole()");
+    JxStory() {
+        throw new UnsupportedOperationException("#JxStory()");
     }
 
     /**
      * Ctor.
-     * @param rle Role
+     * @param tlk Role
+     * @param self Self
      * @param res Base resource
      */
-    JxRole(final Role rle, final BaseRs res) {
-        this.role = rle;
+    JxStory(final Talk tlk, final Human self, final BaseRs res) {
+        this.talk = tlk;
         this.base = res;
+        this.human = self;
     }
 
     /**
-     * He is asking?
-     * @return TRUE if he is asking
+     * Its question.
+     * @return Question text
      * @throws IOException If fails
      */
-    @XmlElement(name = "asking")
-    public boolean isAsking() throws IOException {
-        return this.role.isAsking();
+    @XmlElement(name = "question")
+    public String getQuestion() throws IOException {
+        return this.talk.question();
     }
 
     /**
-     * His name.
-     * @return Name
+     * Total number of messages.
+     * @return Total messages
      * @throws IOException If fails
      */
-    @XmlElement(name = "name")
-    public String getName() throws IOException {
-        return this.role.talker().profile().name();
+    @XmlElement(name = "messages")
+    public int getMessages() throws IOException {
+        return this.talk.messages().size();
     }
 
     /**
-     * His age.
-     * @return Age
+     * Role.
+     * @return Role
      * @throws IOException If fails
      */
-    @XmlElement(name = "age")
-    public int getAge() throws IOException {
-        return Calendar.getInstance().get(Calendar.YEAR)
-            - this.role.talker().profile().year();
-    }
-
-    /**
-     * His sex.
-     * @return Sex
-     * @throws IOException If fails
-     */
-    @XmlElement(name = "sex")
-    public String getSex() throws IOException {
-        return this.role.talker().profile().sex().toString();
+    @XmlElement(name = "role")
+    public JxRole getRole() throws IOException {
+        return new JxRole(new Role(this.talk, this.human), this.base);
     }
 
     /**
@@ -122,11 +119,11 @@ final class JxRole {
         final Collection<Link> links = new LinkedList<Link>();
         links.add(
             new Link(
-                "photo",
+                "open",
                 this.base.uriInfo().getBaseUriBuilder().clone()
-                    .path(PhotoRs.class)
-                    .path(PhotoRs.class, "index")
-                    .build(this.role.talker().urn().nss())
+                    .path(TalkRs.class)
+                    .path(TalkRs.class, "index")
+                    .build(this.talk.number())
             )
         );
         return links;

@@ -53,6 +53,10 @@ public final class PgMessagesITCase {
             msgs.iterate(),
             Matchers.<Message>iterableWithSize(1)
         );
+        MatcherAssert.assertThat(
+            msgs.size(),
+            Matchers.equalTo(1)
+        );
     }
 
 }

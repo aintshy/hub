@@ -67,4 +67,11 @@ public interface Human {
      */
     Iterable<Talk> next() throws IOException;
 
+    /**
+     * Get history.
+     * @return History
+     * @throws IOException If fails
+     */
+    History history() throws IOException;
+
 }

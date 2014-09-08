@@ -22,38 +22,31 @@ package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import java.util.Date;
 
 /**
- * Messages in a talk.
+ * History.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.1
+ * @since 0.4
  */
 @Immutable
-public interface Messages {
+public interface History {
 
     /**
-     * Post a new message.
-     * @param asking Is it an asking message?
-     * @param text The text
-     * @return Message posted
+     * Iterate them all.
+     * @return Talks
      * @throws IOException If fails
      */
-    Message post(boolean asking, String text) throws IOException;
+    Iterable<Talk> iterate() throws IOException;
 
     /**
-     * Iterate them.
-     * @return All messages
+     * Jump to the talk by date (show only those that are older).
+     * @param date The date
+     * @return History
      * @throws IOException If fails
      */
-    Iterable<Message> iterate() throws IOException;
-
-    /**
-     * Total number of them.
-     * @return Total
-     * @throws IOException If fails
-     */
-    int size() throws IOException;
+    History since(Date date) throws IOException;
 
 }

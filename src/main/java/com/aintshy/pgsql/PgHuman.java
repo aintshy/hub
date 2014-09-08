@@ -20,6 +20,7 @@
  */
 package com.aintshy.pgsql;
 
+import com.aintshy.api.History;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
@@ -28,7 +29,7 @@ import com.detectlanguage.errors.APIError;
 import com.google.common.base.Joiner;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
-import com.jcabi.jdbc.Outcome;
+import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
@@ -36,7 +37,6 @@ import com.jcabi.urn.URN;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -50,6 +50,7 @@ import lombok.ToString;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @Immutable
 @ToString(of = "number")
@@ -126,6 +127,11 @@ final class PgHuman implements Human {
         }
     }
 
+    @Override
+    public History history() {
+        return new PgHistory(this.src, this.number);
+    }
+
     /**
      * Get unread talk.
      * @return Unread talk
@@ -149,19 +155,17 @@ final class PgHuman implements Human {
                 )
             )
             .select(
-                new Outcome<Collection<Talk>>() {
-                    @Override
-                    public Collection<Talk> handle(final ResultSet rset,
-                        final Statement stmt) throws SQLException {
-                        final Collection<Talk> talks = new ArrayList<Talk>(1);
-                        if (rset.next()) {
-                            talks.add(
-                                new PgTalk(PgHuman.this.src, rset.getLong(1))
+                new ListOutcome<Talk>(
+                    new ListOutcome.Mapping<Talk>() {
+                        @Override
+                        public Talk map(final ResultSet rset)
+                            throws SQLException {
+                            return new PgTalk(
+                                PgHuman.this.src, rset.getLong(1)
                             );
                         }
-                        return talks;
                     }
-                }
+                )
             );
     }
 
