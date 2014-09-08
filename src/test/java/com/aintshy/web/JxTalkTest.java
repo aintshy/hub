@@ -46,11 +46,7 @@ public final class JxTalkTest {
             JaxbConverter.the(talk),
             XhtmlMatchers.hasXPaths(
                 "/talk/question",
-                "/talk/asker/name",
-                "/talk/responder/urn",
-                "/talk/responder/age",
-                "/talk/responder/locale",
-                "/talk/responder/sex"
+                "/talk/number"
             )
         );
     }

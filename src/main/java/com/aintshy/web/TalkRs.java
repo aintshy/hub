@@ -20,6 +20,7 @@
  */
 package com.aintshy.web;
 
+import com.aintshy.api.Human;
 import com.aintshy.api.Message;
 import com.aintshy.api.Talk;
 import com.google.common.base.Function;
@@ -71,32 +72,17 @@ public final class TalkRs extends BaseRs {
     @Path("/")
     public Response index() throws IOException {
         final Talk talk = this.talk();
+        Human talker = talk.asker();
+        if (talker.equals(this.human())) {
+            talker = talk.responder();
+        }
         return new PageBuilder()
             .stylesheet("/xsl/talk.xsl")
             .build(EmptyPage.class)
             .init(this)
             .link(new Link("post", "./post"))
             .link(new Link("next", "/"))
-            .link(
-                new Link(
-                    "ask-photo",
-                    this.uriInfo().getBaseUriBuilder().clone()
-                        .path(PhotoRs.class)
-                        .path(PhotoRs.class, "index")
-                        .queryParam("urn", "{x}")
-                        .build(talk.asker().urn())
-                )
-            )
-            .link(
-                new Link(
-                    "answer-photo",
-                    this.uriInfo().getBaseUriBuilder().clone()
-                        .path(PhotoRs.class)
-                        .path(PhotoRs.class, "index")
-                        .queryParam("urn", "{x}")
-                        .build(talk.responder().urn())
-                )
-            )
+            .append(new JxTalker(talker, this))
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(

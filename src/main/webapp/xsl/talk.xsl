@@ -32,28 +32,7 @@
                 <xsl:text>next</xsl:text>
             </a>
         </p>
-        <div class="p photos">
-            <div class="ask">
-                <img src="{links/link[@rel='ask-photo']/@href}"/>
-                <div>
-                    <xsl:value-of select="talk/asker/name"/>
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="talk/asker/sex"/>
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="talk/asker/age"/>
-                </div>
-            </div>
-            <div class="answer">
-                <img src="{links/link[@rel='answer-photo']/@href}"/>
-                <div>
-                    <xsl:value-of select="talk/responder/name"/>
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="talk/responder/sex"/>
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="talk/responder/age"/>
-                </div>
-            </div>
-        </div>
+        <xsl:apply-templates select="talker"/>
         <form action="{links/link[@rel='post']/@href}" method="post">
             <fieldset>
                 <input name="text" style="width:100%" placeholder="Post your answer..." maxlength="140"/>
@@ -61,6 +40,18 @@
         </form>
         <xsl:apply-templates select="messages/message"/>
         <xsl:apply-templates select="talk/question"/>
+    </xsl:template>
+    <xsl:template match="talker">
+        <p style="text-align:center">
+            <img src="{links/link[@rel='photo']/@href}" class="photo"/>
+            <div>
+                <xsl:value-of select="name"/>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="sex"/>
+                <xsl:text>/</xsl:text>
+                <xsl:value-of select="age"/>
+            </div>
+        </p>
     </xsl:template>
     <xsl:template match="talk/question">
         <p class="message message-asking">

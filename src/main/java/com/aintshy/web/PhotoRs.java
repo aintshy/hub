@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.net.URI;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -42,14 +42,15 @@ public final class PhotoRs extends BaseRs {
 
     /**
      * Show a photo.
-     * @param urn URN of a user
+     * @param num ID of the user
      * @return PNG
      * @throws IOException If fails
      */
     @GET
-    @Path("/")
+    @Path("/{id : \\d+}")
     @Produces("image/png")
-    public byte[] index(@QueryParam("urn") final URN urn) throws IOException {
+    public byte[] index(@PathParam("id") final String num) throws IOException {
+        final URN urn = URN.create(String.format("urn:aintshy:%s", num));
         final byte[] png = this.base().human(urn).profile().photo();
         if (png == null) {
             throw new WebApplicationException(

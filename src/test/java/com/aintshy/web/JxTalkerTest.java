@@ -20,61 +20,39 @@
  */
 package com.aintshy.web;
 
-import com.aintshy.api.Talk;
-import java.io.IOException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.aintshy.api.mock.MkHuman;
+import com.jcabi.matchers.JaxbConverter;
+import com.jcabi.matchers.XhtmlMatchers;
+import com.rexsl.page.mock.ResourceMocker;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 
 /**
- * Jaxb Talk.
+ * Test case for {@link JxTalker}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.1
+ * @since 0.2
  */
-@XmlRootElement(name = "talk")
-@XmlAccessorType(XmlAccessType.NONE)
-final class JxTalk {
+public final class JxTalkerTest {
 
     /**
-     * Talk.
+     * JxHuman can be converted to XML.
+     * @throws Exception If fails
      */
-    private final transient Talk talk;
-
-    /**
-     * Ctor.
-     */
-    JxTalk() {
-        throw new UnsupportedOperationException("#JxTalk()");
-    }
-
-    /**
-     * Ctor.
-     * @param tlk Talk
-     */
-    JxTalk(final Talk tlk) {
-        this.talk = tlk;
-    }
-
-    /**
-     * Its number.
-     * @return Number
-     */
-    @XmlElement(name = "number")
-    public long getNumber() {
-        return this.talk.number();
-    }
-
-    /**
-     * Its question.
-     * @return Question text
-     * @throws IOException If fails
-     */
-    @XmlElement(name = "question")
-    public String getQuestion() throws IOException {
-        return this.talk.question();
+    @Test
+    public void convertsToXml() throws Exception {
+        final BaseRs base = new ResourceMocker().mock(BaseRs.class);
+        final JxTalker talker = new JxTalker(new MkHuman(), base);
+        MatcherAssert.assertThat(
+            JaxbConverter.the(talker),
+            XhtmlMatchers.hasXPaths(
+                "/talker[name='Jeff Lebowski']",
+                "/talker[age=30]",
+                "/talker[sex='M']",
+                "/talker/links/link[@rel='photo']"
+            )
+        );
     }
 
 }
