@@ -23,6 +23,8 @@ package com.aintshy.api;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.urn.URN;
 import java.io.IOException;
+import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
 
 /**
  * Human.
@@ -73,5 +75,31 @@ public interface Human {
      * @throws IOException If fails
      */
     History history() throws IOException;
+
+    /**
+     * Photo of him.
+     */
+    final class Photo {
+        /**
+         * Human.
+         */
+        private final transient Human human;
+        /**
+         * Ctor.
+         * @param hmn Human
+         */
+        public Photo(final Human hmn) {
+            this.human = hmn;
+        }
+        /**
+         * Get its URI.
+         * @return URI
+         */
+        public URI uri() {
+            return UriBuilder.fromUri("http://photo.aintshy.com/photo")
+                .path("{id}.png")
+                .build(this.human.urn().nss());
+        }
+    }
 
 }

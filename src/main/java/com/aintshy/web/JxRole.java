@@ -20,13 +20,13 @@
  */
 package com.aintshy.web;
 
+import com.aintshy.api.Human;
 import com.aintshy.api.Role;
 import com.rexsl.page.Link;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -117,9 +117,7 @@ final class JxRole {
         links.add(
             new Link(
                 "photo",
-                UriBuilder.fromUri("http://photo.aintshy.com/photo/")
-                    .path("{id}")
-                    .build(this.role.talker().urn().nss())
+                new Human.Photo(this.role.talker()).uri()
             )
         );
         return links;

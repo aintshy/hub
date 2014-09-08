@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -142,9 +141,7 @@ final class JxHuman {
         links.add(
             new Link(
                 "photo",
-                UriBuilder.fromUri("http://photo.aintshy.com/photo")
-                    .path("{id}")
-                    .build(this.human.urn().nss())
+                new Human.Photo(this.human).uri()
             )
         );
         return links;
