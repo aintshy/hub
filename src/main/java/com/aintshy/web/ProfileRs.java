@@ -44,6 +44,7 @@ import javax.ws.rs.core.Response;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle MultipleStringLiteralsCheck (500 lines)
  */
 @Path("/profile")
 public final class ProfileRs extends BaseRs {
