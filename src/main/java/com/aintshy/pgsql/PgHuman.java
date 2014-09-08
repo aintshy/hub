@@ -23,12 +23,15 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
+import com.detectlanguage.DetectLanguage;
+import com.detectlanguage.errors.APIError;
 import com.google.common.base.Joiner;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import com.jcabi.urn.URN;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -37,6 +40,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Locale;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -87,9 +91,15 @@ final class PgHuman implements Human {
     public void ask(final String text) throws IOException {
         try {
             final long num = new JdbcSession(this.src.get())
-                .sql("INSERT INTO question (asker, text) VALUES (?, ?)")
                 .set(this.number)
                 .set(text)
+                .set(this.locale(text))
+                .sql(
+                    Joiner.on(' ').join(
+                        "INSERT INTO question (asker, text, locale)",
+                        "VALUES (?, ?, ?)"
+                    )
+                )
                 .insert(new SingleOutcome<Long>(Long.class, true));
             Logger.info(this, "question #%d asked by #%d", num, this.number);
         } catch (final SQLException ex) {
@@ -125,11 +135,13 @@ final class PgHuman implements Human {
         return new JdbcSession(this.src.get())
             .set(this.number)
             .set(this.number)
+            .set(this.number)
             .sql(
                 Joiner.on(' ').join(
                     "SELECT talk FROM message",
                     "JOIN talk ON talk.id=message.talk",
-                    "JOIN question ON question.id=talk.question",
+                    "JOIN question q ON q.id=talk.question",
+                    "AND q.locale=(SELECT locale FROM human WHERE id=?)",
                     "WHERE message.seen IS NULL",
                     "AND ((asking=true AND responder=?)",
                     "OR (asking=false AND asker=?))",
@@ -162,12 +174,14 @@ final class PgHuman implements Human {
         final Long question = new JdbcSession(this.src.get())
             .set(this.number)
             .set(this.number)
+            .set(this.number)
             .sql(
                 Joiner.on(' ').join(
                     "SELECT question.id FROM question",
                     "LEFT JOIN talk",
                     "ON talk.question=question.id AND responder=?",
                     "WHERE talk.id IS NULL AND asker != ?",
+                    "AND question.locale=(SELECT locale FROM human WHERE id=?)",
                     "LIMIT 1"
                 )
             )
@@ -189,6 +203,28 @@ final class PgHuman implements Human {
             );
         }
         return talks;
+    }
+
+    /**
+     * Detect locale of a text.
+     * @param text The text
+     * @return Locale
+     * @throws IOException If fails
+     */
+    private Locale locale(final String text) throws IOException {
+        final String key = Manifests.read("Aintshy-DetectLanguageKey");
+        final Locale locale;
+        if ("test".equals(key)) {
+            locale = Locale.ENGLISH;
+        } else {
+            DetectLanguage.apiKey = key;
+            try {
+                locale = new Locale(DetectLanguage.simpleDetect(text));
+            } catch (final APIError ex) {
+                throw new IOException(ex);
+            }
+        }
+        return locale;
     }
 
 }

@@ -25,6 +25,7 @@ import com.aintshy.api.Messages;
 import com.aintshy.api.Talk;
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Mock Talk.
@@ -54,6 +55,11 @@ public final class MkTalk implements Talk {
     @Override
     public String question() throws IOException {
         return "how are you?";
+    }
+
+    @Override
+    public Locale locale() throws IOException {
+        return Locale.ENGLISH;
     }
 
     @Override

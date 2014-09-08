@@ -5,3 +5,4 @@ Aintshy-Date: ${timestamp}
 Aintshy-PgsqlJdbc: jdbc:postgresql://localhost:${pgsql.port}/test
 Aintshy-PgsqlUser: test
 Aintshy-PgsqlPassword: test
+Aintshy-DetectLanguageKey: test

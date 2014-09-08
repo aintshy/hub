@@ -5,3 +5,4 @@ Aintshy-Date: ${timestamp}
 Aintshy-PgsqlJdbc: ${pgsql.jdbc}
 Aintshy-PgsqlUser: ${pgsql.user}
 Aintshy-PgsqlPassword: ${pgsql.password}
+Aintshy-DetectLanguageKey: ${detectlanguage.key}

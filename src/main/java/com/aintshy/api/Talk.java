@@ -22,6 +22,7 @@ package com.aintshy.api;
 
 import com.jcabi.aspects.Immutable;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Talk.
@@ -59,6 +60,13 @@ public interface Talk {
      * @throws IOException If fails
      */
     String question() throws IOException;
+
+    /**
+     * Locale.
+     * @return The locale
+     * @throws IOException If fails
+     */
+    Locale locale() throws IOException;
 
     /**
      * All messages of it.

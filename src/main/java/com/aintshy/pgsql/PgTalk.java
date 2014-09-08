@@ -23,11 +23,13 @@ package com.aintshy.pgsql;
 import com.aintshy.api.Human;
 import com.aintshy.api.Messages;
 import com.aintshy.api.Talk;
+import com.google.common.base.Joiner;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.SingleOutcome;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Locale;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -107,6 +109,26 @@ final class PgTalk implements Talk {
                 .sql("SELECT text FROM question JOIN talk ON talk.question=question.id WHERE talk.id=?")
                 .set(this.num)
                 .select(new SingleOutcome<String>(String.class));
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public Locale locale() throws IOException {
+        try {
+            return new Locale(
+                new JdbcSession(this.src.get())
+                    .set(this.num)
+                    .sql(
+                        Joiner.on(' ').join(
+                            "SELECT locale FROM question",
+                            "JOIN talk ON talk.question=question.id",
+                            "WHERE talk.id=?"
+                        )
+                    )
+                    .select(new SingleOutcome<String>(String.class))
+            );
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
