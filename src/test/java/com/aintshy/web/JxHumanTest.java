@@ -23,7 +23,6 @@ package com.aintshy.web;
 import com.aintshy.api.mock.MkHuman;
 import com.jcabi.matchers.JaxbConverter;
 import com.jcabi.matchers.XhtmlMatchers;
-import com.rexsl.page.mock.ResourceMocker;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -42,8 +41,7 @@ public final class JxHumanTest {
      */
     @Test
     public void convertsToXml() throws Exception {
-        final BaseRs base = new ResourceMocker().mock(BaseRs.class);
-        final JxHuman Human = new JxHuman(new MkHuman(), base);
+        final JxHuman Human = new JxHuman(new MkHuman());
         MatcherAssert.assertThat(
             JaxbConverter.the(Human),
             XhtmlMatchers.hasXPaths(
@@ -51,7 +49,8 @@ public final class JxHumanTest {
                 "/human[urn='urn:test:1']",
                 "/human[age=30]",
                 "/human[locale='en']",
-                "/human[sex='M']"
+                "/human[sex='M']",
+                "/human/links/link[@rel='photo']/@href"
             )
         );
     }

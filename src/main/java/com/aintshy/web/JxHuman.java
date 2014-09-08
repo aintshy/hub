@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -50,11 +51,6 @@ final class JxHuman {
     private final transient Human human;
 
     /**
-     * Base.
-     */
-    private final transient BaseRs base;
-
-    /**
      * Ctor.
      */
     JxHuman() {
@@ -64,11 +60,9 @@ final class JxHuman {
     /**
      * Ctor.
      * @param hmn Human
-     * @param res Base resource
      */
-    JxHuman(final Human hmn, final BaseRs res) {
+    JxHuman(final Human hmn) {
         this.human = hmn;
-        this.base = res;
     }
 
     /**
@@ -84,10 +78,9 @@ final class JxHuman {
     /**
      * His URN.
      * @return URN
-     * @throws IOException If fails
      */
     @XmlElement(name = "urn")
-    public String getUrn() throws IOException {
+    public String getUrn() {
         return this.human.urn().toString();
     }
 
@@ -141,18 +134,16 @@ final class JxHuman {
     /**
      * Its links.
      * @return Links
-     * @throws IOException If fails
      */
     @XmlElementWrapper(name = "links")
     @XmlElement(name = "link")
-    public Collection<Link> getLinks() throws IOException {
+    public Collection<Link> getLinks() {
         final Collection<Link> links = new LinkedList<Link>();
         links.add(
             new Link(
                 "photo",
-                this.base.uriInfo().getBaseUriBuilder().clone()
-                    .path(PhotoRs.class)
-                    .path(PhotoRs.class, "index")
+                UriBuilder.fromUri("http://photo.aintshy.com/photo")
+                    .path("{id}")
                     .build(this.human.urn().nss())
             )
         );

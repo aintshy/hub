@@ -28,6 +28,7 @@ import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
+import java.net.URI;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -126,11 +127,7 @@ public final class AnonymousRs extends BaseRs {
         final Identity identity = new Identity.Simple(
             human.urn(),
             human.urn().nss(),
-            this.uriInfo().getBaseUriBuilder()
-                .clone()
-                .path(PhotoRs.class)
-                .path(PhotoRs.class, "index")
-                .build(human.urn())
+            URI.create("http://img.aintshy.com/no-photo.png")
         );
         throw new WebApplicationException(
             Response.seeOther(this.uriInfo().getBaseUri())

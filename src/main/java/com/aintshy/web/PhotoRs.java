@@ -50,7 +50,7 @@ public final class PhotoRs extends BaseRs {
      * @throws IOException If fails
      */
     @GET
-    @Path("/{id : \\d+}")
+    @Path("/{id : \\d+}.png")
     @Produces("image/png")
     public Response index(@PathParam("id") final String num)
         throws IOException {
@@ -64,8 +64,8 @@ public final class PhotoRs extends BaseRs {
             );
         }
         final CacheControl cache = new CacheControl();
-        cache.setMaxAge((int) TimeUnit.DAYS.toSeconds(1L));
-        cache.setPrivate(true);
+        cache.setMaxAge((int) TimeUnit.HOURS.toSeconds(1L));
+        cache.setPrivate(false);
         return Response.ok(new ByteArrayInputStream(png))
             .cacheControl(cache)
             .type("image/png")

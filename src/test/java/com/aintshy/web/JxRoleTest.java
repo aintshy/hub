@@ -25,7 +25,6 @@ import com.aintshy.api.mock.MkHuman;
 import com.aintshy.api.mock.MkTalk;
 import com.jcabi.matchers.JaxbConverter;
 import com.jcabi.matchers.XhtmlMatchers;
-import com.rexsl.page.mock.ResourceMocker;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
@@ -44,9 +43,8 @@ public final class JxRoleTest {
      */
     @Test
     public void convertsToXml() throws Exception {
-        final BaseRs base = new ResourceMocker().mock(BaseRs.class);
         final JxRole talker = new JxRole(
-            new Role(new MkTalk(), new MkHuman()), base
+            new Role(new MkTalk(), new MkHuman())
         );
         MatcherAssert.assertThat(
             JaxbConverter.the(talker),

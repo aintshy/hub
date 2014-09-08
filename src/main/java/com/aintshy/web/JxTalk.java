@@ -84,7 +84,7 @@ final class JxTalk {
      */
     @XmlElement(name = "locale")
     public String getLocale() throws IOException {
-        return this.talk.locale().getDisplayLanguage();
+        return this.talk.locale().getLanguage();
     }
 
 }

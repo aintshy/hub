@@ -80,7 +80,7 @@ public final class TalkRs extends BaseRs {
             .init(this)
             .link(new Link("post", "./post"))
             .link(new Link("next", "/"))
-            .append(new JxRole(role, this))
+            .append(new JxRole(role))
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(

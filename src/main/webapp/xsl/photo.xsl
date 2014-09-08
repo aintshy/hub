@@ -30,7 +30,7 @@
         <p>
             <xsl:text>
                 Upload your new photo. It has to be a square image, preferably
-                larger than 500x500 pixels. We accept PNG, GIF, and JPEG formats.
+                larger than 400x400 pixels. We accept PNG, GIF, and JPEG formats.
             </xsl:text>
         </p>
         <p style="text-align:center">

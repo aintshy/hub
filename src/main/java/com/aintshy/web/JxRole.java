@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -49,11 +50,6 @@ final class JxRole {
     private final transient Role role;
 
     /**
-     * Base.
-     */
-    private final transient BaseRs base;
-
-    /**
      * Ctor.
      */
     JxRole() {
@@ -63,11 +59,9 @@ final class JxRole {
     /**
      * Ctor.
      * @param rle Role
-     * @param res Base resource
      */
-    JxRole(final Role rle, final BaseRs res) {
+    JxRole(final Role rle) {
         this.role = rle;
-        this.base = res;
     }
 
     /**
@@ -123,9 +117,8 @@ final class JxRole {
         links.add(
             new Link(
                 "photo",
-                this.base.uriInfo().getBaseUriBuilder().clone()
-                    .path(PhotoRs.class)
-                    .path(PhotoRs.class, "index")
+                UriBuilder.fromUri("http://photo.aintshy.com/photo/")
+                    .path("{id}")
                     .build(this.role.talker().urn().nss())
             )
         );

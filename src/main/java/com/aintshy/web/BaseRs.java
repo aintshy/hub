@@ -93,9 +93,7 @@ public class BaseRs extends BaseResource {
                 final Response.ResponseBuilder builder) {
                 if (!BaseRs.this.auth().identity().equals(Identity.ANONYMOUS)) {
                     try {
-                        page.append(
-                            new JxHuman(BaseRs.this.human(), BaseRs.this)
-                        );
+                        page.append(new JxHuman(BaseRs.this.human()));
                     } catch (final IOException ex) {
                         throw new IllegalStateException(ex);
                     }

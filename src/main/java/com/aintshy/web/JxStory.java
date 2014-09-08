@@ -105,7 +105,7 @@ final class JxStory {
      */
     @XmlElement(name = "role")
     public JxRole getRole() throws IOException {
-        return new JxRole(new Role(this.talk, this.human), this.base);
+        return new JxRole(new Role(this.talk, this.human));
     }
 
     /**
