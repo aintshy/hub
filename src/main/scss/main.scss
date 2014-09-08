@@ -111,21 +111,28 @@ p, fieldset, pre, .p {
 }
 
 .msg {
-  border-radius: .3 * $em;
-  padding: .2 * $em;
+  span {
+    border-radius: .3 * $em;
+    padding: .2 * $em .6 * $em;
+  }
 }
 .msg-his {
   text-align: right;
   margin-left: 5 * $em;
-  background-color: cadetblue;
+  span {
+    background-color: cadetblue;
+  }
 }
 .msg-mine {
   text-align: left;
   margin-right: 5 * $em;
-  background-color: lightgray;
+  span {
+    background-color: lightsalmon;
+  }
 }
 
 .photo {
   width: 160px;
   height: 160px;
+  border: 1px solid darkgray;
 }
