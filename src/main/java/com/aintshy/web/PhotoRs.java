@@ -21,13 +21,16 @@
 package com.aintshy.web;
 
 import com.jcabi.urn.URN;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 
 /**
@@ -49,7 +52,8 @@ public final class PhotoRs extends BaseRs {
     @GET
     @Path("/{id : \\d+}")
     @Produces("image/png")
-    public byte[] index(@PathParam("id") final String num) throws IOException {
+    public Response index(@PathParam("id") final String num)
+        throws IOException {
         final URN urn = URN.create(String.format("urn:aintshy:%s", num));
         final byte[] png = this.base().human(urn).profile().photo();
         if (png == null) {
@@ -59,7 +63,13 @@ public final class PhotoRs extends BaseRs {
                 ).build()
             );
         }
-        return png;
+        final CacheControl cache = new CacheControl();
+        cache.setMaxAge((int) TimeUnit.DAYS.toSeconds(1L));
+        cache.setPrivate(true);
+        return Response.ok(new ByteArrayInputStream(png))
+            .cacheControl(cache)
+            .type("image/png")
+            .build();
     }
 
 }

@@ -20,8 +20,8 @@
  */
 package com.aintshy.web;
 
-import com.aintshy.api.Human;
 import com.aintshy.api.Message;
+import com.aintshy.api.Role;
 import com.aintshy.api.Talk;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -45,6 +45,7 @@ import javax.ws.rs.core.Response;
  * @version $Id$
  * @since 0.1
  * @checkstyle MultipleStringLiteralsCheck (500 lines)
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @Path("/{number : \\d+}")
 public final class TalkRs extends BaseRs {
@@ -72,17 +73,14 @@ public final class TalkRs extends BaseRs {
     @Path("/")
     public Response index() throws IOException {
         final Talk talk = this.talk();
-        Human talker = talk.asker();
-        if (talker.equals(this.human())) {
-            talker = talk.responder();
-        }
+        final Role role = new Role(talk, this.human());
         return new PageBuilder()
             .stylesheet("/xsl/talk.xsl")
             .build(EmptyPage.class)
             .init(this)
             .link(new Link("post", "./post"))
             .link(new Link("next", "/"))
-            .append(new JxTalker(talker, this))
+            .append(new JxRole(role, this))
             .append(new JxTalk(talk))
             .append(
                 JaxbGroup.build(

@@ -20,7 +20,9 @@
  */
 package com.aintshy.web;
 
+import com.aintshy.api.Role;
 import com.aintshy.api.mock.MkHuman;
+import com.aintshy.api.mock.MkTalk;
 import com.jcabi.matchers.JaxbConverter;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.rexsl.page.mock.ResourceMocker;
@@ -28,13 +30,13 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 /**
- * Test case for {@link JxTalker}.
+ * Test case for {@link JxRole}.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.2
  */
-public final class JxTalkerTest {
+public final class JxRoleTest {
 
     /**
      * JxHuman can be converted to XML.
@@ -43,14 +45,17 @@ public final class JxTalkerTest {
     @Test
     public void convertsToXml() throws Exception {
         final BaseRs base = new ResourceMocker().mock(BaseRs.class);
-        final JxTalker talker = new JxTalker(new MkHuman(), base);
+        final JxRole talker = new JxRole(
+            new Role(new MkTalk(), new MkHuman()), base
+        );
         MatcherAssert.assertThat(
             JaxbConverter.the(talker),
             XhtmlMatchers.hasXPaths(
-                "/talker[name='Jeff Lebowski']",
-                "/talker[age=30]",
-                "/talker[sex='M']",
-                "/talker/links/link[@rel='photo']"
+                "/role[name='Jeff Lebowski']",
+                "/role[age=30]",
+                "/role[sex='M']",
+                "/role/links/link[@rel='photo']",
+                "/role[asking='false']"
             )
         );
     }

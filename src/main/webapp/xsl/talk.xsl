@@ -32,7 +32,7 @@
                 <xsl:text>next</xsl:text>
             </a>
         </p>
-        <xsl:apply-templates select="talker"/>
+        <xsl:apply-templates select="role"/>
         <form action="{links/link[@rel='post']/@href}" method="post">
             <fieldset>
                 <input name="text" style="width:100%" placeholder="Post your answer..." maxlength="140"/>
@@ -41,7 +41,7 @@
         <xsl:apply-templates select="messages/message"/>
         <xsl:apply-templates select="talk/question"/>
     </xsl:template>
-    <xsl:template match="talker">
+    <xsl:template match="role">
         <p style="text-align:center">
             <img src="{links/link[@rel='photo']/@href}" class="photo"/>
             <div>
@@ -54,20 +54,33 @@
         </p>
     </xsl:template>
     <xsl:template match="talk/question">
-        <p class="message message-asking">
+        <p>
+            <xsl:attribute name="class">
+                <xsl:text>msg msg-</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="/page/role/asking = 'true'">
+                        <xsl:text>his</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>mine</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
             <xsl:value-of select="."/>
         </p>
     </xsl:template>
     <xsl:template match="message">
         <p>
             <xsl:attribute name="class">
-                <xsl:text>message message-</xsl:text>
-                <xsl:if test="asking = 'true'">
-                    <xsl:text>asking</xsl:text>
-                </xsl:if>
-                <xsl:if test="asking = 'false'">
-                    <xsl:text>answering</xsl:text>
-                </xsl:if>
+                <xsl:text>msg msg-</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="/page/role/asking = asking">
+                        <xsl:text>his</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>mine</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
             <xsl:value-of select="text"/>
         </p>

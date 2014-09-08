@@ -20,7 +20,7 @@
  */
 package com.aintshy.web;
 
-import com.aintshy.api.Human;
+import com.aintshy.api.Role;
 import com.rexsl.page.Link;
 import java.io.IOException;
 import java.util.Calendar;
@@ -33,20 +33,20 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Talker in JAXB.
+ * Role in JAXB.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.2
  */
-@XmlRootElement(name = "talker")
+@XmlRootElement(name = "role")
 @XmlAccessorType(XmlAccessType.NONE)
-final class JxTalker {
+final class JxRole {
 
     /**
-     * Human.
+     * Role.
      */
-    private final transient Human human;
+    private final transient Role role;
 
     /**
      * Base.
@@ -56,18 +56,28 @@ final class JxTalker {
     /**
      * Ctor.
      */
-    JxTalker() {
+    JxRole() {
         throw new UnsupportedOperationException("#JxTalker()");
     }
 
     /**
      * Ctor.
-     * @param tlk Talker
+     * @param rle Role
      * @param res Base resource
      */
-    JxTalker(final Human tlk, final BaseRs res) {
-        this.human = tlk;
+    JxRole(final Role rle, final BaseRs res) {
+        this.role = rle;
         this.base = res;
+    }
+
+    /**
+     * He is asking?
+     * @return TRUE if he is asking
+     * @throws IOException If fails
+     */
+    @XmlElement(name = "asking")
+    public boolean isAsking() throws IOException {
+        return this.role.isAsking();
     }
 
     /**
@@ -77,7 +87,7 @@ final class JxTalker {
      */
     @XmlElement(name = "name")
     public String getName() throws IOException {
-        return this.human.profile().name();
+        return this.role.talker().profile().name();
     }
 
     /**
@@ -88,7 +98,7 @@ final class JxTalker {
     @XmlElement(name = "age")
     public int getAge() throws IOException {
         return Calendar.getInstance().get(Calendar.YEAR)
-            - this.human.profile().year();
+            - this.role.talker().profile().year();
     }
 
     /**
@@ -98,16 +108,17 @@ final class JxTalker {
      */
     @XmlElement(name = "sex")
     public String getSex() throws IOException {
-        return this.human.profile().sex().toString();
+        return this.role.talker().profile().sex().toString();
     }
 
     /**
      * Its links.
      * @return Links
+     * @throws IOException If fails
      */
     @XmlElementWrapper(name = "links")
     @XmlElement(name = "link")
-    public Collection<Link> getLinks() {
+    public Collection<Link> getLinks() throws IOException {
         final Collection<Link> links = new LinkedList<Link>();
         links.add(
             new Link(
@@ -115,7 +126,7 @@ final class JxTalker {
                 this.base.uriInfo().getBaseUriBuilder().clone()
                     .path(PhotoRs.class)
                     .path(PhotoRs.class, "index")
-                    .build(this.human.urn().nss())
+                    .build(this.role.talker().urn().nss())
             )
         );
         return links;

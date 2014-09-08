@@ -110,13 +110,19 @@ p, fieldset, pre, .p {
   color: red;
 }
 
-.message-asking {
-  text-align: left;
-  margin-right: 5 * $em;
+.msg {
+  border-radius: .3 * $em;
+  padding: .2 * $em;
 }
-.message-answering {
+.msg-his {
   text-align: right;
   margin-left: 5 * $em;
+  background-color: cadetblue;
+}
+.msg-mine {
+  text-align: left;
+  margin-right: 5 * $em;
+  background-color: lightgray;
 }
 
 .photo {
