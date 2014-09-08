@@ -228,14 +228,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <configuration>
-                        <nonFilteredFileExtensions>
-                            <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
-                        </nonFilteredFileExtensions>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <configuration>
                         <parallel>none</parallel>
