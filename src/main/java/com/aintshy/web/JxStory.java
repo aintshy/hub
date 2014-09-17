@@ -79,6 +79,16 @@ final class JxStory {
     }
 
     /**
+     * Its number.
+     * @return Number
+     * @since 0.5.2
+     */
+    @XmlElement(name = "number")
+    public long getNumber() {
+        return this.talk.number();
+    }
+
+    /**
      * Its question.
      * @return Question text
      * @throws IOException If fails
