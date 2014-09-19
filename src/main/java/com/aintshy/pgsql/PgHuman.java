@@ -90,6 +90,9 @@ final class PgHuman implements Human {
 
     @Override
     public void ask(final String text) throws IOException {
+        if (text.isEmpty()) {
+            throw new IllegalArgumentException("text can't be empty");
+        }
         try {
             final long num = new JdbcSession(this.src.get())
                 .set(this.number)

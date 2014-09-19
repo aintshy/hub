@@ -73,6 +73,9 @@ final class PgMessages implements Messages {
     @Override
     public Message post(final boolean asking,
         final String text) throws IOException {
+        if (text.isEmpty()) {
+            throw new IllegalArgumentException("text can't be empty");
+        }
         try {
             new JdbcSession(this.src.get())
                 // @checkstyle LineLength (1 line)
