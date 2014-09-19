@@ -34,6 +34,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 /**
@@ -129,9 +130,11 @@ public final class AnonymousRs extends BaseRs {
             human.urn().nss(),
             URI.create("http://img.aintshy.com/no-photo.png")
         );
+        final NewCookie cookie = this.auth().cookie(identity);
         throw new WebApplicationException(
             Response.seeOther(this.uriInfo().getBaseUri())
-                .cookie(this.auth().cookie(identity))
+                .cookie(cookie)
+                .header("X-Aintshy-Token", cookie.getValue())
                 .build()
         );
     }
