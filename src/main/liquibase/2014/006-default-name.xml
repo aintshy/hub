@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'
+  logicalFilePath="006-default-name.xml">
+  <changeSet id='006' author='yegor256'>
+    <sql>
+      UPDATE human SET name = 'user' || id WHERE name = '';
+    </sql>
+    <sql>
+      CREATE SEQUENCE user_number START 1;
+    </sql>
+    <sql>
+      ALTER TABLE human ALTER COLUMN name SET DEFAULT 'user' || nextval('user_number');
+    </sql>
+    <sql>
+      ALTER TABLE human ALTER COLUMN name SET NOT NULL;
+    </sql>
+  </changeSet>
+</databaseChangeLog>
