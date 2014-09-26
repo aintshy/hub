@@ -118,7 +118,12 @@ public final class AnonymousRs extends BaseRs {
         @FormParam("password") final String password) throws IOException {
         final Human human;
         try {
-            human = this.base().register(email, password, Pocket.CONSOLE);
+            human = this.base().register(
+                email, password,
+                Pocket.class.cast(
+                    this.servletContext().getAttribute(Pocket.class.getName())
+                )
+            );
         } catch (final Base.InvalidPasswordException ex) {
             throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
         } catch (final Base.InvalidEmailFormatException ex) {

@@ -25,8 +25,10 @@ import com.aintshy.api.Human;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Talk;
 import com.jcabi.urn.URN;
+import com.rexsl.page.Resource;
 import java.io.IOException;
-import java.util.logging.Level;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 /**
  * Human that is safe enough to work.
@@ -48,25 +50,25 @@ final class SafeHuman implements Human {
      * @param base Base resource
      * @throws IOException If fails
      */
-    SafeHuman(final Human hmn, final BaseRs base) throws IOException {
+    SafeHuman(final Human hmn, final Resource base) throws IOException {
         if (!hmn.profile().confirmed()) {
-            throw base.flash().redirect(
-                base.uriInfo().getBaseUriBuilder().clone()
-                    .path(SetupRs.class)
-                    .path(SetupRs.class, "notConfirmed")
-                    .build(),
-                "please confirm your email first",
-                Level.INFO
+            throw new WebApplicationException(
+                Response.seeOther(
+                    base.uriInfo().getBaseUriBuilder()
+                        .path(SetupRs.class)
+                        .path(SetupRs.class, "notConfirmed")
+                        .build()
+                ).build()
             );
         }
         if (hmn.profile().year() == 0) {
-            throw base.flash().redirect(
-                base.uriInfo().getBaseUriBuilder().clone()
-                    .path(SetupRs.class)
-                    .path(SetupRs.class, "noDetails")
-                    .build(),
-                "please give us more details about yourself",
-                Level.INFO
+            throw new WebApplicationException(
+                Response.seeOther(
+                    base.uriInfo().getBaseUriBuilder()
+                        .path(SetupRs.class)
+                        .path(SetupRs.class, "noDetails")
+                        .build()
+                ).build()
             );
         }
         this.human = hmn;
