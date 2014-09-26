@@ -22,8 +22,9 @@ package com.aintshy.web;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
-import com.aintshy.api.Pocket;
 import com.aintshy.api.Talk;
+import com.aintshy.email.Postman;
+import com.aintshy.email.SmtpPocket;
 import com.google.common.collect.Iterables;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
@@ -120,8 +121,13 @@ public final class AnonymousRs extends BaseRs {
         try {
             human = this.base().register(
                 email, password,
-                Pocket.class.cast(
-                    this.servletContext().getAttribute(Pocket.class.getName())
+                new SmtpPocket(
+                    email,
+                    Postman.class.cast(
+                        this.servletContext().getAttribute(
+                            Postman.class.getName()
+                        )
+                    )
                 )
             );
         } catch (final Base.InvalidPasswordException ex) {

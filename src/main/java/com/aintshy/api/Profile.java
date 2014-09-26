@@ -49,6 +49,13 @@ public interface Profile {
     void confirm(String code) throws IOException;
 
     /**
+     * Resend confirmation code.
+     * @param pocket Where to put it
+     * @throws IOException If fails
+     */
+    void resend(Pocket pocket) throws IOException;
+
+    /**
      * His name.
      * @return Name
      * @throws IOException If fails

@@ -22,6 +22,8 @@ package com.aintshy.web;
 
 import com.aintshy.api.Profile;
 import com.aintshy.api.Sex;
+import com.aintshy.email.Postman;
+import com.aintshy.email.SmtpPocket;
 import com.rexsl.page.Link;
 import com.rexsl.page.PageBuilder;
 import java.io.IOException;
@@ -73,6 +75,15 @@ public final class SetupRs extends BaseRs {
                         .build()
                 )
             )
+            .link(
+                new Link(
+                    "resend",
+                    this.uriInfo().getBaseUriBuilder().clone()
+                        .path(SetupRs.class)
+                        .path(SetupRs.class, "resend")
+                        .build()
+                )
+            )
             .render()
             .build();
     }
@@ -95,6 +106,31 @@ public final class SetupRs extends BaseRs {
         throw this.flash().redirect(
             this.uriInfo().getBaseUri(),
             String.format("your email %s is confirmed", profile.email()),
+            Level.INFO
+        );
+    }
+
+    /**
+     * Resend code by email.
+     * @throws IOException If fails
+     */
+    @POST
+    @Path("/resend")
+    public void resend() throws IOException {
+        final Profile profile = this.human().profile();
+        profile.resend(
+            new SmtpPocket(
+                profile.email(),
+                Postman.class.cast(
+                    this.servletContext().getAttribute(
+                        Postman.class.getName()
+                    )
+                )
+            )
+        );
+        throw this.flash().redirect(
+            this.uriInfo().getBaseUri(),
+            "check your inbox",
             Level.INFO
         );
     }

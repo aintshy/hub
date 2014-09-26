@@ -20,11 +20,11 @@
  */
 package com.aintshy.api.mock;
 
+import com.aintshy.api.Pocket;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Tv;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -39,37 +39,42 @@ import java.util.Locale;
 public final class MkProfile implements Profile {
 
     @Override
-    public boolean confirmed() throws IOException {
+    public boolean confirmed() {
         return true;
     }
 
     @Override
-    public void confirm(final String code) throws IOException {
+    public void confirm(final String code) {
         throw new UnsupportedOperationException("#confirm()");
     }
 
     @Override
-    public String name() throws IOException {
+    public void resend(final Pocket pocket) {
+        throw new UnsupportedOperationException("#resend()");
+    }
+
+    @Override
+    public String name() {
         return "Jeff Lebowski";
     }
 
     @Override
-    public String email() throws IOException {
+    public String email() {
         return "test@aintshy.com";
     }
 
     @Override
-    public int year() throws IOException {
+    public int year() {
         return Calendar.getInstance().get(Calendar.YEAR) - Tv.THIRTY;
     }
 
     @Override
-    public Sex sex() throws IOException {
+    public Sex sex() {
         return Sex.M;
     }
 
     @Override
-    public Locale locale() throws IOException {
+    public Locale locale() {
         return Locale.ENGLISH;
     }
 
@@ -81,12 +86,12 @@ public final class MkProfile implements Profile {
     }
 
     @Override
-    public byte[] photo() throws IOException {
+    public byte[] photo() {
         return new byte[0];
     }
 
     @Override
-    public void photo(final byte[] bytes) throws IOException {
+    public void photo(final byte[] bytes) {
         throw new UnsupportedOperationException("#photo()");
     }
 }

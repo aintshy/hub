@@ -20,6 +20,7 @@
  */
 package com.aintshy.pgsql;
 
+import com.aintshy.api.Pocket;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Sex;
 import com.jcabi.aspects.Immutable;
@@ -118,6 +119,19 @@ final class PgProfile implements Profile {
                 );
             }
             Logger.info(this, "email confirmed by human #%d", this.number);
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
+    public void resend(final Pocket pocket) throws IOException {
+        try {
+            final String code = new JdbcSession(this.src.get())
+                .sql("SELECT code FROM human WHERE id=?")
+                .set(this.number)
+                .select(new SingleOutcome<String>(String.class));
+            pocket.put(code);
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
