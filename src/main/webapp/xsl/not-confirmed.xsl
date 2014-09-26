@@ -40,5 +40,10 @@
                 <input type="submit" value="Confirm"/>
             </fieldset>
         </form>
+        <form action="{links/link[@rel='resend']/@href}" method="post">
+            <fieldset>
+                <input type="submit" value="Resend it by email"/>
+            </fieldset>
+        </form>
     </xsl:template>
 </xsl:stylesheet>
