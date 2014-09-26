@@ -24,6 +24,7 @@ import com.aintshy.api.Base;
 import com.aintshy.api.Human;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Immutable;
+import com.jcabi.aspects.Tv;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.Outcome;
 import com.jcabi.jdbc.SingleOutcome;
@@ -33,6 +34,7 @@ import com.jcabi.urn.URN;
 import com.jolbox.bonecp.BoneCPDataSource;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
@@ -50,6 +52,13 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode(of = "src")
 public final class PgBase implements Base {
+
+    /**
+     * Email regex.
+     */
+    private static final Pattern EMAIL = Pattern.compile(
+        "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$"
+    );
 
     /**
      * Data source.
@@ -79,14 +88,19 @@ public final class PgBase implements Base {
     @Override
     public Human register(final String email, final String password)
         throws IOException {
-        if (!email.matches(".+@.+")) {
+        if (!PgBase.EMAIL.matcher(email).matches()) {
             throw new Base.InvalidEmailFormatException(
                 "email format is not correct"
             );
         }
-        if (!password.matches(".{3,}")) {
+        if (password.length() < Tv.THREE) {
             throw new Base.InvalidPasswordException(
-                "password is not good enough, should be 3+ characters"
+                "password is too short, should be at least three letters"
+            );
+        }
+        if (password.length() > Tv.FORTY) {
+            throw new Base.InvalidPasswordException(
+                "password is too long, 40 letters is the maximum"
             );
         }
         Long number;
