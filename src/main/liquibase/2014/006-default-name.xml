@@ -4,7 +4,7 @@
   logicalFilePath="006-default-name.xml">
   <changeSet id='006' author='yegor256'>
     <sql>
-      UPDATE human SET name = 'user' || id WHERE name = '';
+      UPDATE human SET name = 'user' || id WHERE name = '' OR name IS NULL;
     </sql>
     <sql>
       CREATE SEQUENCE user_number START 1;
