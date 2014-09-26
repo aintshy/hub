@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns='http://www.liquibase.org/xml/ns/dbchangelog'
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xsi:schemaLocation='http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd'
+  logicalFilePath="005-email-code.xml">
+  <changeSet id='005' author='yegor256'>
+    <sql>
+      ALTER TABLE human ADD COLUMN code CHAR(4) DEFAULT ltrim(to_char(1000 + random() * 8999, '0000')) NOT NULL;
+    </sql>
+    <sql>
+      UPDATE human SET code = '0000' WHERE confirmed = true;
+    </sql>
+    <sql>
+      UPDATE human SET code = '5409' WHERE confirmed = false;
+    </sql>
+    <sql>
+      ALTER TABLE human DROP COLUMN confirmed;
+    </sql>
+  </changeSet>
+</databaseChangeLog>

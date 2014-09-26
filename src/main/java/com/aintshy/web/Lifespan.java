@@ -21,6 +21,7 @@
 package com.aintshy.web;
 
 import com.aintshy.api.Base;
+import com.aintshy.email.Postman;
 import com.aintshy.pgsql.PgBase;
 import com.jcabi.aspects.Loggable;
 import com.jcabi.manifests.Manifests;
@@ -52,11 +53,34 @@ public final class Lifespan implements ServletContextListener {
             throw new IllegalStateException(ex);
         }
         event.getServletContext().setAttribute(Base.class.getName(), base);
+        event.getServletContext().setAttribute(
+            Postman.class.getName(), Lifespan.postman()
+        );
     }
 
     @Override
     public void contextDestroyed(final ServletContextEvent event) {
         // nothing
+    }
+
+    /**
+     * Make a postman.
+     * @return Postman
+     */
+    private static Postman postman() {
+        final Postman postman;
+        final String host = Manifests.read("Aintshy-SmtpHost");
+        if ("test".equals(host)) {
+            postman = Postman.CONSOLE;
+        } else {
+            postman = new Postman.Default(
+                host,
+                Integer.parseInt(Manifests.read("Aintshy-SmtpPort")),
+                Manifests.read("Aintshy-SmtpUser"),
+                Manifests.read("Aintshy-SmtpPassword")
+            );
+        }
+        return postman;
     }
 
 }

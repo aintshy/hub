@@ -22,9 +22,12 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Pocket;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 /**
  * Integration case for {@link PgBase}.
@@ -36,21 +39,25 @@ import org.junit.Test;
 public final class PgBaseITCase {
 
     /**
-     * PgBase can register a human.
+     * PgBase can register a human and confirm.
      * @throws Exception If fails
      */
     @Test
-    public void registersHuman() throws Exception {
+    public void registersHumanAndConfirms() throws Exception {
         final Base base = new PgBase();
         final String email = "t@aintshy.com";
         final String password = "\u20ac=*'";
-        final Human first = base.register(email, password);
+        final Pocket pocket = Mockito.mock(Pocket.class);
+        final Human first = base.register(email, password, pocket);
+        final ArgumentCaptor<String> captor =
+            ArgumentCaptor.forClass(String.class);
+        Mockito.verify(pocket).put(captor.capture());
         MatcherAssert.assertThat(
             first.profile().confirmed(),
             Matchers.is(false)
         );
-        first.profile().confirm();
-        final Human second = base.register(email, password);
+        first.profile().confirm(captor.getValue());
+        final Human second = base.register(email, password, Pocket.CONSOLE);
         MatcherAssert.assertThat(
             second.profile().confirmed(),
             Matchers.is(true)

@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -45,12 +46,26 @@ import lombok.ToString;
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
  * @since 0.1
+ * @checkstyle ClassDataAbstractionCouplingCheck (500 lines)
  */
 @Immutable
 @ToString(of = "number")
 @EqualsAndHashCode(of = { "src", "number" })
 @SuppressWarnings("PMD.TooManyMethods")
 final class PgProfile implements Profile {
+
+    /**
+     * Regex for user name.
+     */
+    private static final Pattern RE_NAME = Pattern.compile(
+        "[a-zA-Z0-9\\- ]{4,36}"
+    );
+
+    /**
+     * Regex for confirmation code.
+     * @since 0.6
+     */
+    private static final Pattern RE_CODE = Pattern.compile("[0-9]{4}");
 
     /**
      * Data source.
@@ -76,21 +91,32 @@ final class PgProfile implements Profile {
     public boolean confirmed() throws IOException {
         try {
             return new JdbcSession(this.src.get())
-                .sql("SELECT confirmed FROM human WHERE id=?")
+                .sql("SELECT id FROM human WHERE id=? AND code='0000'")
                 .set(this.number)
-                .select(new SingleOutcome<Boolean>(Boolean.class));
+                .select(Outcome.NOT_EMPTY);
         } catch (final SQLException ex) {
             throw new IOException(ex);
         }
     }
 
     @Override
-    public void confirm() throws IOException {
+    public void confirm(final String code) throws IOException {
+        if (!PgProfile.RE_CODE.matcher(code).matches()) {
+            throw new Profile.ConfirmCodeException(
+                "the code always contains four digits"
+            );
+        }
         try {
-            new JdbcSession(this.src.get())
-                .sql("UPDATE human SET confirmed=true WHERE id=?")
+            final int done = new JdbcSession(this.src.get())
+                .sql("UPDATE human SET code='0000' WHERE id=? AND code=?")
                 .set(this.number)
-                .update(Outcome.VOID);
+                .set(code)
+                .update(Outcome.UPDATE_COUNT);
+            if (done == 0) {
+                throw new Profile.ConfirmCodeException(
+                    "the code doesn't match our records"
+                );
+            }
             Logger.info(this, "email confirmed by human #%d", this.number);
         } catch (final SQLException ex) {
             throw new IOException(ex);
@@ -166,7 +192,7 @@ final class PgProfile implements Profile {
     @Override
     public void update(final String name, final int year,
         final Sex sex, final Locale locale) throws IOException {
-        if (!name.matches("[a-zA-Z0-9\\- ]{4,36}")) {
+        if (!PgProfile.RE_NAME.matcher(name).matches()) {
             throw new Profile.UpdateException(
                 "name should be 4-36 letters, spaces or numbers"
             );

@@ -24,6 +24,7 @@ import com.aintshy.api.Base;
 import com.aintshy.api.Human;
 import com.aintshy.api.Message;
 import com.aintshy.api.Messages;
+import com.aintshy.api.Pocket;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -44,9 +45,13 @@ public final class PgMessagesITCase {
     @Test
     public void postsMessage() throws Exception {
         final Base base = new PgBase();
-        final Human friend = base.register("i09@aintshy.com", "--Iokha");
+        final Human friend = base.register(
+            "i09@aintshy.com", "--Iokha", Pocket.CONSOLE
+        );
         friend.ask("how are you doing this?");
-        final Human human = base.register("pp09@aintshy.com", "-9w8(8s");
+        final Human human = base.register(
+            "pp09@aintshy.com", "-9w8(8s", Pocket.CONSOLE
+        );
         final Messages msgs = human.next().iterator().next().messages();
         msgs.post(false, "I'm fine, thanks!");
         MatcherAssert.assertThat(

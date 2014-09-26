@@ -6,3 +6,7 @@ Aintshy-PgsqlJdbc: jdbc:postgresql://localhost:${pgsql.port}/test
 Aintshy-PgsqlUser: test
 Aintshy-PgsqlPassword: test
 Aintshy-DetectLanguageKey: test
+Aintshy-SmtpHost: test
+Aintshy-SmtpPort: 25
+Aintshy-SmtpUser: test
+Aintshy-SmtpPassword: test

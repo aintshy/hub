@@ -6,3 +6,7 @@ Aintshy-PgsqlJdbc: ${pgsql.jdbc}
 Aintshy-PgsqlUser: ${pgsql.user}
 Aintshy-PgsqlPassword: ${pgsql.password}
 Aintshy-DetectLanguageKey: ${detectlanguage.key}
+Aintshy-SmtpHost: ${smtp.host}
+Aintshy-SmtpPort: ${smtp.port}
+Aintshy-SmtpUser: ${smtp.user}
+Aintshy-SmtpPassword: ${smtp.password}
