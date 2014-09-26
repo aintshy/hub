@@ -47,6 +47,16 @@ public final class SmtpPocket implements Pocket {
     private final transient String address;
 
     /**
+     * Subject.
+     */
+    private final transient String subject;
+
+    /**
+     * Body.
+     */
+    private final transient String body;
+
+    /**
      * SMTP postman.
      */
     private final transient Postman postman;
@@ -55,21 +65,27 @@ public final class SmtpPocket implements Pocket {
      * Ctor.
      * @param addr Email address
      * @param pst Postman
+     * @param subj Subject
+     * @param text Body
+     * @checkstyle ParameterNumberCheck (5 lines)
      */
-    public SmtpPocket(final String addr, final Postman pst) {
+    public SmtpPocket(final String addr, final String subj,
+        final String text, final Postman pst) {
         this.address = addr;
         this.postman = pst;
+        this.subject = subj;
+        this.body = text;
     }
 
     @Override
     public void put(final String code) throws IOException {
         final Email email = new SimpleEmail();
-        email.setSubject("confirmation code");
+        email.setSubject(this.subject);
         try {
             email.setFrom("aintshy.com <no-reply@aintshy.com>");
             email.setMsg(
                 String.format(
-                    "Hi, your confirmation code is %s\n\n--\naintshy.com",
+                    String.format("%s\n\n--\naintshy.com", this.body),
                     code
                 )
             );

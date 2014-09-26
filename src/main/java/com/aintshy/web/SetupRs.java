@@ -121,6 +121,8 @@ public final class SetupRs extends BaseRs {
         profile.resend(
             new SmtpPocket(
                 profile.email(),
+                "confirmation code (resend)",
+                "Hey, here is your code again: %s",
                 Postman.class.cast(
                     this.servletContext().getAttribute(
                         Postman.class.getName()

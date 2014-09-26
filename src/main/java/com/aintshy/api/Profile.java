@@ -32,6 +32,7 @@ import java.util.Locale;
  * @since 0.1
  */
 @Immutable
+@SuppressWarnings("PMD.TooManyMethods")
 public interface Profile {
 
     /**

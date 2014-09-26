@@ -55,6 +55,14 @@ public interface Base {
         throws IOException;
 
     /**
+     * Remind.
+     * @param email Email
+     * @param pocket Pocket where to put the code
+     * @throws IOException If fails
+     */
+    void remind(String email, Pocket pocket) throws IOException;
+
+    /**
      * Get human by URN (throws
      * {@link com.aintshy.api.Base.HumanNotFoundException} if this user
      * is absent).

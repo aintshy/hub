@@ -140,6 +140,26 @@ public final class PgBase implements Base {
     }
 
     @Override
+    public void remind(final String email, final Pocket pocket)
+        throws IOException {
+        try {
+            final boolean exists = new JdbcSession(this.src.get())
+                .sql("SELECT code FROM human WHERE email=?")
+                .set(email)
+                .select(Outcome.NOT_EMPTY);
+            if (exists) {
+                final String password = new JdbcSession(this.src.get())
+                    .sql("SELECT password FROM human WHERE email=?")
+                    .set(email)
+                    .select(new SingleOutcome<String>(String.class));
+                pocket.put(password);
+            }
+        } catch (final SQLException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    @Override
     public Human human(final URN urn) throws IOException {
         final long number = Long.parseLong(urn.nss());
         final boolean exists;

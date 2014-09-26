@@ -47,5 +47,18 @@
                 any promotional messages.
             </xsl:text>
         </p>
+        <p>
+            <xsl:text>
+                Already registered here but forgot your password? No
+                problem. Give us your email and we'll send you the
+                password right away.
+            </xsl:text>
+        </p>
+        <form action="{links/link[@rel='remind']/@href}" method="post">
+            <fieldset>
+                <input name="email" size="30" placeholder="Email..."/>
+                <input type="submit" value="Remind"/>
+            </fieldset>
+        </form>
     </xsl:template>
 </xsl:stylesheet>

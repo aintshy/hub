@@ -31,6 +31,7 @@ import com.rexsl.page.PageBuilder;
 import com.rexsl.page.auth.Identity;
 import java.io.IOException;
 import java.net.URI;
+import java.util.logging.Level;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -86,6 +87,7 @@ public final class AnonymousRs extends BaseRs {
             .build(EmptyPage.class)
             .init(this)
             .link(new Link("enter", "./enter"))
+            .link(new Link("remind", "./remind"))
             .render()
             .build();
     }
@@ -108,6 +110,35 @@ public final class AnonymousRs extends BaseRs {
     }
 
     /**
+     * Remind by email.
+     * @param email Email
+     * @throws IOException If fails
+     */
+    @POST
+    @Path("/remind")
+    public void resend(@FormParam("email") final String email)
+        throws IOException {
+        this.base().remind(
+            email,
+            new SmtpPocket(
+                email,
+                "password remind",
+                "Hey, here is your password: %s",
+                Postman.class.cast(
+                    this.servletContext().getAttribute(
+                        Postman.class.getName()
+                    )
+                )
+            )
+        );
+        throw this.flash().redirect(
+            this.uriInfo().getBaseUri(),
+            "check your inbox",
+            Level.INFO
+        );
+    }
+
+    /**
      * Enter the system.
      * @param email Email
      * @param password Password
@@ -123,6 +154,8 @@ public final class AnonymousRs extends BaseRs {
                 email, password,
                 new SmtpPocket(
                     email,
+                    "confirmation code",
+                    "Hi, your confirmation code is: %s",
                     Postman.class.cast(
                         this.servletContext().getAttribute(
                             Postman.class.getName()
