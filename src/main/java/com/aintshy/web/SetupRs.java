@@ -149,6 +149,27 @@ public final class SetupRs extends BaseRs {
         @FormParam("sex") final String sex,
         @FormParam("name") final String name,
         @FormParam("lang") final String lang) throws IOException {
+        if (!year.matches("[0-9]{4}")) {
+            throw this.flash().redirect(
+                this.uriInfo().getBaseUri(),
+                "year of birth is not valid",
+                Level.WARNING
+            );
+        }
+        if (!sex.matches("M|F|T")) {
+            throw this.flash().redirect(
+                this.uriInfo().getBaseUri(),
+                "sex is not valid",
+                Level.WARNING
+            );
+        }
+        if (!lang.matches("[a-z]{2}")) {
+            throw this.flash().redirect(
+                this.uriInfo().getBaseUri(),
+                "language (locale) is in wrong format",
+                Level.WARNING
+            );
+        }
         final Profile profile = this.human().profile();
         try {
             profile.update(
