@@ -22,6 +22,7 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Pocket;
 import com.aintshy.api.Talk;
 import java.io.IOException;
 import org.hamcrest.CustomMatcher;
@@ -45,7 +46,9 @@ public final class PgHumanITCase {
     @Test
     public void asksQuestion() throws Exception {
         final Base base = new PgBase();
-        final Human human = base.register("hs@aintshy.com", "-9w8skkha");
+        final Human human = base.register(
+            "hs@aintshy.com", "-9w8skkha", Pocket.CONSOLE
+        );
         human.ask("how does it work for you?");
     }
 
@@ -56,9 +59,13 @@ public final class PgHumanITCase {
     @Test
     public void fetchesNextTalk() throws Exception {
         final Base base = new PgBase();
-        final Human friend = base.register("f8@aintshy.com", "--Iokha");
+        final Human friend = base.register(
+            "f8@aintshy.com", "--Iokha", Pocket.CONSOLE
+        );
         friend.ask("how are you doing this?");
-        final Human human = base.register("oi@aintshy.com", "-9w8(8s");
+        final Human human = base.register(
+            "oi@aintshy.com", "-9w8(8s", Pocket.CONSOLE
+        );
         final Iterable<Talk> talks = human.next();
         MatcherAssert.assertThat(
             talks,
@@ -78,9 +85,13 @@ public final class PgHumanITCase {
     @Test
     public void fetchesMyOwnTalk() throws Exception {
         final Base base = new PgBase();
-        final Human human = base.register("oi17@aintshy.com", "9*7kha");
+        final Human human = base.register(
+            "oi17@aintshy.com", "9*7kha", Pocket.CONSOLE
+        );
         human.ask("what is the weather today?");
-        final Human friend = base.register("yyft6@aintshy.com", "-9w0*8s");
+        final Human friend = base.register(
+            "yyft6@aintshy.com", "-9w0*8s", Pocket.CONSOLE
+        );
         final Iterable<Talk> talks = new MyTalks(friend).fetch();
         for (final Talk talk : talks) {
             talk.messages().post(false, "just an answer");

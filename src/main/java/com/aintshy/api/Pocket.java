@@ -18,43 +18,37 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.aintshy.pgsql;
+package com.aintshy.api;
 
-import com.aintshy.api.Base;
-import com.aintshy.api.Human;
-import com.aintshy.api.Pocket;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.Test;
+import com.jcabi.aspects.Immutable;
+import com.jcabi.log.Logger;
+import java.io.IOException;
 
 /**
- * Integration case for {@link PgHistory}.
+ * Where to put a secret code after registration.
  *
  * @author Yegor Bugayenko (yegor@tpc2.com)
  * @version $Id$
- * @since 0.4
+ * @since 0.6
  */
-public final class PgHistoryITCase {
+@Immutable
+public interface Pocket {
 
     /**
-     * PgHistory can list talks.
-     * @throws Exception If fails
+     * Console only.
      */
-    @Test
-    public void listsTalks() throws Exception {
-        final Base base = new PgBase();
-        final Human friend = base.register(
-            "r43@aintshy.com", "--Iokha", Pocket.CONSOLE
-        );
-        friend.ask("how are you doing this?");
-        final Human human = base.register(
-            "e21i@aintshy.com", "-9w8(8s", Pocket.CONSOLE
-        );
-        human.next().iterator().next().messages().post(false, "easy!");
-        MatcherAssert.assertThat(
-            human.history().iterate(),
-            Matchers.not(Matchers.emptyIterable())
-        );
-    }
+    Pocket CONSOLE = new Pocket() {
+        @Override
+        public void put(final String code) {
+            Logger.info(this, "code is '%s'", code);
+        }
+    };
+
+    /**
+     * Put the code.
+     * @param code Code
+     * @throws IOException If fails
+     */
+    void put(String code) throws IOException;
 
 }

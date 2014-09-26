@@ -22,6 +22,7 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Pocket;
 import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Immutable;
 import com.jcabi.aspects.Tv;
@@ -57,7 +58,8 @@ public final class PgBase implements Base {
      * Email regex.
      */
     private static final Pattern EMAIL = Pattern.compile(
-        "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$"
+        "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+        Pattern.CASE_INSENSITIVE
     );
 
     /**
@@ -86,8 +88,8 @@ public final class PgBase implements Base {
     }
 
     @Override
-    public Human register(final String email, final String password)
-        throws IOException {
+    public Human register(final String email, final String password,
+        final Pocket pocket) throws IOException {
         if (!PgBase.EMAIL.matcher(email).matches()) {
             throw new Base.InvalidEmailFormatException(
                 "email format is not correct"
@@ -115,6 +117,12 @@ public final class PgBase implements Base {
                     .set(email)
                     .set(password)
                     .insert(new SingleOutcome<Long>(Long.class));
+                pocket.put(
+                    new JdbcSession(this.src.get())
+                        .sql("SELECT code FROM human WHERE id=?")
+                        .set(number)
+                        .select(new SingleOutcome<String>(String.class))
+                );
                 Logger.info(this, "user #%d registered as %s", number, email);
             } else {
                 final String pwd = new JdbcSession(this.src.get())

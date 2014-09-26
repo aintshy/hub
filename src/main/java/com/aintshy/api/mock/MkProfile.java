@@ -44,7 +44,7 @@ public final class MkProfile implements Profile {
     }
 
     @Override
-    public void confirm() throws IOException {
+    public void confirm(final String code) throws IOException {
         throw new UnsupportedOperationException("#confirm()");
     }
 

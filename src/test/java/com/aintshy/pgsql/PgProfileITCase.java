@@ -22,6 +22,7 @@ package com.aintshy.pgsql;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Pocket;
 import com.aintshy.api.Profile;
 import com.aintshy.api.Sex;
 import com.jcabi.aspects.Tv;
@@ -47,7 +48,9 @@ public final class PgProfileITCase {
     @Test
     public void exposesData() throws Exception {
         final Base base = new PgBase();
-        final Human human = base.register("h3es@aintshy.com", "-9w8skkha");
+        final Human human = base.register(
+            "h3es@aintshy.com", "-9w8skkha", Pocket.CONSOLE
+        );
         final Profile profile = human.profile();
         final int year = Calendar.getInstance().get(Calendar.YEAR) - Tv.THIRTY;
         profile.update("Jeffrey", year, Sex.M, Locale.GERMAN);
@@ -65,7 +68,9 @@ public final class PgProfileITCase {
     @Test
     public void updatesPhoto() throws Exception {
         final Base base = new PgBase();
-        final Human human = base.register("f8ke@aintshy.com", "-9w9lKha");
+        final Human human = base.register(
+            "f8ke@aintshy.com", "-9w9lKha", Pocket.CONSOLE
+        );
         final Profile profile = human.profile();
         final byte[] bytes = {0x00, 0x7f, 0x1f, 0x09};
         profile.photo(bytes);

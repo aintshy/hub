@@ -87,7 +87,11 @@ public final class SetupRs extends BaseRs {
     public void confirm(@FormParam("code") final String code)
         throws IOException {
         final Profile profile = this.human().profile();
-        profile.confirm();
+        try {
+            profile.confirm(code);
+        } catch (final Profile.ConfirmCodeException ex) {
+            throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
+        }
         throw this.flash().redirect(
             this.uriInfo().getBaseUri(),
             String.format("your email %s is confirmed", profile.email()),

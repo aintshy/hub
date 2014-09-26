@@ -47,10 +47,12 @@ public interface Base {
      *
      * @param email Email
      * @param password Password
+     * @param pocket Pocket where to put the code
      * @return Human
      * @throws IOException If fails
      */
-    Human register(String email, String password) throws IOException;
+    Human register(String email, String password, Pocket pocket)
+        throws IOException;
 
     /**
      * Get human by URN (throws

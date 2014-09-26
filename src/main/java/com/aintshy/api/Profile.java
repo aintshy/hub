@@ -43,9 +43,10 @@ public interface Profile {
 
     /**
      * Confirm email.
+     * @param code Code to use
      * @throws IOException If fails
      */
-    void confirm() throws IOException;
+    void confirm(String code) throws IOException;
 
     /**
      * His name.
@@ -121,6 +122,24 @@ public interface Profile {
          * @param cause Cause
          */
         public UpdateException(final String cause) {
+            super(cause);
+        }
+    }
+
+    /**
+     * Confirmation code is wrong.
+     * @since 0.6
+     */
+    final class ConfirmCodeException extends RuntimeException {
+        /**
+         * Serialization marker.
+         */
+        private static final long serialVersionUID = 305929936831895556L;
+        /**
+         * Ctor.
+         * @param cause Cause
+         */
+        public ConfirmCodeException(final String cause) {
             super(cause);
         }
     }

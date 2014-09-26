@@ -22,6 +22,7 @@ package com.aintshy.web;
 
 import com.aintshy.api.Base;
 import com.aintshy.api.Human;
+import com.aintshy.api.Pocket;
 import com.aintshy.api.Talk;
 import com.google.common.collect.Iterables;
 import com.rexsl.page.Link;
@@ -117,7 +118,7 @@ public final class AnonymousRs extends BaseRs {
         @FormParam("password") final String password) throws IOException {
         final Human human;
         try {
-            human = this.base().register(email, password);
+            human = this.base().register(email, password, Pocket.CONSOLE);
         } catch (final Base.InvalidPasswordException ex) {
             throw this.flash().redirect(this.uriInfo().getBaseUri(), ex);
         } catch (final Base.InvalidEmailFormatException ex) {
