@@ -1,8 +1,14 @@
-assets: {settings.xml: yegor256/home#assets/aintshy/settings.xml, pubring.gpg: yegor256/home#assets/pubring.gpg,
-  secring.gpg: yegor256/home#assets/secring.gpg, id_rsa: yegor256/home#assets/aintshy/id_rsa,
-  id_rsa.pub: yegor256/home#assets/aintshy/id_rsa.pub, s3cfg: yegor256/home#assets/s3cfg}
-env: {MAVEN_OPTS: '-XX:MaxPermSize=256m -Xmx1g'}
-install: [sudo gem install pdd]
+assets:
+  settings.xml: yegor256/home#assets/aintshy/settings.xml
+  pubring.gpg: yegor256/home#assets/pubring.gpg
+  secring.gpg: yegor256/home#assets/secring.gpg
+  id_rsa: yegor256/home#assets/aintshy/id_rsa
+  id_rsa.pub: yegor256/home#assets/aintshy/id_rsa.pub
+  s3cfg: yegor256/home#assets/s3cfg
+env:
+  MAVEN_OPTS: -XX:MaxPermSize=256m -Xmx1g
+install:
+- sudo gem install pdd
 deploy:
   script: |
     mvn clean deploy -Paintshy --errors --settings ../settings.xml
@@ -36,4 +42,7 @@ merge:
     mvn help:system clean install -Pqulice --errors --settings ../settings.xml
     mvn clean
     pdd --source=$(pwd) --verbose --file=/dev/null
-architect: [yegor256, yegor256, karato]
+architect:
+- yegor256
+- yegor256
+- karato
