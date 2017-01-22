@@ -81,7 +81,6 @@
         </site>
     </distributionManagement>
     <properties>
-        <saxon.version>9.1.0.8</saxon.version>
         <jersey.version>1.18.1</jersey.version>
     </properties>
     <dependencies>
@@ -216,14 +215,14 @@
         <dependency>
             <groupId>net.sourceforge.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>${saxon.version}</version>
+            <version>9.1.0.8</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.saxon</groupId>
             <artifactId>saxon</artifactId>
-            <version>${saxon.version}</version>
-            <classifier>xpath</classifier>
+            <version>9.1.0.8</version>
+            <classifier>dom</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -299,9 +298,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jasig.maven</groupId>
+                <groupId>nl.geodienstencentrum.maven</groupId>
                 <artifactId>sass-maven-plugin</artifactId>
-                <version>1.1.1</version>
+                <version>2.5</version>
                 <executions>
                     <execution>
                         <id>generate-css</id>
@@ -557,7 +556,7 @@
                     <plugin>
                         <groupId>com.github.adrianboimvaser</groupId>
                         <artifactId>postgresql-maven-plugin</artifactId>
-                        <version>0.2-SNAPSHOT</version>
+                        <version>0.2</version>
                         <configuration>
                             <pgsqlHome>${project.build.directory}/pgsql</pgsqlHome>
                             <dataDir>${project.build.directory}/data</dataDir>
