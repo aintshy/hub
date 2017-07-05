@@ -1,6 +1,6 @@
 Aintshy-SecurityKey: ${security.key}
 Aintshy-Version: ${project.version}
-Aintshy-Revision: BUILD
+Aintshy-Revision: f4ca73a
 Aintshy-Date: ${timestamp}
 Aintshy-PgsqlJdbc: ${pgsql.jdbc}
 Aintshy-PgsqlUser: ${pgsql.user}
