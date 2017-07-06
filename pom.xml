@@ -470,7 +470,7 @@
                         <executions>
                             <execution>
                                 <id>casperjs-test</id>
-                                <phase>integration-test</phase>
+                                <phase>integration-test-never</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
